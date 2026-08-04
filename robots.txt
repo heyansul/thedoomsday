@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block nothing — this is a single-page fan site.
+# Add Disallow lines here later if you create admin or staging paths.
+
+Sitemap: https://thedoomsday.in/sitemap.xml

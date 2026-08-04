@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://thedoomsday.in/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://thedoomsday.in/assets/doctor-doom-vs-avengers-battlefield-scene-hd-mobile-wallpaper-702815.jpg</image:loc>
+      <image:title>Doctor Doom vs the Avengers — Avengers: Doomsday</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://thedoomsday.in/assets/91HDFhbstML.jpg</image:loc>
+      <image:title>Secret Wars by Jonathan Hickman and Esad Ribic</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://thedoomsday.in/assets/91MExB_wwfL__UF1000_1000_QL80_.jpg</image:loc>
+      <image:title>Doctor Doom: The Book of Doom</image:title>
+    </image:image>
+  </url>
+</urlset>
