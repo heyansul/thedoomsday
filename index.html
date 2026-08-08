@@ -744,6 +744,14 @@ p{line-height:1.72}
 #por-side{display:flex;flex-direction:column;gap:12px;min-height:0;overflow-y:auto;padding-right:6px;
  scroll-behavior:smooth;overscroll-behavior:contain}
 #por-side>*{flex-shrink:0}
+#por-kit{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.kit{background:var(--void2);border:1px solid var(--line);padding:11px 10px;text-align:left;cursor:pointer;
+ transition:.42s ease;line-height:1.45}
+.kit:hover{border-color:var(--gold)}
+.kit.on{border-color:var(--kc);background:rgba(255,255,255,.05)}
+.kit b{display:block;font-family:Oswald,sans-serif;font-weight:500;font-size:.95rem;text-transform:uppercase;
+ letter-spacing:.03em;color:var(--kc)}
+.kit span{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--dim);margin-top:3px}
 #por-dests{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .pdest{background:var(--void2);border:1px solid var(--line);padding:10px 8px;text-align:left;cursor:pointer;
  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--dim);
@@ -778,6 +786,45 @@ p{line-height:1.72}
  letter-spacing:.1em;margin-bottom:10px;color:#06060b}
 #xm-info p{color:var(--dim);font-size:.94rem;line-height:1.8;margin-bottom:9px}
 #xm-info .pw2{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;color:var(--gold);margin-top:8px}
+
+/* ===== TRAVEL: carried item, return door, the lock ===== */
+#carry{border-color:var(--line);color:var(--dim)}
+#carry.has{border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 1px rgba(216,174,79,.25) inset}
+#carry.has.tempad{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 0 1px rgba(47,243,224,.25) inset}
+#backportal{position:fixed;left:4vw;bottom:62px;z-index:31;display:flex;align-items:center;gap:10px;
+ background:rgba(13,13,21,.92);border:1px solid var(--line);color:var(--dim);
+ padding:10px 15px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;
+ letter-spacing:.11em;text-transform:uppercase;transition:.42s ease;backdrop-filter:blur(4px)}
+#backportal.hide{display:none}
+#backportal:hover{border-color:var(--gold);color:var(--paper)}
+#backportal .ic{width:16px;height:16px;flex-shrink:0;border-radius:50%;border:2px solid currentColor;
+ position:relative;transition:.42s ease}
+#backportal.open .ic{border-color:var(--gold);box-shadow:0 0 10px rgba(255,150,45,.55)}
+#backportal.open{border-color:rgba(216,174,79,.6);color:var(--gold)}
+#backportal.sealed .ic{border-style:dashed;opacity:.7}
+@media(max-width:760px){#backportal{left:auto;right:4vw;bottom:74px;font-size:9.5px;padding:9px 12px}}
+
+#puzzle{position:fixed;inset:0;z-index:96;display:none;align-items:center;justify-content:center;
+ padding:24px;background:rgba(6,6,11,.93)}
+#puzzle.on{display:flex}
+#puz-in{max-width:480px;width:100%;max-height:90vh;overflow-y:auto;background:var(--panel);
+ border:1px solid var(--gold);padding:28px 30px 24px;position:relative;text-align:center;
+ box-shadow:14px 14px 0 rgba(0,0,0,.6);animation:gbIn .42s cubic-bezier(.2,1.2,.3,1)}
+#puz-kick{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--red);text-transform:uppercase}
+#puz-title{font-size:1.35rem;margin:8px 0 10px}
+#puz-text{color:var(--dim);font-size:.92rem;line-height:1.72;margin-bottom:16px}
+#puz-stage{position:relative;width:100%;aspect-ratio:1;max-width:290px;margin:0 auto 12px}
+#puz-stage.off{display:none}
+#puz-stage canvas{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+#puz-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:290px;margin:0 auto 12px}
+#puz-pad.off{display:none}
+.glyph{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+ background:var(--void2);border:1px solid var(--line);color:var(--dim);cursor:pointer;transition:.2s ease}
+.glyph:hover{border-color:var(--cyan);color:var(--paper)}
+.glyph.lit{background:rgba(47,243,224,.2);border-color:var(--cyan);color:#fff;transform:scale(1.06)}
+.glyph.bad{background:rgba(224,27,45,.2);border-color:var(--red)}
+#puz-status{font-size:10px;letter-spacing:.12em;color:var(--dim);min-height:18px;margin-bottom:12px}
+#puz-status.win{color:var(--green)}
 #toast{position:fixed;bottom:64px;left:50%;transform:translateX(-50%) translateY(20px);z-index:120;background:var(--gold);color:#1a1408;padding:12px 22px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;opacity:0;transition:.4s;pointer-events:none;text-align:center;max-width:88vw}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.2s!important}}
@@ -824,6 +871,7 @@ p{line-height:1.72}
 <div id="top">
  <div id="logo">DOOM<i>FILE</i>/616</div>
  <div style="display:flex;gap:7px">
+  <button class="tbtn" id="carry">EMPTY HANDS</button>
   <button class="tbtn" id="cipher">CIPHER 0/6</button>
   <button class="tbtn" id="snd">&#9834; Sound: Off</button>
  </div>
@@ -981,7 +1029,9 @@ p{line-height:1.72}
  <div class="body"><div id="por-lay">
   <div id="por-stage"><canvas id="por-cv"></canvas></div>
   <div id="por-side">
-   <div class="mono" style="font-size:10.5px;letter-spacing:.13em;color:var(--gold)">CHOOSE A DESTINATION</div>
+   <div class="mono" style="font-size:10.5px;letter-spacing:.13em;color:var(--gold)">PICK SOMETHING UP FIRST</div>
+   <div id="por-kit"></div>
+   <div class="mono" style="font-size:10.5px;letter-spacing:.13em;color:var(--gold);margin-top:4px">CHOOSE A DESTINATION</div>
    <div id="por-dests"></div>
    <div id="por-info"></div>
    <div class="bt-bar">
@@ -1473,6 +1523,24 @@ p{line-height:1.72}
   <span id="dos-stat"></span><div id="dos-body"></div>
  </div>
 </div></div>
+<button id="backportal" class="hide">
+ <span class="ic"></span><span class="lb"></span>
+</button>
+
+<div id="puzzle"><div id="puz-in">
+ <div class="xx">&#10005;</div>
+ <div id="puz-kick"></div>
+ <h3 id="puz-title"></h3>
+ <p id="puz-text"></p>
+ <div id="puz-stage"><canvas id="puz-cv"></canvas></div>
+ <div id="puz-pad"></div>
+ <div id="puz-status" class="mono"></div>
+ <div class="bt-bar" style="justify-content:center">
+  <button class="mini" id="puz-reset">Scramble again</button>
+  <button class="mini" id="puz-skip">Leave it sealed</button>
+ </div>
+</div></div>
+
 <div id="secret"><div id="sec-in">
  <div class="xx">&#10005;</div>
  <div class="mono" style="font-size:9px;letter-spacing:.24em;color:var(--red)">CLASSIFIED / ILLUMINATI EYES ONLY</div>
@@ -1883,6 +1951,7 @@ function go(n,fast){
   $('prev').disabled=(n===0);
   $('next').disabled=(n===pages.length-1);
   if(to.classList.contains('scr')){to.scrollTop=0;}
+  if(typeof refreshDoor==='function'){refreshDoor();}
   var sc=to.querySelectorAll('.bt-side,#doom-right,#str-right,#sen-right,#kang-right,#pins,#throne-side,#chapters,.body');
   for(var q=0;q<sc.length;q++){sc[q].scrollTop=0;sc[q].scrollLeft=0;}
   setTimeout(function(){
@@ -1895,6 +1964,7 @@ $('prev').onclick=function(){go(idx-1);};
 $('next').onclick=function(){go(idx+1);};
 $('logo').onclick=function(){go(0);};
 function closeAll(){
+  var pz=$('puzzle');if(pz){pz.classList.remove('on');}
   $('glitchbox').classList.remove('on');
   $('dossier').classList.remove('on');
   $('secret').classList.remove('on');
@@ -1967,7 +2037,8 @@ $('cipher').onclick=function(){renderCipher();$('secret').classList.add('on');};
 renderCipher();
 var konami=[38,38,40,40,37,39,37,39,66,65],kpos=0,typed='';
 window.addEventListener('keydown',function(e){
-  var open=$('glitchbox').classList.contains('on')||$('dossier').classList.contains('on')||$('secret').classList.contains('on');
+  var open=$('glitchbox').classList.contains('on')||$('dossier').classList.contains('on')||
+           $('secret').classList.contains('on')||$('puzzle').classList.contains('on');
   if(e.keyCode===konami[kpos]){kpos++;if(kpos===konami.length){kpos=0;solve(0);}}
   else{kpos=(e.keyCode===konami[0])?1:0;}
   if(e.key&&e.key.length===1&&activeId!=='p15'){
@@ -6329,6 +6400,264 @@ makeBattle('pDA','da-cv','da-ph',['da-prev','da-play','da-next'],{
  ]
 });
 
+/* ================= TRAVEL SYSTEM : the ring, the TemPad, and the locks =================
+   Rules, kept deliberately fair:
+   - Ordinary navigation (arrows, swipe, scroll, the rail) always works. Nothing traps you.
+   - Stepping THROUGH a portal costs the item you are carrying.
+   - Landing somewhere without an item, the way back to the Portal Room is sealed until you
+     open the lock. Solving it hands you a fresh item and permanently attunes that page.
+============================================================================================ */
+var CARRY=null;            /* 'ring' | 'tempad' | null */
+var ATTUNED={};            /* pages whose lock has already been opened */
+var LASTITEM='ring';       /* what you travelled with, so the lock matches the tool */
+var PORTAL_IDX=-1;
+
+function itemName(k){return k==='tempad'?'TVA TEMPAD':'SLING RING';}
+function setCarry(v){
+  CARRY=v;
+  var c=$('carry');
+  c.classList.toggle('has',!!v);
+  c.classList.toggle('tempad',v==='tempad');
+  c.textContent=v?('\u25C9 '+itemName(v)):'EMPTY HANDS';
+  c.title=v?('Carrying the '+itemName(v)+' \u2014 enough to step through one portal')
+           :'Pick up a Sling Ring or a TemPad in the Portal Room';
+  refreshDoor();
+}
+$('carry').onclick=function(){
+  if(CARRY){toast('Carrying the '+itemName(CARRY)+' \u2014 good for one jump');}
+  else{toast('Empty handed. Open a lock, or pick something up in the Portal Room.');}
+};
+
+function portalIndex(){
+  if(PORTAL_IDX<0){
+    for(var i=0;i<pages.length;i++){if(pages[i].id==='pPORTAL'){PORTAL_IDX=i;}}
+  }
+  return PORTAL_IDX;
+}
+var seenPortal=false;
+function refreshDoor(){
+  var b=$('backportal');
+  if(activeId==='pPORTAL'){seenPortal=true;b.classList.add('hide');return;}
+  if(!seenPortal){b.classList.add('hide');return;}
+  b.classList.remove('hide');
+  var open=!!CARRY||!!ATTUNED[activeId];
+  b.classList.toggle('open',open);
+  b.classList.toggle('sealed',!open);
+  b.querySelector('.lb').textContent=open?'Return to the Portal Room':'Sealed \u00b7 open the lock';
+}
+var doorHinted=false;
+function hintDoor(){
+  if(doorHinted||activeId==='pPORTAL'){return;}
+  doorHinted=true;
+  toast('Sealed. Open the lock to get back to the Portal Room \u2014 or just keep scrolling.');
+}
+$('backportal').onclick=function(){
+  if(activeId==='pPORTAL'){return;}
+  if(CARRY||ATTUNED[activeId]){
+    if(CARRY){setCarry(null);}
+    var rn=$('rune');rn.classList.remove('go');void rn.offsetWidth;rn.classList.add('go');
+    magicBurst(window.innerWidth*0.12,window.innerHeight*0.86,40,60);
+    sfxCast();
+    toast('Stepping back through');
+    setTimeout(function(){go(portalIndex(),true);},220);
+  }else{
+    openLock();
+  }
+};
+/* landing somewhere without an item: mention it once, then stay out of the way */
+var _rd=refreshDoor;
+refreshDoor=function(){
+  _rd();
+  if(activeId!=='pPORTAL'&&!CARRY&&!ATTUNED[activeId]&&!doorHinted&&idx!==0){
+    setTimeout(hintDoor,1400);
+  }
+};
+
+/* ---------------- the locks ---------------- */
+(function(){
+  var box=$('puzzle'),cv=$('puz-cv'),g=null;
+  var kind='ring',rings=[],seq=[],entry=[],flashing=-1,solved=false,pageAt='';
+  var GLYPHS=['\u16B1','\u16A8','\u16C1','\u16D2','\u16DE','\u16A0'];
+
+  function fit(){g=fitCanvas(cv);}
+  onResize.push(function(){if(box.classList.contains('on')){fit();}});
+
+  function close(){box.classList.remove('on');}
+  $('puz-skip').onclick=close;
+  box.querySelector('.xx').onclick=close;
+  box.onclick=function(e){if(e.target===box){close();}};
+
+  window.openLock=function(){
+    pageAt=activeId;
+    kind=(LASTITEM==='tempad')?'pad':'ring';
+    solved=false;
+    $('puz-status').textContent='';
+    $('puz-status').classList.remove('win');
+    if(kind==='ring'){
+      $('puz-kick').textContent='MYSTIC LOCK \u00b7 SANCTUM SEAL';
+      $('puz-title').textContent='Align the seal';
+      $('puz-text').innerHTML='Three rings, knocked out of true. Click the <b style="color:var(--paper)">right half</b> of a ring to turn it clockwise, the <b style="color:var(--paper)">left half</b> to turn it back. Line all three notches up with the marker at the top and the Sling Ring is yours.';
+      $('puz-stage').classList.remove('off');
+      $('puz-pad').classList.add('off');
+      scramble();
+      setTimeout(fit,30);
+    }else{
+      $('puz-kick').textContent='TEMPAD LOCK \u00b7 TVA AUTHORISATION';
+      $('puz-title').textContent='Repeat the sequence';
+      $('puz-text').innerHTML='The TemPad wants its authorisation code. Watch the four glyphs light, then tap them back in the same order.';
+      $('puz-stage').classList.add('off');
+      $('puz-pad').classList.remove('off');
+      buildPad();
+    }
+    box.classList.add('on');
+    sfxCast();
+  };
+  $('puz-reset').onclick=function(){
+    if(kind==='ring'){scramble();}else{buildPad();}
+  };
+
+  function win(){
+    if(solved){return;}
+    solved=true;
+    var item=(kind==='pad')?'tempad':'ring';
+    ATTUNED[pageAt]=true;
+    $('puz-status').textContent='LOCK OPEN \u2014 '+itemName(item)+' RECOVERED';
+    $('puz-status').classList.add('win');
+    sfxHit(true);
+    magicBurst(window.innerWidth/2,window.innerHeight/2,44,80);
+    setTimeout(function(){
+      setCarry(item);
+      close();
+      toast(itemName(item)+' recovered \u2014 the way back is open');
+    },900);
+  }
+
+  /* ----- ring lock ----- */
+  function scramble(){
+    rings=[];
+    for(var i=0;i<3;i++){
+      var r=1+Math.floor(Math.random()*7);
+      rings.push({rot:r,steps:8});
+    }
+    if(rings.every(function(r){return r.rot===0;})){rings[0].rot=3;}
+    $('puz-status').textContent='THREE RINGS OUT OF TRUE';
+  }
+  cv.addEventListener('click',function(e){
+    if(kind!=='ring'||solved||!g){return;}
+    var r=cv.getBoundingClientRect();
+    var px=(e.clientX-r.left)*(g.W/r.width),py=(e.clientY-r.top)*(g.H/r.height);
+    var cx=g.W/2,cy=g.H/2,M=Math.min(g.W,g.H);
+    var d=Math.hypot(px-cx,py-cy);
+    var band=-1;
+    if(d<M*0.20){band=2;}
+    else if(d<M*0.31){band=1;}
+    else if(d<M*0.44){band=0;}
+    if(band<0){return;}
+    var dir=(px>=cx)?1:-1;
+    rings[band].rot=(rings[band].rot+dir+8)%8;
+    sfxUI();
+    var aligned=rings.every(function(rr){return rr.rot===0;});
+    $('puz-status').textContent=aligned?'ALIGNED':(rings.filter(function(rr){return rr.rot===0;}).length+' OF 3 ALIGNED');
+    if(aligned){setTimeout(win,380);}
+  });
+
+  /* ----- tempad lock ----- */
+  function buildPad(){
+    seq=[];entry=[];
+    for(var i=0;i<4;i++){seq.push(Math.floor(Math.random()*6));}
+    $('puz-pad').innerHTML=GLYPHS.map(function(gl,i){
+      return '<div class="glyph" data-i="'+i+'">'+gl+'</div>';
+    }).join('');
+    var cells=$('puz-pad').querySelectorAll('.glyph');
+    for(var c=0;c<cells.length;c++){
+      (function(el){
+        el.onclick=function(){
+          if(solved||flashing>=0){return;}
+          var i2=parseInt(el.getAttribute('data-i'),10);
+          el.classList.add('lit');
+          setTimeout(function(){el.classList.remove('lit');},180);
+          sfxUI();
+          entry.push(i2);
+          var k=entry.length-1;
+          if(entry[k]!==seq[k]){
+            el.classList.add('bad');
+            $('puz-status').textContent='WRONG GLYPH \u2014 WATCH AGAIN';
+            setTimeout(function(){el.classList.remove('bad');entry=[];play();},520);
+            return;
+          }
+          $('puz-status').textContent=entry.length+' / 4';
+          if(entry.length===seq.length){win();}
+        };
+      })(cells[c]);
+    }
+    play();
+  }
+  function play(){
+    var cells=$('puz-pad').querySelectorAll('.glyph');
+    flashing=0;entry=[];
+    $('puz-status').textContent='WATCH';
+    seq.forEach(function(v,i){
+      setTimeout(function(){
+        var el=cells[v];
+        if(!el){return;}
+        el.classList.add('lit');sfxUI();
+        setTimeout(function(){el.classList.remove('lit');},330);
+        if(i===seq.length-1){setTimeout(function(){flashing=-1;$('puz-status').textContent='YOUR TURN';},430);}
+      },420+i*520);
+    });
+  }
+
+  frameHooks.push(function(t){
+    if(kind!=='ring'||!box.classList.contains('on')){return;}
+    if(!g){fit();}
+    if(!g||!rings.length){return;}
+    var x=g.x,W=g.W,H=g.H,cx=W/2,cy=H/2,M=Math.min(W,H);
+    x.clearRect(0,0,W,H);
+    var all=rings.every(function(r){return r.rot===0;});
+    /* the marker you are aiming at */
+    x.strokeStyle=all?'rgba(59,165,92,.95)':'rgba(216,174,79,.9)';x.lineWidth=2.4;
+    x.beginPath();x.moveTo(cx,cy-M*0.48);x.lineTo(cx,cy-M*0.44);x.stroke();
+    x.beginPath();x.moveTo(cx-6,cy-M*0.475);x.lineTo(cx,cy-M*0.44);x.lineTo(cx+6,cy-M*0.475);x.stroke();
+    for(var i=0;i<3;i++){
+      var R=M*(0.4-i*0.11);
+      var a0=-Math.PI/2+rings[i].rot*(6.2832/8);
+      var ok=(rings[i].rot===0);
+      x.strokeStyle=ok?'rgba(59,165,92,.85)':'rgba(216,174,79,.4)';
+      x.lineWidth=M*0.055;
+      x.beginPath();x.arc(cx,cy,R,a0+0.34,a0+6.2832-0.34);x.stroke();
+      /* the notch */
+      x.strokeStyle=ok?'rgba(120,255,170,.95)':'rgba(255,150,45,.95)';
+      x.lineWidth=3;
+      x.beginPath();
+      x.moveTo(cx+Math.cos(a0)*(R-M*0.035),cy+Math.sin(a0)*(R-M*0.035));
+      x.lineTo(cx+Math.cos(a0)*(R+M*0.035),cy+Math.sin(a0)*(R+M*0.035));
+      x.stroke();
+      /* runes riding the band */
+      for(var q=0;q<8;q++){
+        var qa=a0+q*(6.2832/8);
+        x.save();
+        x.translate(cx+Math.cos(qa)*R,cy+Math.sin(qa)*R);
+        x.rotate(qa+1.5708);
+        x.font=Math.max(9,M*0.045)+'px serif';x.textAlign='center';
+        x.fillStyle=ok?'rgba(120,255,170,.5)':'rgba(216,174,79,.42)';
+        x.fillText(GLYPHS[q%GLYPHS.length],0,M*0.015);
+        x.restore();
+      }
+    }
+    /* the eye at the centre */
+    var pulse=0.4+Math.sin(t*0.05)*0.2+(all?0.45:0);
+    x.fillStyle=all?'rgba(59,165,92,'+pulse+')':'rgba(216,174,79,'+(pulse*0.55)+')';
+    x.beginPath();x.arc(cx,cy,M*0.07,0,6.284);x.fill();
+    if(all){
+      for(var k2=0;k2<3;k2++){
+        var pp=((t*1.6+k2*40)%120)/120;
+        x.strokeStyle='rgba(120,255,170,'+((1-pp)*0.5)+')';x.lineWidth=2;
+        x.beginPath();x.arc(cx,cy,M*0.07+pp*M*0.42,0,6.284);x.stroke();
+      }
+    }
+  });
+})();
+
 /* ===== THE PORTAL ROOM : user-opened, destination-aware portals ===== */
 var DESTS=[
  {k:'838',n:'EARTH-838',c:'47,243,224',
@@ -6371,6 +6700,27 @@ var DESTS=[
   resizers.pPORTAL=init;
   onResize.push(function(){if(activeId==='pPORTAL'){init();}});
 
+  var KIT=[
+   {k:'ring',n:'Sling Ring',c:'255,150,45',d:'Kamar-Taj issue. Opens one door.'},
+   {k:'tempad',n:'TVA TemPad',c:'47,243,224',d:'Requisitioned. Same result, worse paperwork.'}
+  ];
+  function renderKit(){
+    $('por-kit').innerHTML=KIT.map(function(it){
+      return '<button class="kit'+(CARRY===it.k?' on':'')+'" data-k="'+it.k+'" style="--kc:rgb('+it.c+')">'+
+        '<b>'+it.n+'</b><span>'+it.d+'</span></button>';
+    }).join('');
+    var bs=$('por-kit').querySelectorAll('.kit');
+    for(var i=0;i<bs.length;i++){
+      (function(el){
+        el.onclick=function(){
+          var k=el.getAttribute('data-k');
+          setCarry(CARRY===k?null:k);
+          renderKit();
+          if(CARRY){toast('Picked up the '+itemName(CARRY)+' \u2014 good for one jump');}
+        };
+      })(bs[i]);
+    }
+  }
   function renderDests(){
     $('por-dests').innerHTML=DESTS.map(function(dd,i){
       return '<button class="pdest'+(i===sel?' on':'')+'" data-i="'+i+'" style="--pc:rgb('+dd.c+')">'+
@@ -6388,7 +6738,7 @@ var DESTS=[
       '<p>'+dd.d+'</p><p>'+dd.d2+'</p>'+
       '<div class="st" style="color:var(--dim)">DRAG A CIRCLE TO OPEN &middot; CLICK A PORTAL\u2019S CENTRE TO STEP THROUGH</div>';
   }
-  renderDests();info();
+  renderKit();renderDests();info();
 
   function open2(px,py,r,k){
     ports.push({x:px,y:py,r:Math.max(46,Math.min(r||90,190)),k:(typeof k==='number')?k:sel,
@@ -6436,11 +6786,22 @@ var DESTS=[
   /* stepping through fires the quick portal transition to a related page */
   var JUMP={'838':'p13','fox':'pXM','battle':'pDA','void':'p7','talo':'p10','latveria':'p4','616':'p9','mirror':'p5'};
   function stepThrough(pt){
+    if(!CARRY){
+      toast('You need a Sling Ring or a TemPad to step through');
+      var kit=$('por-kit');
+      kit.style.transition='none';kit.style.boxShadow='0 0 0 2px rgba(224,27,45,.6)';
+      setTimeout(function(){kit.style.transition='box-shadow .8s ease';kit.style.boxShadow='none';},60);
+      sfxUI();
+      return;
+    }
+    LASTITEM=CARRY;
+    setCarry(null);
+    renderKit();
     var dd=DESTS[pt.k];
     var targetId=JUMP[dd.k]||'p9';
     var n=-1;
     for(var i=0;i<pages.length;i++){if(pages[i].id===targetId){n=i;}}
-    toast('Stepping through to '+dd.n);
+    toast('Stepping through to '+dd.n+' \u2014 the '+itemName(LASTITEM)+' is spent');
     var rn=$('rune');rn.classList.remove('go');void rn.offsetWidth;rn.classList.add('go');
     magicBurst(window.innerWidth/2,window.innerHeight/2,60,60);
     sfxCast();
@@ -6660,6 +7021,28 @@ var DESTS=[
       x.fillText('CLICK CENTRE TO STEP THROUGH',P.x,P.y+R+20);
     }
 
+    /* whatever you are carrying, hovering in the room */
+    if(CARRY){
+      var ix=W*0.5,iy=H*0.9,ic=(CARRY==='tempad')?'47,243,224':'255,150,45';
+      var bob=Math.sin(t*0.03)*4;
+      if(CARRY==='ring'){
+        x.strokeStyle='rgba('+ic+',.9)';x.lineWidth=2.4;
+        x.beginPath();x.arc(ix,iy+bob,13,0,6.284);x.stroke();
+        for(var kk=0;kk<10;kk++){
+          var ka=t*0.05+kk*0.628;
+          x.fillStyle='rgba('+ic+','+(0.3+0.4*Math.sin(t*0.1+kk))+')';
+          x.beginPath();x.arc(ix+Math.cos(ka)*16,iy+bob+Math.sin(ka)*16,1.5,0,6.284);x.fill();
+        }
+      }else{
+        x.strokeStyle='rgba('+ic+',.9)';x.lineWidth=2;
+        x.strokeRect(ix-11,iy-15+bob,22,30);
+        x.fillStyle='rgba('+ic+','+(0.25+0.25*Math.sin(t*0.08))+')';
+        x.fillRect(ix-8,iy-12+bob,16,18);
+      }
+      x.font='10px "JetBrains Mono",monospace';x.textAlign='center';
+      x.fillStyle='rgba('+ic+',.75)';
+      x.fillText('CARRYING',ix,iy+34);
+    }
     /* the circle you are currently tracing */
     if(drag&&dpts.length>1){
       x.strokeStyle='rgba('+DESTS[sel].c+',.85)';x.lineWidth=2.6;x.lineCap='round';
@@ -6675,7 +7058,7 @@ var DESTS=[
     x.fillStyle='rgba(6,6,11,.72)';x.fillRect(0,H-32,W,32);
     x.font='11px "JetBrains Mono",monospace';x.textAlign='left';
     x.fillStyle='rgba(216,174,79,.9)';
-    x.fillText('ARMED: '+DESTS[sel].n,12,H-12);
+    x.fillText('ARMED: '+DESTS[sel].n+(CARRY?'   \u25C9 '+itemName(CARRY):'   \u25CB EMPTY HANDS'),12,H-12);
     x.textAlign='right';x.fillStyle='rgba(170,166,158,.7)';
     x.fillText(ports.length+' OPEN \u00B7 DRAG TO TEAR ONE',W-12,H-12);
   };
@@ -7468,6 +7851,8 @@ var WALLLINES=[
 })();
 
 $('prev').disabled=true;
+setCarry(null);
+refreshDoor();
 
 </script>
 </body>
