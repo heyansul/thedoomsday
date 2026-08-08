@@ -825,6 +825,32 @@ p{line-height:1.72}
 .glyph.bad{background:rgba(224,27,45,.2);border-color:var(--red)}
 #puz-status{font-size:10px;letter-spacing:.12em;color:var(--dim);min-height:18px;margin-bottom:12px}
 #puz-status.win{color:var(--green)}
+
+/* ===== THE LOOP ===== */
+#loopchip{border-color:var(--violet);color:var(--violet)}
+#loopchip.hide{display:none}
+#loopchip.broken{border-color:var(--green);color:var(--green)}
+#loopchip.pulse{animation:lchip 2.4s ease-in-out infinite}
+@keyframes lchip{0%,100%{box-shadow:0 0 0 0 rgba(164,92,255,0)}50%{box-shadow:0 0 0 4px rgba(164,92,255,.22)}}
+#loopbreak{border:1px solid var(--violet);background:rgba(164,92,255,.07);padding:16px 18px}
+#loopbreak.hide{display:none}
+#loopbreak .lb-k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--violet)}
+#loopbreak .lb-t{font-family:Oswald,sans-serif;font-weight:600;font-size:1.15rem;text-transform:uppercase;
+ letter-spacing:.03em;margin:6px 0 8px}
+#loopbreak p{color:var(--dim);font-size:.92rem;line-height:1.72;margin-bottom:12px}
+#lb-go{width:100%;background:var(--violet);border:0;color:#0d0618;padding:12px;cursor:pointer;
+ font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+ transition:.36s ease}
+#lb-go:hover{background:#c08cff}
+#por-state{border:1px solid var(--line);border-left:2px solid var(--dim);background:var(--void2);
+ padding:12px 15px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
+ line-height:1.75;color:var(--dim)}
+#por-state b{display:block;color:var(--paper);letter-spacing:.13em;margin-bottom:4px}
+#por-state.open{border-left-color:var(--violet)}
+#por-state.free{border-left-color:var(--green)}
+#por-shut{display:none}
+#por-shut.show{display:block;border-color:var(--green);color:var(--green)}
+#por-shut.show:hover{background:var(--green);color:#06060b}
 #toast{position:fixed;bottom:64px;left:50%;transform:translateX(-50%) translateY(20px);z-index:120;background:var(--gold);color:#1a1408;padding:12px 22px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;opacity:0;transition:.4s;pointer-events:none;text-align:center;max-width:88vw}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.2s!important}}
@@ -871,6 +897,7 @@ p{line-height:1.72}
 <div id="top">
  <div id="logo">DOOM<i>FILE</i>/616</div>
  <div style="display:flex;gap:7px">
+  <button class="tbtn hide" id="loopchip">LOOP</button>
   <button class="tbtn" id="carry">EMPTY HANDS</button>
   <button class="tbtn" id="cipher">CIPHER 0/6</button>
   <button class="tbtn" id="snd">&#9834; Sound: Off</button>
@@ -921,6 +948,30 @@ p{line-height:1.72}
    <button class="mini" id="t-reset">Regrow</button>
    <button class="mini danger" id="t-burn">Snap everything</button>
    <span class="st" id="t-stat">LIMBS 0 / PRUNED 0 / NEW GROWTH 0</span>
+  </div>
+ </div></div>
+</div>
+
+<div class="page" id="pPORTAL">
+ <div class="hd">
+  <div class="kick">The Portal Room &middot; interactive</div>
+  <h2>Open a door to another universe</h2>
+  <p>Pick a destination, then <b style="color:var(--gold)">drag a circle</b> anywhere in the room to tear it open &mdash; or just click. Portals stay open, drift, and show you what is actually on the other side. Click straight through the middle of one to step into it.</p>
+ </div>
+ <div class="body"><div id="por-lay">
+  <div id="por-stage"><canvas id="por-cv"></canvas></div>
+  <div id="por-side">
+   <div class="mono" style="font-size:10.5px;letter-spacing:.13em;color:var(--gold)">PICK SOMETHING UP FIRST</div>
+   <div id="por-kit"></div>
+   <div class="mono" style="font-size:10.5px;letter-spacing:.13em;color:var(--gold);margin-top:4px">CHOOSE A DESTINATION</div>
+   <div id="por-dests"></div>
+   <div id="por-info"></div>
+   <div id="por-state"></div>
+   <div class="bt-bar">
+    <button class="mini" id="por-auto">Sling Ring: Auto</button>
+    <button class="mini" id="por-clear">Close all</button>
+    <button class="mini" id="por-shut">Close the portal</button>
+   </div>
   </div>
  </div></div>
 </div>
@@ -991,6 +1042,12 @@ p{line-height:1.72}
  <div class="body"><div id="str-lay">
   <div id="str-stage"><canvas id="str-cv"></canvas></div>
   <div id="str-right">
+   <div id="loopbreak" class="hide">
+    <div class="lb-k">TEMPORAL ANOMALY DETECTED</div>
+    <div class="lb-t">You are caught in the loop</div>
+    <p>A portal is open somewhere in this file, and while it stays open the sections fold back on each other. The Eye can cut a loop &mdash; it is the one thing in the building that has done this before, several thousand times, on purpose.</p>
+    <button id="lb-go">Break the loop</button>
+   </div>
    <div id="fut-box">
     <div id="fut-n">14,000,605</div>
     <div id="fut-l">FUTURES EXAMINED &middot; CLICK THE EYE TO SEARCH</div>
@@ -1015,28 +1072,6 @@ p{line-height:1.72}
    <div class="sbox">
     <div class="q">Then he broke it himself</div>
     <p>In Multiverse of Madness he dreamwalks, meets the Illuminati of Earth-838, watches a version of himself executed for the damage that variant caused, and is told at the end that he has triggered an incursion. Strange is the MCU character most responsible for the multiverse being cracked open, and the only one who has already been shown the bill.</p>
-   </div>
-  </div>
- </div></div>
-</div>
-
-<div class="page" id="pPORTAL">
- <div class="hd">
-  <div class="kick">The Portal Room &middot; interactive</div>
-  <h2>Open a door to another universe</h2>
-  <p>Pick a destination, then <b style="color:var(--gold)">drag a circle</b> anywhere in the room to tear it open &mdash; or just click. Portals stay open, drift, and show you what is actually on the other side. Click straight through the middle of one to step into it.</p>
- </div>
- <div class="body"><div id="por-lay">
-  <div id="por-stage"><canvas id="por-cv"></canvas></div>
-  <div id="por-side">
-   <div class="mono" style="font-size:10.5px;letter-spacing:.13em;color:var(--gold)">PICK SOMETHING UP FIRST</div>
-   <div id="por-kit"></div>
-   <div class="mono" style="font-size:10.5px;letter-spacing:.13em;color:var(--gold);margin-top:4px">CHOOSE A DESTINATION</div>
-   <div id="por-dests"></div>
-   <div id="por-info"></div>
-   <div class="bt-bar">
-    <button class="mini" id="por-auto">Sling Ring: Auto</button>
-    <button class="mini" id="por-clear">Close all</button>
    </div>
   </div>
  </div></div>
@@ -1892,7 +1927,7 @@ var boomGo=function(){};
 /* ===== DECK ===== */
 var TURN=2520;
 var pages=[].slice.call(document.querySelectorAll('.page'));
-var names=['Title','Loki Tree','Kang','Doom','Dr Strange','Portal Room','Thanos',
+var names=['Title','Loki Tree','Portal Room','Kang','Doom','Dr Strange','Thanos',
            'Thanos vs Avengers','Doom vs Kang vs Thanos','Doom vs Avengers',
            'Sentry','Trophy Wall','Incursion Map','The X-Men','Roster','Comics',
            'Post-Credits','Briefing','Evidence','War Room','Arena','Rooftop','Full Guide'];
@@ -1913,7 +1948,20 @@ function clearFx(el){
   for(var i=0;i<FX.length;i++){el.classList.remove('x-'+FX[i]+'-in','x-'+FX[i]+'-out');}
 }
 function go(n,fast){
-  if(busy||n===idx||n<0||n>=pages.length){return;}
+  if(busy||n<0||n>=pages.length){return;}
+  /* while the loop is held, paging wraps around the magical sections */
+  if(loopHeld()){
+    if(LOOP_IDS.indexOf(pages[n].id)<0){
+      var cur=LOOP_IDS.indexOf(activeId);
+      if(cur<0){n=idOf('pPORTAL');}
+      else{
+        var step=(n>idx)?1:-1;
+        n=idOf(LOOP_IDS[(cur+step+LOOP_IDS.length)%LOOP_IDS.length]);
+      }
+      toast('The loop holds \u2014 cut it at the Sanctum');
+    }
+  }
+  if(n===idx){return;}
   busy=true;
   var back=n<idx,from=pages[idx],to=pages[n];
   /* a different effect every turn, never the same one twice running */
@@ -2637,6 +2685,22 @@ var RINGS=[
   resizers.p5=init;
   onResize.push(function(){if(activeId==='p5'){init();}});
 
+  $('lb-go').onclick=function(){
+    if(!loopHeld()){return;}
+    loopBroken=true;
+    updateLoopUI();
+    /* cast a time loop on the Eye so you can see it happen */
+    ring=5;
+    var rbs=document.querySelectorAll('.ring');
+    for(var q=0;q<rbs.length;q++){rbs[q].classList.toggle('on',q===5);}
+    $('ring-note').innerHTML=RINGS[5].note+'<br><span style="color:rgba('+RINGS[5].c+',.9)">'+RINGS[5].say+'</span>';
+    if(g){cast(g.W/2,g.H/2,Math.min(g.W,g.H)*0.34);}
+    var rn=$('rune');rn.classList.remove('go');void rn.offsetWidth;rn.classList.add('go');
+    magicBurst(window.innerWidth/2,window.innerHeight/2,60,90);
+    sfxCast();sfxHit(true);
+    toast('Loop cut \u2014 returning you to the Portal Room');
+    setTimeout(function(){go(idOf('pPORTAL'),true);},1500);
+  };
   var rb=document.querySelectorAll('.ring');
   for(var i=0;i<rb.length;i++){
     (function(el){
@@ -3242,8 +3306,8 @@ var LORE=[
 ];
 (function(){
   var cv=$('tree-cv'),g=null;
-  var nodes=[],pruned=0,newGrowth=0,hot=-1,sparks=[],bolts=[],tva=false,tvaT=0,cleared=false;
-  var MAXGEN=4,CAP=190;
+  var nodes=[],pruned=0,newGrowth=0,hot=-1,sparks=[],bolts=[],tva=false,tvaT=0,cleared=false,lastLive=0;
+  var MAXGEN=5,CAP=340;
   function addNode(px,py,ang,len,gen,parent,lore){
     var n={id:nodes.length,x0:px,y0:py,ang:ang,len:len,gen:gen,parent:parent,
       kids:[],grow:0,alive:true,seed:Math.random()*100,read:false,
@@ -3270,7 +3334,11 @@ var LORE=[
     return live;
   }
   function stat(){
-    $('t-stat').textContent='LIMBS '+liveCount()+' / PRUNED '+pruned+' / NEW GROWTH '+newGrowth;
+    var gens={};
+    for(var i=0;i<nodes.length;i++){if(nodes[i].alive){gens[nodes[i].gen]=(gens[nodes[i].gen]||0)+1;}}
+    var depth=0;
+    for(var k in gens){if(gens.hasOwnProperty(k)&&+k>depth){depth=+k;}}
+    $('t-stat').textContent='LIMBS '+liveCount()+' / DEPTH '+(depth+1)+' / PRUNED '+pruned+' / REGROWN '+newGrowth;
   }
   resizers.p2=build;
   onResize.push(function(){if(activeId==='p2'){build();}});
@@ -3433,6 +3501,7 @@ var LORE=[
     gr.addColorStop(0,'rgba(216,174,79,0.17)');gr.addColorStop(1,'rgba(216,174,79,0)');
     x.fillStyle=gr;x.fillRect(0,0,g.W,g.H);
 
+    var grew=false;
     var hands=drawLoki(x,cx,cy,S,t);
     var rootI=0;
     for(var i=0;i<nodes.length;i++){
@@ -3446,11 +3515,11 @@ var LORE=[
     for(var q=0;q<nodes.length;q++){
       var nn=nodes[q];
       if(!nn.alive){continue;}
-      if(nn.grow<1){nn.grow=Math.min(1,nn.grow+0.02);}
+      if(nn.grow<1){nn.grow=Math.min(1,nn.grow+0.028);}
       if(nn.grow>=1&&!nn.split&&nn.gen<MAXGEN&&nodes.length<CAP){
-        nn.split=true;
+        nn.split=true;grew=true;
         var e=endOf(nn,t);
-        var kn=(nn.gen<2)?2:(Math.random()<0.7?2:1);
+        var kn=(nn.gen<2)?2:(nn.gen<4?(Math.random()<0.78?2:1):1);
         for(var c=0;c<kn;c++){
           var off=(c===0?-1:1)*(0.34+Math.random()*0.3);
           if(kn===1){off=(Math.random()-.5)*0.5;}
@@ -3498,17 +3567,17 @@ var LORE=[
         var nd=nodes[r];
         if(!nd.alive||nd.gen!==gen||nd.grow<=0){continue;}
         var e2=endOf(nd,t),isHot=(r===hot);
-        var w=Math.max(0.7,3.4-gen*0.72);
+        var w=Math.max(0.85,3.6-gen*0.58);
         var bend=(14-gen*3);
         var mxx=(nd.x0+e2.x)/2+Math.cos(e2.a+1.5)*(bend+Math.sin(t*0.01+nd.seed)*4);
         var myy=(nd.y0+e2.y)/2+Math.sin(e2.a+1.5)*(bend+Math.cos(t*0.01+nd.seed)*4);
         x.lineWidth=isHot?w+1.8:w;
-        var alpha=0.72-gen*0.1;
+        var alpha=Math.max(0.34,0.8-gen*0.085);
         x.strokeStyle=isHot?'rgba(224,27,45,0.95)'
           :(nd.lore>=0&&!nd.read?'rgba(240,210,130,'+(alpha+0.15)+')':'rgba(216,174,79,'+(alpha*0.8)+')');
         x.beginPath();x.moveTo(nd.x0,nd.y0);x.quadraticCurveTo(mxx,myy,e2.x,e2.y);x.stroke();
         if(gen>=2){
-          x.fillStyle='rgba(47,243,224,'+(0.35-gen*0.05)+')';
+          x.fillStyle='rgba(47,243,224,'+Math.max(0.18,0.45-gen*0.05)+')';
           x.beginPath();x.arc(e2.x,e2.y,1.5,0,6.284);x.fill();
         }
         if(gen===0){
@@ -3527,6 +3596,7 @@ var LORE=[
         }
       }
     }
+    if(grew||(t%20===0&&liveCount()!==lastLive)){lastLive=liveCount();stat();}
     for(var s2=sparks.length-1;s2>=0;s2--){
       var sp=sparks[s2];sp.x+=sp.vx;sp.y+=sp.vy;sp.vy+=0.08;sp.l--;
       if(sp.l<=0){sparks.splice(s2,1);continue;}
@@ -6407,6 +6477,48 @@ makeBattle('pDA','da-cv','da-ph',['da-prev','da-play','da-next'],{
    - Landing somewhere without an item, the way back to the Portal Room is sealed until you
      open the lock. Solving it hands you a fresh item and permanently attunes that page.
 ============================================================================================ */
+/* --- the loop ---------------------------------------------------------------
+   Nothing is gated until YOU tear a portal open. From that moment the magical
+   sections fold back on each other and ordinary paging is held inside them.
+   Cut the loop at the Sanctum, return to the Portal Room, close the portal,
+   and the whole site goes back to behaving like an ordinary set of pages.
+----------------------------------------------------------------------------- */
+var portalOpen=false, loopBroken=false;
+var LOOP_IDS=['p2','pPORTAL','p3','p4','p5'];
+var LOOP_NAMES='Loki \u00b7 Portal Room \u00b7 Kang \u00b7 Doom \u00b7 Sanctum';
+function loopHeld(){return portalOpen&&!loopBroken;}
+function idOf(id){for(var i=0;i<pages.length;i++){if(pages[i].id===id){return i;}}return -1;}
+function updateLoopUI(){
+  var chip=$('loopchip');
+  chip.classList.toggle('hide',!portalOpen);
+  chip.classList.toggle('broken',loopBroken);
+  chip.classList.toggle('pulse',loopHeld());
+  chip.textContent=loopHeld()?'\u25C9 LOOP HELD':'\u25CB LOOP BROKEN';
+  chip.title=loopHeld()
+    ?'A portal is open. Paging is held inside the magical sections until the loop is cut at the Sanctum.'
+    :'The loop is cut. Return to the Portal Room and close the portal.';
+  var lb=$('loopbreak');
+  if(lb){lb.classList.toggle('hide',!loopHeld());}
+  var shut=$('por-shut');
+  if(shut){shut.classList.toggle('show',portalOpen&&loopBroken);}
+  var st=$('por-state');
+  if(st){
+    st.classList.toggle('open',loopHeld());
+    st.classList.toggle('free',portalOpen&&loopBroken);
+    if(!portalOpen){
+      st.innerHTML='<b>NO PORTAL OPEN</b>The file pages normally. Tear one open and the magical sections will start folding back on each other.';
+    }else if(!loopBroken){
+      st.innerHTML='<b>LOOP HELD</b>Paging is caught between '+LOOP_NAMES+'. Cut it at the Sanctum, then come back here and close the portal.';
+    }else{
+      st.innerHTML='<b>LOOP CUT \u2014 CLOSE THE PORTAL</b>You can page anywhere again, but the door stays open until you shut it.';
+    }
+  }
+  if(typeof refreshDoor==='function'){refreshDoor();}
+}
+$('loopchip').onclick=function(){
+  if(loopHeld()){toast('Held between '+LOOP_NAMES+' \u2014 cut the loop at the Sanctum');}
+  else{toast('Loop cut. Close the portal to finish it.');}
+};
 var CARRY=null;            /* 'ring' | 'tempad' | null */
 var ATTUNED={};            /* pages whose lock has already been opened */
 var LASTITEM='ring';       /* what you travelled with, so the lock matches the tool */
@@ -6434,11 +6546,10 @@ function portalIndex(){
   }
   return PORTAL_IDX;
 }
-var seenPortal=false;
 function refreshDoor(){
   var b=$('backportal');
-  if(activeId==='pPORTAL'){seenPortal=true;b.classList.add('hide');return;}
-  if(!seenPortal){b.classList.add('hide');return;}
+  /* no open portal means no lock, no door, and nothing unusual about scrolling */
+  if(!portalOpen||activeId==='pPORTAL'){b.classList.add('hide');return;}
   b.classList.remove('hide');
   var open=!!CARRY||!!ATTUNED[activeId];
   b.classList.toggle('open',open);
@@ -6449,7 +6560,7 @@ var doorHinted=false;
 function hintDoor(){
   if(doorHinted||activeId==='pPORTAL'){return;}
   doorHinted=true;
-  toast('Sealed. Open the lock to get back to the Portal Room \u2014 or just keep scrolling.');
+  toast('A portal is open. Open the lock to get back to it \u2014 or cut the loop at the Sanctum.');
 }
 $('backportal').onclick=function(){
   if(activeId==='pPORTAL'){return;}
@@ -6468,7 +6579,7 @@ $('backportal').onclick=function(){
 var _rd=refreshDoor;
 refreshDoor=function(){
   _rd();
-  if(activeId!=='pPORTAL'&&!CARRY&&!ATTUNED[activeId]&&!doorHinted&&idx!==0){
+  if(portalOpen&&activeId!=='pPORTAL'&&!CARRY&&!ATTUNED[activeId]&&!doorHinted&&idx!==0){
     setTimeout(hintDoor,1400);
   }
 };
@@ -6488,6 +6599,7 @@ refreshDoor=function(){
   box.onclick=function(e){if(e.target===box){close();}};
 
   window.openLock=function(){
+    if(!portalOpen){return;}
     pageAt=activeId;
     kind=(LASTITEM==='tempad')?'pad':'ring';
     solved=false;
@@ -6741,10 +6853,18 @@ var DESTS=[
   renderKit();renderDests();info();
 
   function open2(px,py,r,k){
+    var first=!portalOpen;
+    portalOpen=true;
+    if(first){
+      loopBroken=false;
+      updateLoopUI();
+      toast('A portal is open \u2014 the sections are folding back on each other');
+    }
     ports.push({x:px,y:py,r:Math.max(46,Math.min(r||90,190)),k:(typeof k==='number')?k:sel,
       t:0,born:1,vx:(Math.random()-.5)*0.22,vy:(Math.random()-.5)*0.16,spin:Math.random()*6.28});
     if(ports.length>3){ports.shift();}
     sfxCast();
+    updateLoopUI();
   }
   function local(e){
     var r=cv.getBoundingClientRect();
@@ -6807,7 +6927,20 @@ var DESTS=[
     sfxCast();
     if(n>=0){setTimeout(function(){go(n,true);},260);}
   }
-  $('por-clear').onclick=function(){ports=[];toast('All portals closed');};
+  $('por-clear').onclick=function(){
+    ports=[];
+    toast(loopBroken?'Doorways cleared \u2014 now close the portal itself':'Doorways cleared, but the way is still open');
+  };
+  $('por-shut').onclick=function(){
+    if(!(portalOpen&&loopBroken)){return;}
+    ports=[];
+    portalOpen=false;loopBroken=false;
+    updateLoopUI();
+    var rn=$('rune');rn.classList.remove('go');void rn.offsetWidth;rn.classList.add('go');
+    magicBurst(window.innerWidth/2,window.innerHeight/2,54,90);
+    sfxBoom();
+    toast('Portal closed. The file pages normally again.');
+  };
   $('por-auto').onclick=function(){
     auto=!auto;
     $('por-auto').classList.toggle('on',auto);
@@ -7060,7 +7193,9 @@ var DESTS=[
     x.fillStyle='rgba(216,174,79,.9)';
     x.fillText('ARMED: '+DESTS[sel].n+(CARRY?'   \u25C9 '+itemName(CARRY):'   \u25CB EMPTY HANDS'),12,H-12);
     x.textAlign='right';x.fillStyle='rgba(170,166,158,.7)';
-    x.fillText(ports.length+' OPEN \u00B7 DRAG TO TEAR ONE',W-12,H-12);
+    x.fillText(portalOpen
+      ?(ports.length+' OPEN \u00B7 '+(loopBroken?'LOOP CUT':'LOOP HELD'))
+      :'DRAG TO TEAR ONE OPEN',W-12,H-12);
   };
 })();
 
@@ -7852,6 +7987,7 @@ var WALLLINES=[
 
 $('prev').disabled=true;
 setCarry(null);
+updateLoopUI();
 refreshDoor();
 
 </script>
