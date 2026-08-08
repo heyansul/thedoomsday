@@ -733,6 +733,49 @@ p{line-height:1.72}
  .hd p{font-size:.95rem}
  #guide p,#guide li{font-size:.95rem}
 }
+
+/* ===== PORTAL ROOM ===== */
+#por-lay{display:grid;grid-template-columns:1.3fr .7fr;gap:26px;height:100%;min-height:0;align-items:stretch}
+@media(max-width:960px){#por-lay{grid-template-columns:1fr;overflow-y:auto}}
+#por-stage{position:relative;min-height:290px;border:1px solid var(--line);background:#05050b;overflow:hidden}
+#por-stage canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;touch-action:none}
+#por-side{display:flex;flex-direction:column;gap:12px;min-height:0;overflow-y:auto;padding-right:6px;
+ scroll-behavior:smooth;overscroll-behavior:contain}
+#por-side>*{flex-shrink:0}
+#por-dests{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pdest{background:var(--void2);border:1px solid var(--line);padding:10px 8px;text-align:left;cursor:pointer;
+ font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--dim);
+ transition:.36s ease;line-height:1.4}
+.pdest:hover{border-color:var(--gold);color:var(--paper)}
+.pdest.on{border-color:var(--pc);color:var(--paper);background:rgba(255,255,255,.04)}
+.pdest i{display:block;font-style:normal;color:var(--pc);font-size:9px;margin-top:3px;opacity:.9}
+#por-info{background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--gold);padding:16px 18px}
+#por-info h4{font-family:Oswald,sans-serif;font-weight:600;font-size:1.1rem;text-transform:uppercase;
+ letter-spacing:.03em;margin-bottom:8px}
+#por-info p{color:var(--dim);font-size:.93rem;line-height:1.78;margin-bottom:9px}
+#por-info .st{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--gold)}
+
+/* ===== X-MEN ===== */
+#xm-lay{display:grid;grid-template-columns:1.25fr .75fr;gap:26px;height:100%;min-height:0;align-items:stretch}
+@media(max-width:960px){#xm-lay{grid-template-columns:1fr;overflow-y:auto}}
+#xm-stage{position:relative;min-height:280px;border:1px solid var(--line);background:#05060b;overflow:hidden}
+#xm-stage canvas{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+#xm-side{display:flex;flex-direction:column;gap:10px;min-height:0;overflow-y:auto;padding-right:6px;
+ scroll-behavior:smooth;overscroll-behavior:contain}
+#xm-side>*{flex-shrink:0}
+#xm-roster{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.xmc{background:var(--panel);border:1px solid var(--line);padding:9px 11px;cursor:pointer;text-align:left;transition:.36s ease}
+.xmc:hover{border-color:var(--cyan)}
+.xmc.on{border-color:var(--mc);background:rgba(255,255,255,.045)}
+.xmc b{display:block;font-family:Oswald,sans-serif;font-weight:500;font-size:.96rem;text-transform:uppercase;letter-spacing:.03em}
+.xmc span{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--dim);margin-top:2px}
+#xm-info{background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--mc,var(--gold));padding:17px 19px}
+#xm-info .rl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;color:var(--dim)}
+#xm-info h4{font-family:Oswald,sans-serif;font-weight:600;font-size:1.3rem;text-transform:uppercase;margin:5px 0 4px}
+#xm-info .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;padding:3px 9px;
+ letter-spacing:.1em;margin-bottom:10px;color:#06060b}
+#xm-info p{color:var(--dim);font-size:.94rem;line-height:1.8;margin-bottom:9px}
+#xm-info .pw2{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;color:var(--gold);margin-top:8px}
 #toast{position:fixed;bottom:64px;left:50%;transform:translateX(-50%) translateY(20px);z-index:120;background:var(--gold);color:#1a1408;padding:12px 22px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;opacity:0;transition:.4s;pointer-events:none;text-align:center;max-width:88vw}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.2s!important}}
@@ -786,7 +829,7 @@ p{line-height:1.72}
 <div id="rail"></div>
 <div id="bot">
  <button class="arw" id="prev">&larr; Prev</button>
- <div id="pnum" class="mono">01 / 21</div>
+ <div id="pnum" class="mono">01 / 23</div>
  <button class="arw" id="next">Next &rarr;</button>
 </div>
 
@@ -927,6 +970,26 @@ p{line-height:1.72}
  </div></div>
 </div>
 
+<div class="page" id="pPORTAL">
+ <div class="hd">
+  <div class="kick">The Portal Room &middot; interactive</div>
+  <h2>Open a door to another universe</h2>
+  <p>Pick a destination, then <b style="color:var(--gold)">drag a circle</b> anywhere in the room to tear it open &mdash; or just click. Portals stay open, drift, and show you what is actually on the other side. Click straight through the middle of one to step into it.</p>
+ </div>
+ <div class="body"><div id="por-lay">
+  <div id="por-stage"><canvas id="por-cv"></canvas></div>
+  <div id="por-side">
+   <div class="mono" style="font-size:10.5px;letter-spacing:.13em;color:var(--gold)">CHOOSE A DESTINATION</div>
+   <div id="por-dests"></div>
+   <div id="por-info"></div>
+   <div class="bt-bar">
+    <button class="mini" id="por-auto">Sling Ring: Auto</button>
+    <button class="mini" id="por-clear">Close all</button>
+   </div>
+  </div>
+ </div></div>
+</div>
+
 <div class="page" id="p6">
  <div class="hd">
   <div class="kick">The Last Time Someone Tried This</div>
@@ -1055,6 +1118,21 @@ p{line-height:1.72}
  <div class="body"><div id="globe-lay">
   <div id="g-stage"><canvas id="globe-cv"></canvas><div id="g-ring"></div></div>
   <div id="pins"></div>
+ </div></div>
+</div>
+
+<div class="page" id="pXM">
+ <div class="hd">
+  <div class="kick">The Fox Timeline</div>
+  <h2>The X-Men are in this film</h2>
+  <p>Not recast, not rebooted &mdash; the same actors from twenty-six years of X-Men films, arriving as a separate reality on a collision course with 616. Click any mutant to read them.</p>
+ </div>
+ <div class="body"><div id="xm-lay">
+  <div id="xm-stage"><canvas id="xm-cv"></canvas></div>
+  <div id="xm-side">
+   <div id="xm-roster"></div>
+   <div id="xm-info"></div>
+  </div>
  </div></div>
 </div>
 
@@ -1330,6 +1408,10 @@ p{line-height:1.72}
    <li><b>Kelsey Grammer</b> &mdash; Beast</li>
    <li><b>Channing Tatum</b> &mdash; Gambit, carried over from Deadpool &amp; Wolverine</li>
   </ul>
+
+  <h3>Is Wolverine in Avengers: Doomsday?</h3>
+  <p>Hugh Jackman is <strong>not</strong> on the announced cast list, so Wolverine is unconfirmed. Logan and Wolverine are the same character &mdash; Logan is the name he goes by, Wolverine the codename &mdash; and the case for his return rests on Deadpool &amp; Wolverine, which folded the Fox library into the MCU and ended with this version of him choosing to stay. Treat it as speculation until Marvel says otherwise.</p>
+  <p>The confirmed mutants are Professor X, Magneto, Cyclops, Mystique, Nightcrawler, Beast and Gambit.</p>
 
   <h3>What is Avengers: Doomsday about?</h3>
   <p>Marvel&rsquo;s official synopsis is deliberately short: heroes from three distinct universes are set on a deadly collision course and face an existential threat unlike anything they have encountered. The three universes are generally read as the main MCU, the Fantastic Four&rsquo;s reality from First Steps, and the Fox X-Men timeline.</p>
@@ -1712,9 +1794,9 @@ var boomGo=function(){};
 /* ===== DECK ===== */
 var TURN=2520;
 var pages=[].slice.call(document.querySelectorAll('.page'));
-var names=['Title','Loki Tree','Kang','Doom','Dr Strange','Thanos',
+var names=['Title','Loki Tree','Kang','Doom','Dr Strange','Portal Room','Thanos',
            'Thanos vs Avengers','Doom vs Kang vs Thanos','Doom vs Avengers',
-           'Sentry','Trophy Wall','Incursion Map','Roster','Comics',
+           'Sentry','Trophy Wall','Incursion Map','The X-Men','Roster','Comics',
            'Post-Credits','Briefing','Evidence','War Room','Arena','Rooftop','Full Guide'];
 var sfxWords=['KRAK!','FWOOSH','SHRAK','BOOM!','WHUMP','THOOM','ZZKT!','KLANG','FWAM!','SKRSH','KRAKK','VWOOM','THWIP','DOOM!','FWASH','SNKT!'];
 var idx=0,busy=false;
@@ -1732,17 +1814,20 @@ pages[0].classList.add('act');
 function clearFx(el){
   for(var i=0;i<FX.length;i++){el.classList.remove('x-'+FX[i]+'-in','x-'+FX[i]+'-out');}
 }
-function go(n){
+function go(n,fast){
   if(busy||n===idx||n<0||n>=pages.length){return;}
   busy=true;
   var back=n<idx,from=pages[idx],to=pages[n];
   /* a different effect every turn, never the same one twice running */
-  var fx=FX[(n+(back?3:0))%FX.length];
-  if(fx===go.last){fx=FX[(FX.indexOf(fx)+2)%FX.length];}
+  var fx=fast?'iris':FX[(n+(back?3:0))%FX.length];
+  if(!fast&&fx===go.last){fx=FX[(FX.indexOf(fx)+2)%FX.length];}
   go.last=fx;
+  var dur=fast?880:TURN;
   var dir=back?-1:1;
   from.style.setProperty('--dir',dir);
   to.style.setProperty('--dir',dir);
+  from.style.setProperty('--turn',fast?'.88s':'2.5s');
+  to.style.setProperty('--turn',fast?'.88s':'2.5s');
 
   var sw=$('sfx').firstElementChild;
   sw.textContent=sfxWords[n%sfxWords.length];
@@ -1773,7 +1858,7 @@ function go(n){
     from.classList.remove('out');clearFx(from);clearFx(to);
     busy=false;
     if(resizers[to.id]){resizers[to.id]();}
-  },TURN+60);
+  },dur+60);
 }
 $('prev').onclick=function(){go(idx-1);};
 $('next').onclick=function(){go(idx+1);};
@@ -1902,7 +1987,7 @@ window.addEventListener('touchend',function(e){
 /* ===== AUDIO : cinematic score + physical, bass-heavy SFX ===== */
 var snd=$('snd'),audioStarted=false,audioOn=false,AU=null;
 function buildAudio(){
-  Tone.Destination.volume.value=-3;
+  Tone.Destination.volume.value=-5;
 
   /* ---------- master chain: glue compression into a limiter ---------- */
   var limiter=new Tone.Limiter(-1.2).toDestination();
@@ -1919,19 +2004,19 @@ function buildAudio(){
   var width=new Tone.Chorus({frequency:.22,delayTime:4.5,depth:.5,wet:.5}).connect(master);
 
   /* ---------- 1. SUB DRONE : the floor of the whole thing ---------- */
-  var subFilt=new Tone.Filter(120,'lowpass').connect(subBus);
+  var subFilt=new Tone.Filter(88,'lowpass').connect(subBus);
   var drone=new Tone.MonoSynth({
     oscillator:{type:'sine'},
     envelope:{attack:6,decay:2,sustain:1,release:12},
-    filterEnvelope:{attack:6,baseFrequency:40,octaves:1.2},
-    volume:-8}).connect(subFilt);
-  var droneLFO=new Tone.LFO({frequency:.055,min:-13,max:-6}).start();
+    filterEnvelope:{attack:6,baseFrequency:38,octaves:1},
+    volume:-19}).connect(subFilt);
+  var droneLFO=new Tone.LFO({frequency:.055,min:-26,max:-17}).start();
   droneLFO.connect(drone.volume);
 
   /* ---------- 2. CELLO BED : detuned saws under a moving filter ---------- */
   var bowFilt=new Tone.Filter({frequency:340,type:'lowpass',rolloff:-24,Q:1.1});
   bowFilt.connect(width);bowFilt.connect(spaceSend);
-  var bowLFO=new Tone.LFO({frequency:.038,min:210,max:620}).start();
+  var bowLFO=new Tone.LFO({frequency:.038,min:280,max:760}).start();
   bowLFO.connect(bowFilt.frequency);
   var strings=new Tone.PolySynth(Tone.FMSynth,{
     harmonicity:1.004,modulationIndex:1.4,
@@ -1939,29 +2024,29 @@ function buildAudio(){
     modulation:{type:'sine'},
     envelope:{attack:5.5,decay:3,sustain:.85,release:11},
     modulationEnvelope:{attack:7,decay:2,sustain:.5,release:9},
-    volume:-24}).connect(bowFilt);
+    volume:-22}).connect(bowFilt);
 
   /* ---------- 3. CHOIR : breathy AM pad, very far back ---------- */
   var choir=new Tone.PolySynth(Tone.AMSynth,{
     harmonicity:2.005,
     oscillator:{type:'sine'},modulation:{type:'triangle'},
     envelope:{attack:8,decay:3,sustain:.75,release:14},
-    volume:-30}).connect(spaceSend);
+    volume:-27}).connect(spaceSend);
 
   /* ---------- 4. THE BRAAAM : low brass swell, rare, huge ---------- */
-  var brassFilt=new Tone.Filter({frequency:180,type:'lowpass',rolloff:-24});
+  var brassFilt=new Tone.Filter({frequency:240,type:'lowpass',rolloff:-24});
   brassFilt.connect(master);brassFilt.connect(hallSend);
   var brass=new Tone.PolySynth(Tone.MonoSynth,{
     oscillator:{type:'fatsawtooth',count:4,spread:32},
     envelope:{attack:1.1,decay:2.4,sustain:.25,release:5},
-    filterEnvelope:{attack:1.4,decay:2,sustain:.3,release:4,baseFrequency:70,octaves:3.4},
-    volume:-19}).connect(brassFilt);
+    filterEnvelope:{attack:1.4,decay:2,sustain:.3,release:4,baseFrequency:95,octaves:3},
+    volume:-27}).connect(brassFilt);
 
   /* ---------- 5. HEARTBEAT : soft taiko pulse ---------- */
   var heart=new Tone.MembraneSynth({
     pitchDecay:.14,octaves:3.6,
-    envelope:{attack:.004,decay:.75,sustain:0,release:.5},
-    volume:-19}).connect(subBus);
+    envelope:{attack:.004,decay:.7,sustain:0,release:.5},
+    volume:-27}).connect(subBus);
   var heartAir=new Tone.NoiseSynth({noise:{type:'brown'},
     envelope:{attack:.005,decay:.5,sustain:0},volume:-38})
     .connect(new Tone.Filter(220,'lowpass').connect(hallSend));
@@ -2013,7 +2098,7 @@ function buildAudio(){
     envelope:{attack:.006,decay:3.4,sustain:0},volume:-11})
     .connect(new Tone.Filter(420,'lowpass').connect(hallSend));
   var boomBody=new Tone.MembraneSynth({pitchDecay:.5,octaves:12,
-    envelope:{attack:.001,decay:3.2,sustain:0},volume:-4}).connect(subBus);
+    envelope:{attack:.001,decay:3,sustain:0},volume:-9}).connect(subBus);
 
   /* cast: bell cluster with a breath of air */
   var castBell=new Tone.PolySynth(Tone.FMSynth,{harmonicity:3.2,modulationIndex:7,
@@ -2044,7 +2129,7 @@ function buildAudio(){
     /* the braaam lands on the first and fourth chord only, so it stays an event */
     if(c.brass&&bar%8<4){
       brass.triggerAttackRelease(c.brass,'2n',time+0.02);
-      subDrop(70,32,2.6,0.1);
+      subDrop(74,38,2.2,0.035);
     }
     /* heartbeat under the second half of each cycle */
     if(bar%2===1){
@@ -2070,7 +2155,7 @@ function sfxTurn(){
     AU.whooshFilt.frequency.exponentialRampToValueAtTime(300,n+1.3);
     AU.whoosh.triggerAttackRelease('1n',n);
     AU.turnBody.triggerAttackRelease('C1','2n',n+0.1);
-    AU.subDrop(78,38,1.1,0.075);
+    AU.subDrop(78,42,1.1,0.05);
     AU.turnTail.triggerAttackRelease('8n',n+0.14);
   });
 }
@@ -2080,7 +2165,7 @@ function sfxHit(big){
     AU.hitBody.triggerAttackRelease(big?'E0':'A0','4n',n);
     AU.hitCrack.triggerAttackRelease('16n',n);
     AU.hitRoom.triggerAttackRelease('4n',n+0.01);
-    AU.subDrop(big?95:70,big?26:34,big?1.5:0.8,big?0.14:0.07);
+    AU.subDrop(big?95:70,big?30:38,big?1.3:0.7,big?0.1:0.05);
   });
 }
 function sfxCast(){
@@ -2088,7 +2173,7 @@ function sfxCast(){
     var n=Tone.now();
     AU.castBell.triggerAttackRelease(['G3','B3','D4','F#4','A4'],'1n',n);
     AU.castAir.triggerAttackRelease('2n',n);
-    AU.subDrop(52,30,1.4,0.045);
+    AU.subDrop(52,34,1.4,0.03);
   });
 }
 function sfxUI(){safe(function(){AU.ui.triggerAttackRelease('C2','64n',Tone.now());});}
@@ -2098,8 +2183,8 @@ function sfxBoom(){
     AU.boomBody.triggerAttackRelease('C0','1n',n);
     AU.boomAir.triggerAttackRelease('1n',n);
     AU.brass.triggerAttackRelease(['C1','G1','C2'],'1n',n+0.02);
-    AU.subDrop(140,22,3.6,0.42);
-    AU.subDrop(60,20,4.4,0.24);
+    AU.subDrop(140,28,3.2,0.24);
+    AU.subDrop(60,26,4,0.13);
     /* pull the bed down under the blast, then let it swell back in slowly */
     AU.master.volume.cancelScheduledValues(n);
     AU.master.volume.setValueAtTime(-24,n);
@@ -3996,6 +4081,8 @@ xmen:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stro
 deadpool:'<svg viewBox="0 0 100 100"><path d="M50 10 C68 10 82 26 82 48 C82 72 66 90 50 90 C34 90 18 72 18 48 C18 26 32 10 50 10Z" fill="none" stroke="currentColor" stroke-width="4"/><path d="M30 42 C36 34 44 34 48 42 C44 50 36 50 30 42Z" fill="currentColor"/><path d="M70 42 C64 34 56 34 52 42 C56 50 64 50 70 42Z" fill="currentColor"/></svg>',
 shangchi:'<svg viewBox="0 0 100 100"><circle cx="50" cy="34" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" r="17" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="66" r="11" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="50" r="9" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="68" cy="50" r="9" fill="none" stroke="currentColor" stroke-width="3"/></svg>',
 sentry:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="18" fill="currentColor"/><g stroke="currentColor" stroke-width="3"><path d="M50 6 V24 M50 76 V94 M6 50 H24 M76 50 H94 M19 19 L31 31 M69 69 L81 81 M81 19 L69 31 M31 69 L19 81"/></g></svg>',
+wolverine:'<svg viewBox="0 0 100 100"><g stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"><path d="M26 86 L18 24"/><path d="M50 90 L50 18"/><path d="M74 86 L82 24"/></g><path d="M14 88 H86" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>',
+magneto:'<svg viewBox="0 0 100 100"><path d="M26 82 V44 a24 24 0 0 1 48 0 V82" fill="none" stroke="currentColor" stroke-width="10"/><rect x="20" y="80" width="14" height="12" fill="currentColor"/><rect x="66" y="80" width="14" height="12" fill="currentColor"/></svg>',
 doom:'<svg viewBox="0 0 100 100"><path d="M50 8 C72 8 84 24 84 46 C84 74 68 92 50 96 C32 92 16 74 16 46 C16 24 28 8 50 8Z" fill="none" stroke="currentColor" stroke-width="4"/><path d="M30 40 L44 36 L44 48 L30 50Z" fill="currentColor"/><path d="M70 40 L56 36 L56 48 L70 50Z" fill="currentColor"/><path d="M38 66 H62 L58 80 H42Z" fill="currentColor"/></svg>'
 };
 var POW={
@@ -4009,6 +4096,8 @@ deadpool:'<svg viewBox="0 0 200 200"><g style="animation:jitter .24s steps(2) in
 four:'<svg viewBox="0 0 200 200"><g style="transform-origin:50% 82%;animation:flick .48s ease-in-out infinite"><path d="M100 180 C68 156 60 124 78 92 C82 112 92 118 96 108 C90 78 108 56 126 38 C116 74 142 88 138 122 C135 150 120 170 100 180Z" fill="#ff9b3b" opacity=".8"/><path d="M100 174 C80 156 76 134 88 112 C90 130 98 132 100 124 C96 102 110 88 120 74 C112 100 128 110 126 130 C124 148 114 166 100 174Z" fill="#ffe066"/></g><g style="transform-origin:50% 50%;animation:stretchy 1.4s ease-in-out infinite;opacity:.4"><ellipse cx="100" cy="100" rx="80" ry="40" fill="none" stroke="#2ff3e0" stroke-width="2"/></g></svg>',
 shangchi:'<svg viewBox="0 0 200 200"><g fill="none" stroke="#f5d98a" stroke-width="3"><circle cx="100" cy="100" r="86" style="transform-origin:50% 50%;animation:ringspin 4.2s linear infinite" stroke-dasharray="20 12"/><circle cx="100" cy="100" r="68" style="transform-origin:50% 50%;animation:ringspin 3s linear infinite reverse"/><circle cx="100" cy="100" r="50" style="transform-origin:50% 50%;animation:ringspin 2.1s linear infinite" stroke-dasharray="14 9"/><circle cx="100" cy="100" r="34" style="transform-origin:50% 50%;animation:ringspin 1.4s linear infinite reverse"/><circle cx="100" cy="100" r="18" style="transform-origin:50% 50%;animation:ringspin .9s linear infinite"/></g></svg>',
 sentry:'<svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="46" fill="#ffd76b" opacity=".22" style="transform-origin:50% 50%;animation:sunpulse 1.5s ease-in-out infinite"/><circle cx="100" cy="100" r="30" fill="#fff2c0" opacity=".5" style="transform-origin:50% 50%;animation:sunpulse 1.5s .3s ease-in-out infinite"/><g stroke="#ffd76b" stroke-width="3" style="transform-origin:50% 50%;animation:spinS 9s linear infinite"><path d="M100 8 V44 M100 156 V192 M8 100 H44 M156 100 H192 M34 34 L60 60 M140 140 L166 166 M166 34 L140 60 M60 140 L34 166"/></g></svg>',
+wolverine:'<svg viewBox="0 0 200 200"><g stroke="#e8eef5" stroke-width="4" stroke-linecap="round" fill="none" stroke-dasharray="300" style="animation:crack .9s ease-out infinite"><path d="M10 30 L190 120"/><path d="M10 70 L190 160"/><path d="M10 110 L190 200"/></g><g stroke="#f0be20" stroke-width="2" fill="none" stroke-dasharray="300" style="animation:crack .9s .2s ease-out infinite"><path d="M14 34 L186 124"/><path d="M14 114 L186 204"/></g></svg>',
+magneto:'<svg viewBox="0 0 200 200"><g fill="none" stroke="#a45cff" stroke-width="2" style="transform-origin:50% 50%;animation:ringspin 5s linear infinite"><ellipse cx="100" cy="100" rx="90" ry="52"/><ellipse cx="100" cy="100" rx="66" ry="38"/><ellipse cx="100" cy="100" rx="42" ry="24"/></g><g fill="#c8ced8" style="transform-origin:50% 50%;animation:ringspin 2.6s linear infinite reverse"><rect x="150" y="96" width="18" height="6"/><rect x="32" y="96" width="18" height="6"/><rect x="96" y="40" width="6" height="18"/><rect x="96" y="142" width="6" height="18"/></g></svg>',
 doom:'<svg viewBox="0 0 200 200"><g fill="none" stroke="#a45cff" stroke-width="2.4" style="transform-origin:50% 50%;animation:ringspin 6s linear infinite"><path d="M100 16 L118 72 L178 72 L130 106 L148 164 L100 128 L52 164 L70 106 L22 72 L82 72Z"/><circle cx="100" cy="100" r="88" stroke-dasharray="6 16"/></g><g fill="none" stroke="#2ff3e0" stroke-width="1.6" style="transform-origin:50% 50%;animation:ringspin 4s linear infinite reverse"><rect x="46" y="46" width="108" height="108"/></g><circle cx="100" cy="100" r="14" fill="#a45cff" style="transform-origin:50% 50%;animation:pulseR 1.1s ease-out infinite"/></svg>'
 };
 var CHARS=[
@@ -4047,7 +4136,7 @@ var CHARS=[
   b:[['The situation','Pascal, Kirby, Quinn and Moss-Bachrach all cross over from First Steps. At Comic-Con, Marvel walked the audience through Doom\u2019s history with this family specifically.'],
      ['Why they matter','Doom versus Reed Richards is the central rivalry: two men certain they are the smartest thing in existence, one of whom is right.'],
      ['Franklin Richards','Established as powerful enough that Galactus wanted him as a successor. If Doom needs a Beyonder-scale source, Franklin is the substitute, which makes a child the most dangerous object in the film.']]},
- {k:'xmen',n:'X-Men',c:'#f0a020',role:'The Fox Timeline',stat:'SIX CONFIRMED',statc:'#3ba55c',
+ {k:'xmen',n:'The X-Men',c:'#f0a020',role:'Xavier\u2019s School',stat:'SEVEN CONFIRMED',statc:'#3ba55c',
   b:[['The situation','Stewart, McKellen, Marsden, Romijn, Cumming and Grammer return. Not recast younger. Stewart\u2019s Xavier opens the trailer warning of an unthinkable decision before the day is out.'],
      ['Why they matter','Not a reboot. The MCU is treating twenty-six years of X-Men films as a branch that grew on its own and is now on a collision course with 616.'],
      ['The theory','In the 2015 Secret Wars, 616 fought the Ultimate Universe as the realities collided. With no Ultimate Universe on screen, the Fox X-Men are the natural stand-in.']]},
@@ -4055,6 +4144,15 @@ var CHARS=[
   b:[['The situation','Simu Liu is on the confirmed cast list, bringing the Ten Rings into an Avengers film for the first time.'],
      ['The dangling thread','The post-credits scene showed the rings broadcasting into deep space to an unknown receiver. That thread has sat untouched for years.'],
      ['The theory','A well-circulated reading connects the beacon to the Beyonders, whose power Doom steals in the comics to build Battleworld.']]},
+ {k:'wolverine',n:'Logan / Wolverine',c:'#f0be20',role:'James Howlett',stat:'NOT CONFIRMED',statc:'#a45cff',
+  b:[['One man, two names','Logan is what he calls himself. Wolverine is what the programme that put adamantium on his skeleton called him. Same character, and the film would use both.'],
+     ['Be clear','Hugh Jackman is not on the announced Doomsday cast list. Everything below is inference.'],
+     ['Why he still matters','Deadpool & Wolverine formally folded the Fox library into the MCU, introduced anchor beings, and ended with this version of Logan choosing to stay rather than go home. That is a door left deliberately open.'],
+     ['The power set','Adamantium claws and a healing factor that makes him the hardest man on any battlefield to remove permanently. In a story where realities are being deleted wholesale, an unkillable man is a genuinely interesting problem.']]},
+ {k:'magneto',n:'Magneto',c:'#a45cff',role:'Erik Lehnsherr',stat:'CONFIRMED CAST',statc:'#3ba55c',
+  b:[['The situation','Ian McKellen returns, twenty-six years after X-Men, in the role that made comic-book villains respectable on film.'],
+     ['Why he matters','His reasoning rhymes with Doom\u2019s more closely than anyone else in the cast. Both look at the world, conclude it is badly built, and are usually right about the diagnosis and monstrous about the cure.'],
+     ['The obvious scene','A man who controls metal, in a room with a man who wears a full suit of it. The comics have run that for sixty years and it has never stopped working.']]},
  {k:'deadpool',n:'Deadpool',c:'#e01b2d',role:'Wade Wilson',stat:'NOT CONFIRMED',statc:'#a45cff',
   b:[['Be clear','Ryan Reynolds is not on the announced cast list. Everything below is inference.'],
      ['Why he still matters','Deadpool and Wolverine introduced the anchor being, established the Fox properties as coexisting timelines, and joked about the exact mechanics Doomsday will take seriously.'],
@@ -5325,7 +5423,16 @@ var FIGS={
  panther:{main:'#1b1b2a',dark:'#101019',trim:'#a45cff',cape:'',bulk:1,tall:1},
  widow  :{main:'#1d1d26',dark:'#101016',trim:'#e01b2d',cape:'',bulk:0.94,tall:0.96},
  shangchi:{main:'#8f2f2a',dark:'#5a1d1a',trim:'#f5d98a',cape:'',bulk:1,tall:1},
- sue    :{main:'#2a4a8f',dark:'#16294f',trim:'#c8d4e8',cape:'',bulk:0.94,tall:1}
+ sue    :{main:'#2a4a8f',dark:'#16294f',trim:'#c8d4e8',cape:'',bulk:0.94,tall:1},
+ wolverine:{main:'#e0b820',dark:'#26418f',trim:'#1a1a22',cape:'',bulk:1.12,tall:0.94},
+ xavier :{main:'#3a3a48',dark:'#22222c',trim:'#2ff3e0',cape:'',bulk:1,tall:0.98},
+ magneto:{main:'#8f1d2a',dark:'#5a1019',trim:'#a45cff',cape:'#6a1420',bulk:1.02,tall:1.02},
+ cyclops:{main:'#2a4a8f',dark:'#16294f',trim:'#e01b2d',cape:'',bulk:1,tall:1},
+ storm  :{main:'#1d222c',dark:'#101319',trim:'#d8e4f0',cape:'#2a3340',bulk:0.96,tall:1.01},
+ nightcrawler:{main:'#1a2a3a',dark:'#0d1520',trim:'#e01b2d',cape:'#141f2c',bulk:0.96,tall:1},
+ mystique:{main:'#3a7a9a',dark:'#1f4a5f',trim:'#a8302c',cape:'',bulk:0.94,tall:1},
+ beast  :{main:'#2f5fd4',dark:'#1c3a8a',trim:'#c8d4e8',cape:'',bulk:1.2,tall:0.98},
+ gambit :{main:'#5a3a2a',dark:'#3a2418',trim:'#d83cc8',cape:'#4a2f20',bulk:1,tall:1.01}
 };
 function drawHero(x,k,px,py,S,pose,t,seed){
   var F=FIGS[k]||FIGS.cap;
@@ -5512,6 +5619,65 @@ function drawHero(x,k,px,py,S,pose,t,seed){
     x.quadraticCurveTo(1,hy-28,8,hy-18);x.quadraticCurveTo(24,hy-26,16,hy-4);
     x.quadraticCurveTo(6,hy-14,-6,hy-14);x.closePath();x.fill();
     x.fillStyle='#3a2c08';x.fillRect(-8,hy-2,6,2.6);x.fillRect(4,hy-2,6,2.6);
+  }else if(k==='wolverine'){
+    x.fillStyle='#e0b820';x.beginPath();x.ellipse(1,hy,14.5,16,0,0,6.284);x.fill();
+    x.fillStyle='#e0b820';
+    x.beginPath();x.moveTo(-15,hy-4);x.lineTo(-22,hy-26);x.lineTo(-5,hy-13);x.closePath();x.fill();
+    x.beginPath();x.moveTo(17,hy-4);x.lineTo(24,hy-26);x.lineTo(7,hy-13);x.closePath();x.fill();
+    x.fillStyle='#1a1a22';
+    x.beginPath();x.moveTo(-11,hy-5);x.lineTo(-2,hy-8);x.lineTo(-2,hy-1);x.lineTo(-11,hy+1);x.closePath();x.fill();
+    x.beginPath();x.moveTo(13,hy-5);x.lineTo(4,hy-8);x.lineTo(4,hy-1);x.lineTo(13,hy+1);x.closePath();x.fill();
+    x.fillStyle='#e6c9a8';x.fillRect(-7,hy+3,16,10);
+    x.fillStyle='#2a2018';x.fillRect(-6,hy+9,14,3);
+  }else if(k==='xavier'){
+    x.fillStyle='#e6c9a8';x.beginPath();x.ellipse(1,hy,14,15.5,0,0,6.284);x.fill();
+    x.fillStyle='#d8b894';x.beginPath();x.ellipse(1,hy-6,14,10,0,Math.PI,0);x.fill();
+    x.fillStyle='#1a1a22';x.fillRect(-7,hy-1,5,2.6);x.fillRect(5,hy-1,5,2.6);
+  }else if(k==='magneto'){
+    x.fillStyle=F.main;x.beginPath();x.ellipse(1,hy,14.5,16,0,0,6.284);x.fill();
+    x.fillStyle=F.main;
+    x.beginPath();x.moveTo(-15,hy-6);x.lineTo(-13,hy-28);x.lineTo(-2,hy-14);x.closePath();x.fill();
+    x.beginPath();x.moveTo(17,hy-6);x.lineTo(15,hy-28);x.lineTo(4,hy-14);x.closePath();x.fill();
+    x.fillStyle='#d8c8b0';x.fillRect(-8,hy+1,18,11);
+    x.fillStyle='#1a1a22';x.fillRect(-7,hy+3,5,2.4);x.fillRect(5,hy+3,5,2.4);
+  }else if(k==='cyclops'){
+    x.fillStyle=F.main;x.beginPath();x.ellipse(1,hy,14,15.5,0,0,6.284);x.fill();
+    x.fillStyle='#c8a020';x.fillRect(-14,hy-8,30,8);
+    x.fillStyle='rgba(224,27,45,.95)';x.fillRect(-12,hy-6,26,4);
+    x.fillStyle='#e6c9a8';x.fillRect(-7,hy+2,16,10);
+  }else if(k==='storm'){
+    x.fillStyle='#6b4a3a';x.beginPath();x.ellipse(1,hy,13.5,15,0,0,6.284);x.fill();
+    x.fillStyle='#eef2f7';
+    x.beginPath();x.moveTo(-15,hy+12);x.quadraticCurveTo(-20,hy-18,1,hy-17);
+    x.quadraticCurveTo(22,hy-18,17,hy+12);x.quadraticCurveTo(9,hy-4,1,hy-4);
+    x.quadraticCurveTo(-7,hy-4,-15,hy+12);x.closePath();x.fill();
+    x.fillStyle='rgba(230,245,255,.95)';x.fillRect(-7,hy-1,5,2.6);x.fillRect(5,hy-1,5,2.6);
+  }else if(k==='nightcrawler'){
+    x.fillStyle='#2a3f55';x.beginPath();x.ellipse(1,hy,13.5,15.5,0,0,6.284);x.fill();
+    x.fillStyle='rgba(255,240,140,.9)';x.fillRect(-8,hy-2,6,2.8);x.fillRect(4,hy-2,6,2.8);
+    x.strokeStyle='#e01b2d';x.lineWidth=2.4;
+    x.beginPath();x.moveTo(14,-40);x.quadraticCurveTo(46,-24,38,6);x.stroke();
+  }else if(k==='mystique'){
+    x.fillStyle='#3a7a9a';x.beginPath();x.ellipse(1,hy,13.5,15,0,0,6.284);x.fill();
+    x.fillStyle='#a8302c';
+    x.beginPath();x.moveTo(-14,hy+8);x.quadraticCurveTo(-19,hy-18,1,hy-17);
+    x.quadraticCurveTo(21,hy-18,16,hy+8);x.quadraticCurveTo(8,hy-5,1,hy-5);
+    x.quadraticCurveTo(-6,hy-5,-14,hy+8);x.closePath();x.fill();
+    x.fillStyle='#f0d040';x.fillRect(-7,hy-1,5,2.6);x.fillRect(5,hy-1,5,2.6);
+  }else if(k==='beast'){
+    x.fillStyle='#2f5fd4';x.beginPath();x.ellipse(1,hy,16,16.5,0,0,6.284);x.fill();
+    x.fillStyle='#1c3a8a';
+    x.beginPath();x.moveTo(-16,hy-6);x.quadraticCurveTo(1,hy-24,18,hy-6);x.lineTo(15,hy-1);
+    x.quadraticCurveTo(1,hy-14,-13,hy-1);x.closePath();x.fill();
+    x.fillStyle='#f0d040';x.fillRect(-8,hy-1,6,2.8);x.fillRect(4,hy-1,6,2.8);
+    x.fillStyle='#e8eef8';x.fillRect(-5,hy+7,4,3);x.fillRect(3,hy+7,4,3);
+  }else if(k==='gambit'){
+    x.fillStyle='#e6c9a8';x.beginPath();x.ellipse(1,hy,13.5,15,0,0,6.284);x.fill();
+    x.fillStyle='#7a5a3a';
+    x.beginPath();x.moveTo(-14,hy-2);x.quadraticCurveTo(1,hy-22,16,hy-2);x.lineTo(14,hy+3);
+    x.quadraticCurveTo(1,hy-13,-12,hy+3);x.closePath();x.fill();
+    x.fillStyle='rgba(216,60,200,'+(0.6+Math.sin(t*0.08+seed)*0.35)+')';
+    x.fillRect(-7,hy-1,5,2.6);x.fillRect(5,hy-1,5,2.6);
   }else{
     x.fillStyle=F.dark;x.beginPath();x.ellipse(1,hy,14,16,0,0,6.284);x.fill();
     x.fillStyle=F.trim;x.fillRect(-8,hy-3,18,3);
@@ -6123,6 +6289,632 @@ makeBattle('pDA','da-cv','da-ph',['da-prev','da-play','da-next'],{
    }}
  ]
 });
+
+/* ===== THE PORTAL ROOM : user-opened, destination-aware portals ===== */
+var DESTS=[
+ {k:'838',n:'EARTH-838',c:'47,243,224',
+  t:'The Illuminati chamber',st:'SEEN IN / MULTIVERSE OF MADNESS',
+  d:'The reality where the smartest people in the room formed a council, made the hard calls in private, and executed their own Doctor Strange for the damage he caused. Karl Mordo runs the Sanctum here. It is the clearest look the MCU has given us at how a neighbouring Earth diverges.',
+  d2:'It also introduced the word incursion out loud, which makes this the doorway Doomsday actually walked through.'},
+ {k:'fox',n:'THE FOX TIMELINE',c:'240,160,32',
+  t:'Xavier\\u2019s School for Gifted Youngsters',st:'CONFIRMED CAST / SIX RETURNING',
+  d:'Twenty-six years of X-Men films, treated not as a reboot but as a branch that grew on its own. Stewart, McKellen, Marsden, Romijn, Cumming and Grammer all step back through this door.',
+  d2:'In the 2015 comics, 616 collided with the Ultimate Universe and only one survived. With no Ultimate Universe on screen, this is the reality standing in for it.'},
+ {k:'battle',n:'BATTLEWORLD',c:'216,174,79',
+  t:'The patchwork planet',st:'SECRET WARS / DEC 17 2027',
+  d:'What Doom builds when saving the branches separately stops being possible: the survivors welded into wedges of one planet, each running its own history, all of it under one ruler with a legal code and a church in his own name.',
+  d2:'The horror of God-Emperor Doom is not that he rules badly. It is that it works.'},
+ {k:'void',n:'THE VOID',c:'164,92,255',
+  t:'Inside Bob Reynolds',st:'THUNDERBOLTS*',
+  d:'Not a place so much as a person. The shadow that arrives attached to the power of a million exploding suns, and the only door on this list that opens inward.',
+  d2:'In Thunderbolts* the team walked into it to reach him. That is the film telling you the fight is never external.'},
+ {k:'talo',n:'TA LO',c:'123,214,180',
+  t:'The village beyond the mountains',st:'SHANG-CHI / RINGS STILL SIGNALLING',
+  d:'A pocket reality reachable only through a shifting bamboo maze, home to the Great Protector and to the ten rings before anyone alive owned them.',
+  d2:'The rings are still broadcasting to something in deep space, and Marvel has never said who answered.'},
+ {k:'latveria',n:'LATVERIA',c:'90,160,110',
+  t:'The sovereign state of Victor Von Doom',st:'THE ONLY DOOR HE NEEDS',
+  d:'A fictional nation with a real seat at the table. Doom is a head of state, so his crimes are foreign policy and his experiments are national projects. He cannot be arrested for what he does, because he does it as a government.',
+  d2:'He does not use doors like these. He builds the building.'},
+ {k:'616',n:'EARTH-616',c:'224,27,45',
+  t:'Home. For now.',st:'THE ONE WITH THE CRACK IN IT',
+  d:'The main MCU: the reality that lost its anchor, cracked the multiverse open twice by accident, and is currently drifting toward something much larger than itself.',
+  d2:'Every other door on this list opens onto this one eventually. That is the whole problem.'},
+ {k:'mirror',n:'THE MIRROR DIMENSION',c:'150,220,255',
+  t:'Where sorcerers take a fight',st:'DOCTOR STRANGE',
+  d:'A folded copy of the real world, running alongside it, where damage does not carry over. Bend a street here and the street outside never notices.',
+  d2:'It is the safest door on this list, and the only one that leads precisely nowhere.'}
+];
+(function(){
+  var cv=$('por-cv'),g=null,sel=1,ports=[],drag=false,dpts=[],auto=false,autoT=0;
+
+  function init(){g=fitCanvas(cv);}
+  resizers.pPORTAL=init;
+  onResize.push(function(){if(activeId==='pPORTAL'){init();}});
+
+  function renderDests(){
+    $('por-dests').innerHTML=DESTS.map(function(dd,i){
+      return '<button class="pdest'+(i===sel?' on':'')+'" data-i="'+i+'" style="--pc:rgb('+dd.c+')">'+
+        dd.n+'<i>'+dd.t+'</i></button>';
+    }).join('');
+    var bs=$('por-dests').querySelectorAll('.pdest');
+    for(var i=0;i<bs.length;i++){
+      (function(el){el.onclick=function(){sel=parseInt(el.getAttribute('data-i'),10);renderDests();info();sfxCast();};})(bs[i]);
+    }
+  }
+  function info(){
+    var dd=DESTS[sel];
+    $('por-info').style.borderLeftColor='rgb('+dd.c+')';
+    $('por-info').innerHTML='<div class="st">'+dd.st+'</div><h4 style="color:rgb('+dd.c+')">'+dd.n+'</h4>'+
+      '<p>'+dd.d+'</p><p>'+dd.d2+'</p>'+
+      '<div class="st" style="color:var(--dim)">DRAG A CIRCLE TO OPEN &middot; CLICK A PORTAL\u2019S CENTRE TO STEP THROUGH</div>';
+  }
+  renderDests();info();
+
+  function open2(px,py,r,k){
+    ports.push({x:px,y:py,r:Math.max(46,Math.min(r||90,190)),k:(typeof k==='number')?k:sel,
+      t:0,born:1,vx:(Math.random()-.5)*0.22,vy:(Math.random()-.5)*0.16,spin:Math.random()*6.28});
+    if(ports.length>5){ports.shift();}
+    sfxCast();
+  }
+  function local(e){
+    var r=cv.getBoundingClientRect();
+    return {x:(e.clientX-r.left)*(cv.offsetWidth/r.width),y:(e.clientY-r.top)*(cv.offsetHeight/r.height)};
+  }
+  cv.addEventListener('pointerdown',function(e){
+    drag=true;dpts=[local(e)];
+    try{cv.setPointerCapture(e.pointerId);}catch(err){}
+  });
+  cv.addEventListener('pointermove',function(e){
+    if(!drag){return;}
+    dpts.push(local(e));
+    if(dpts.length>110){dpts.shift();}
+  });
+  cv.addEventListener('pointerup',function(e){
+    var pt=local(e),i;
+    if(dpts.length>7){
+      var cx=0,cy=0;
+      for(i=0;i<dpts.length;i++){cx+=dpts[i].x;cy+=dpts[i].y;}
+      cx/=dpts.length;cy/=dpts.length;
+      var rr=0;
+      for(i=0;i<dpts.length;i++){rr+=Math.hypot(dpts[i].x-cx,dpts[i].y-cy);}
+      open2(cx,cy,rr/dpts.length);
+      toast('Portal open \u2014 '+DESTS[sel].n);
+    }else{
+      /* clicking the middle of an existing portal steps through it */
+      var hit=-1;
+      for(i=ports.length-1;i>=0;i--){
+        if(Math.hypot(pt.x-ports[i].x,pt.y-ports[i].y)<ports[i].r*0.62){hit=i;break;}
+      }
+      if(hit>=0){stepThrough(ports[hit]);}
+      else{open2(pt.x,pt.y,92);}
+    }
+    magicBurst(e.clientX,e.clientY,26,80);
+    drag=false;dpts=[];
+  });
+  cv.addEventListener('pointerleave',function(){drag=false;dpts=[];});
+
+  /* stepping through fires the quick portal transition to a related page */
+  var JUMP={'838':'p13','fox':'pXM','battle':'pDA','void':'p7','talo':'p10','latveria':'p4','616':'p9','mirror':'p5'};
+  function stepThrough(pt){
+    var dd=DESTS[pt.k];
+    var targetId=JUMP[dd.k]||'p9';
+    var n=-1;
+    for(var i=0;i<pages.length;i++){if(pages[i].id===targetId){n=i;}}
+    toast('Stepping through to '+dd.n);
+    var rn=$('rune');rn.classList.remove('go');void rn.offsetWidth;rn.classList.add('go');
+    magicBurst(window.innerWidth/2,window.innerHeight/2,60,60);
+    sfxCast();
+    if(n>=0){setTimeout(function(){go(n,true);},260);}
+  }
+  $('por-clear').onclick=function(){ports=[];toast('All portals closed');};
+  $('por-auto').onclick=function(){
+    auto=!auto;
+    $('por-auto').classList.toggle('on',auto);
+    $('por-auto').textContent='Sling Ring: '+(auto?'On':'Auto');
+  };
+
+  /* ---------- what you actually see through the door ---------- */
+  function interior(x,P,t){
+    var k=DESTS[P.k].k,R=P.r*0.93,cx=P.x,cy=P.y;
+    x.save();
+    x.beginPath();x.arc(cx,cy,R,0,6.284);x.clip();
+    if(k==='838'){
+      x.fillStyle='#071418';x.fillRect(cx-R,cy-R,R*2,R*2);
+      for(var c=0;c<5;c++){
+        var px=cx-R+ (c+0.5)*(R*2/5);
+        x.fillStyle='rgba(20,60,70,.9)';
+        x.fillRect(px-R*0.07,cy-R,R*0.14,R*2);
+        x.fillStyle='rgba(47,243,224,'+(0.12+0.1*Math.sin(t*0.03+c))+')';
+        x.fillRect(px-R*0.03,cy-R*0.4,R*0.06,R*0.9);
+      }
+      for(var f=0;f<5;f++){
+        var fx2=cx-R*0.6+f*R*0.3;
+        drawHero(x,['strange','cap','ironman','cap','strange'][f],fx2,cy+R*0.72,R/150,'stand',t,f*2);
+      }
+    }else if(k==='fox'){
+      x.fillStyle='#0f0d16';x.fillRect(cx-R,cy-R,R*2,R*2);
+      for(var st=0;st<26;st++){
+        x.fillStyle='rgba(240,236,226,'+(0.15+0.3*Math.abs(Math.sin(t*0.02+st)))+')';
+        x.fillRect(cx-R+((st*57)%(R*2)),cy-R+((st*31)%(R*0.8)),1.4,1.4);
+      }
+      /* mansion silhouette */
+      x.fillStyle='rgba(24,22,34,.98)';
+      x.fillRect(cx-R*0.7,cy+R*0.05,R*1.4,R*0.75);
+      x.beginPath();x.moveTo(cx-R*0.75,cy+R*0.05);x.lineTo(cx,cy-R*0.42);x.lineTo(cx+R*0.75,cy+R*0.05);x.closePath();x.fill();
+      for(var w=0;w<6;w++){
+        x.fillStyle='rgba(240,160,32,'+(0.35+0.3*Math.sin(t*0.04+w*1.4))+')';
+        x.fillRect(cx-R*0.55+w*R*0.19,cy+R*0.22,R*0.08,R*0.13);
+      }
+      /* the X */
+      x.strokeStyle='rgba(240,160,32,'+(0.5+0.3*Math.sin(t*0.05))+')';x.lineWidth=R*0.045;
+      x.beginPath();
+      x.arc(cx,cy-R*0.62,R*0.2,0,6.284);x.stroke();
+      x.beginPath();
+      x.moveTo(cx-R*0.11,cy-R*0.73);x.lineTo(cx+R*0.11,cy-R*0.51);
+      x.moveTo(cx+R*0.11,cy-R*0.73);x.lineTo(cx-R*0.11,cy-R*0.51);
+      x.stroke();
+    }else if(k==='battle'){
+      for(var wg=0;wg<8;wg++){
+        var a1=wg/8*6.2832+t*0.003,a2=(wg+1)/8*6.2832+t*0.003;
+        x.fillStyle='hsla('+(wg*44)+',42%,'+(18+wg*2.6)+'%,.9)';
+        x.beginPath();x.moveTo(cx,cy);x.arc(cx,cy,R,a1,a2);x.closePath();x.fill();
+        x.strokeStyle='rgba(216,174,79,.3)';x.lineWidth=1;x.stroke();
+      }
+      x.fillStyle='rgba(6,6,11,.9)';
+      x.beginPath();x.arc(cx,cy,R*0.26,0,6.284);x.fill();
+      x.fillStyle='rgba(216,174,79,'+(0.6+Math.sin(t*0.06)*0.3)+')';
+      x.beginPath();
+      x.moveTo(cx,cy-R*0.15);x.lineTo(cx+R*0.1,cy);x.lineTo(cx,cy+R*0.15);x.lineTo(cx-R*0.1,cy);
+      x.closePath();x.fill();
+    }else if(k==='void'){
+      x.fillStyle='#08030f';x.fillRect(cx-R,cy-R,R*2,R*2);
+      for(var td=0;td<14;td++){
+        var ta=td/14*6.2832+t*0.006;
+        x.strokeStyle='rgba(120,50,190,'+(0.25+0.2*Math.sin(t*0.05+td))+')';x.lineWidth=R*0.03;
+        x.beginPath();x.moveTo(cx,cy);
+        for(var sg=1;sg<=5;sg++){
+          var sa=ta+Math.sin(t*0.03+sg+td)*0.4;
+          x.lineTo(cx+Math.cos(sa)*R*0.2*sg,cy+Math.sin(sa)*R*0.2*sg);
+        }
+        x.stroke();
+      }
+      x.shadowColor='rgba(255,255,255,.9)';x.shadowBlur=R*0.14;
+      x.fillStyle='rgba(255,255,255,'+(0.55+Math.sin(t*0.08)*0.3)+')';
+      x.beginPath();x.arc(cx-R*0.12,cy,R*0.055,0,6.284);x.fill();
+      x.beginPath();x.arc(cx+R*0.12,cy,R*0.055,0,6.284);x.fill();
+      x.shadowBlur=0;
+    }else if(k==='talo'){
+      var sky2=x.createLinearGradient(cx,cy-R,cx,cy+R);
+      sky2.addColorStop(0,'#123028');sky2.addColorStop(1,'#0a1a16');
+      x.fillStyle=sky2;x.fillRect(cx-R,cy-R,R*2,R*2);
+      for(var mt=0;mt<4;mt++){
+        var mx2=cx-R*0.7+mt*R*0.48,my2=cy+R*0.1+Math.sin(t*0.014+mt)*R*0.05;
+        x.fillStyle='rgba(30,70,58,.92)';
+        x.beginPath();x.moveTo(mx2-R*0.2,my2);x.lineTo(mx2,my2-R*0.34);x.lineTo(mx2+R*0.2,my2);x.closePath();x.fill();
+        x.fillStyle='rgba(123,214,180,.16)';
+        x.beginPath();x.ellipse(mx2,my2+R*0.05,R*0.22,R*0.05,0,0,6.284);x.fill();
+      }
+      for(var rg=0;rg<4;rg++){
+        x.strokeStyle='rgba(245,217,138,'+(0.4-rg*0.08)+')';x.lineWidth=R*0.018;
+        x.beginPath();x.arc(cx,cy-R*0.36,R*(0.08+rg*0.05),t*0.02*(rg%2?-1:1),t*0.02*(rg%2?-1:1)+5);x.stroke();
+      }
+    }else if(k==='latveria'){
+      x.fillStyle='#0b1410';x.fillRect(cx-R,cy-R,R*2,R*2);
+      x.fillStyle='rgba(18,34,26,.98)';
+      x.fillRect(cx-R*0.55,cy-R*0.1,R*1.1,R*0.9);
+      for(var tw=0;tw<3;tw++){
+        var tx2=cx-R*0.45+tw*R*0.45;
+        x.fillRect(tx2-R*0.09,cy-R*0.5,R*0.18,R*0.45);
+        x.beginPath();x.moveTo(tx2-R*0.12,cy-R*0.5);x.lineTo(tx2,cy-R*0.72);x.lineTo(tx2+R*0.12,cy-R*0.5);x.closePath();x.fill();
+        x.fillStyle='rgba(90,160,110,'+(0.35+0.3*Math.sin(t*0.05+tw))+')';
+        x.fillRect(tx2-R*0.03,cy-R*0.38,R*0.06,R*0.14);
+        x.fillStyle='rgba(18,34,26,.98)';
+      }
+      x.strokeStyle='rgba(216,174,79,.5)';x.lineWidth=R*0.02;
+      x.beginPath();x.arc(cx,cy+R*0.3,R*0.16,0,6.284);x.stroke();
+      drawHero(x,'doom',cx,cy+R*0.82,R/150,'stand',t,1);
+    }else if(k==='616'){
+      var sky3=x.createLinearGradient(cx,cy-R,cx,cy+R);
+      sky3.addColorStop(0,'#0d1020');sky3.addColorStop(1,'#1a0e12');
+      x.fillStyle=sky3;x.fillRect(cx-R,cy-R,R*2,R*2);
+      for(var bd=0;bd<12;bd++){
+        var bh3=R*(0.25+((bd*37)%60)/100);
+        x.fillStyle='rgba(20,20,32,.95)';
+        x.fillRect(cx-R+bd*(R*2/11),cy+R-bh3,R*0.14,bh3);
+        for(var ww=0;ww<4;ww++){
+          x.fillStyle='rgba(224,160,60,'+(0.1+0.25*Math.abs(Math.sin(t*0.03+bd+ww)))+')';
+          x.fillRect(cx-R+bd*(R*2/11)+R*0.03,cy+R-bh3+R*0.05+ww*R*0.08,R*0.035,R*0.04);
+        }
+      }
+      var cr=((t*0.7)%140)/140;
+      x.strokeStyle='rgba(224,27,45,'+(1-cr)*0.6+')';x.lineWidth=R*0.02;
+      x.beginPath();
+      x.moveTo(cx-R,cy-R*0.5);
+      for(var zz=0;zz<6;zz++){x.lineTo(cx-R+zz*(R*0.4),cy-R*0.5+Math.sin(zz*2+t*0.05)*R*0.09);}
+      x.stroke();
+    }else{
+      x.fillStyle='#08101a';x.fillRect(cx-R,cy-R,R*2,R*2);
+      for(var sh=0;sh<12;sh++){
+        var sa2=sh/12*6.2832+Math.sin(t*0.02+sh)*0.35;
+        x.strokeStyle='rgba(150,220,255,'+(0.4-sh*0.02)+')';x.lineWidth=1.2;
+        x.beginPath();
+        x.moveTo(cx+Math.cos(sa2)*R*0.2,cy+Math.sin(sa2)*R*0.2);
+        x.lineTo(cx+Math.cos(sa2+0.3)*R*0.95,cy+Math.sin(sa2+0.3)*R*0.95);
+        x.lineTo(cx+Math.cos(sa2+0.6)*R*0.2,cy+Math.sin(sa2+0.6)*R*0.2);
+        x.stroke();
+      }
+    }
+    /* depth: darken the rim so it reads as a hole, not a sticker */
+    var vg=x.createRadialGradient(cx,cy,R*0.45,cx,cy,R);
+    vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.72)');
+    x.fillStyle=vg;x.beginPath();x.arc(cx,cy,R,0,6.284);x.fill();
+    x.restore();
+  }
+
+  draws.pPORTAL=function(t){
+    if(!g){init();}if(!g){return;}
+    var x=g.x,W=g.W,H=g.H,i;
+    x.clearRect(0,0,W,H);
+    /* the sanctum */
+    var bgp=x.createLinearGradient(0,0,0,H);
+    bgp.addColorStop(0,'#0a0812');bgp.addColorStop(.6,'#0d0a16');bgp.addColorStop(1,'#06060b');
+    x.fillStyle=bgp;x.fillRect(0,0,W,H);
+    x.strokeStyle='rgba(240,236,226,.05)';x.lineWidth=1;
+    for(i=0;i<9;i++){
+      x.beginPath();x.moveTo(0,H*(i/9));x.lineTo(W,H*(i/9)+ (i-4)*8);x.stroke();
+      x.beginPath();x.moveTo(W*(i/9),0);x.lineTo(W*(i/9)+(i-4)*8,H);x.stroke();
+    }
+    /* floor mandala */
+    for(i=0;i<3;i++){
+      fxRing(x,W/2,H*0.82,Math.min(W,H)*(0.2+i*0.11),'rgba(216,174,79,'+(0.09-i*0.02)+')',1.2,[8,14],t*0.004*(i%2?-1:1));
+    }
+
+    if(auto){
+      autoT++;
+      if(autoT%150===0){
+        open2(W*(0.2+Math.random()*0.6),H*(0.2+Math.random()*0.55),70+Math.random()*70,
+              Math.floor(Math.random()*DESTS.length));
+      }
+    }
+
+    for(i=0;i<ports.length;i++){
+      var P=ports[i];
+      P.t++;P.spin+=0.004;
+      P.x+=P.vx;P.y+=P.vy;
+      if(P.x<P.r*0.6||P.x>W-P.r*0.6){P.vx*=-1;}
+      if(P.y<P.r*0.6||P.y>H-P.r*0.6){P.vy*=-1;}
+      if(P.born<1){P.born=Math.min(1,P.born+0.05);}
+      var grow=Math.min(1,P.t/22);
+      var R=P.r*grow;
+      var col=DESTS[P.k].c;
+      /* the view through */
+      if(grow>0.25){
+        var saveR=P.r;P.r=R;interior(x,P,t);P.r=saveR;
+      }
+      /* the burning rim */
+      x.strokeStyle='rgba('+col+',.95)';x.lineWidth=3.2;
+      x.beginPath();x.arc(P.x,P.y,R,0,6.284);x.stroke();
+      for(var sp=0;sp<40;sp++){
+        var sa3=P.spin+sp*0.157+t*0.03;
+        var sr=R+Math.sin(t*0.16+sp*1.3)*(5+R*0.04);
+        x.fillStyle='rgba(255,'+(140+((sp*9)%90))+',45,'+(0.35+0.45*Math.random())+')';
+        x.beginPath();x.arc(P.x+Math.cos(sa3)*sr,P.y+Math.sin(sa3)*sr,1.9,0,6.284);x.fill();
+      }
+      /* runes around the edge */
+      var gl3=['\u16B1','\u16A8','\u16C1','\u16D2','\u16DE','\u16A0','\u16B7','\u16C7'];
+      for(var rq=0;rq<10;rq++){
+        var ra=-P.spin*2+rq*0.6283;
+        x.save();
+        x.translate(P.x+Math.cos(ra)*(R*1.14),P.y+Math.sin(ra)*(R*1.14));
+        x.rotate(ra+1.57);
+        x.font=Math.max(9,R*0.11)+'px serif';x.textAlign='center';
+        x.fillStyle='rgba('+col+',.45)';
+        x.fillText(gl3[rq%gl3.length],0,0);
+        x.restore();
+      }
+      /* label */
+      x.font='11px "JetBrains Mono",monospace';x.textAlign='center';
+      x.fillStyle='rgba('+col+',.9)';
+      x.fillText(DESTS[P.k].n,P.x,P.y-R-16);
+      x.fillStyle='rgba(170,166,158,.6)';x.font='10px "JetBrains Mono",monospace';
+      x.fillText('CLICK CENTRE TO STEP THROUGH',P.x,P.y+R+20);
+    }
+
+    /* the circle you are currently tracing */
+    if(drag&&dpts.length>1){
+      x.strokeStyle='rgba('+DESTS[sel].c+',.85)';x.lineWidth=2.6;x.lineCap='round';
+      x.beginPath();
+      for(i=0;i<dpts.length;i++){i?x.lineTo(dpts[i].x,dpts[i].y):x.moveTo(dpts[i].x,dpts[i].y);}
+      x.stroke();
+      var lp=dpts[dpts.length-1];
+      for(i=0;i<10;i++){
+        x.fillStyle='rgba(255,'+(150+i*8)+',50,'+(0.3+Math.random()*0.5)+')';
+        x.beginPath();x.arc(lp.x+(Math.random()-.5)*13,lp.y+(Math.random()-.5)*13,1.8,0,6.284);x.fill();
+      }
+    }
+    x.fillStyle='rgba(6,6,11,.72)';x.fillRect(0,H-32,W,32);
+    x.font='11px "JetBrains Mono",monospace';x.textAlign='left';
+    x.fillStyle='rgba(216,174,79,.9)';
+    x.fillText('ARMED: '+DESTS[sel].n,12,H-12);
+    x.textAlign='right';x.fillStyle='rgba(170,166,158,.7)';
+    x.fillText(ports.length+' OPEN \u00B7 DRAG TO TEAR ONE',W-12,H-12);
+  };
+})();
+
+/* ===== THE X-MEN : the Fox timeline, with powers ===== */
+var MUTANTS=[
+ {k:'xavier',n:'Professor X',real:'Charles Xavier',actor:'Patrick Stewart',ok:1,c:'47,243,224',
+  pw:'Telepathy \u00B7 Cerebro',
+  d:'Stewart opens the first Doomsday trailer warning that an unthinkable decision will have to be made before the day is out. He is the moral weight of the Fox films and, in an incursion story, the only person who can hear an entire dying world at once.',
+  d2:'He has already died once on screen in this timeline, in Multiverse of Madness, at the hands of a Wanda who was not from here. Marvel bringing him back is a statement that variants are cheap and people are not.'},
+ {k:'magneto',n:'Magneto',real:'Erik Lehnsherr',actor:'Ian McKellen',ok:1,c:'164,92,255',
+  pw:'Magnetism \u00B7 Metal manipulation',
+  d:'The most dangerous confirmed mutant in the film, and the one whose logic most closely rhymes with Doom\u2019s. Both believe the world is badly built. Both are usually right about the diagnosis and monstrous about the cure.',
+  d2:'Put him in a room with a man wearing a full suit of metal armour and the scene writes itself. Comics have run that gag for sixty years and it never stops being funny or frightening.'},
+ {k:'cyclops',n:'Cyclops',real:'Scott Summers',actor:'James Marsden',ok:1,c:'224,27,45',
+  pw:'Optic force blasts',
+  d:'Marsden returns after being written out of the original trilogy almost immediately. Reporting on the Comic-Con footage puts Cyclops on screen with a new look, which suggests Marvel is finally giving the field leader something to do.',
+  d2:'Structurally he is the X-Men\u2019s Captain America: the one who runs the plan while everyone else does the impossible.'},
+ {k:'wolverine',n:'Logan / Wolverine',real:'James Howlett',actor:'Hugh Jackman',ok:0,c:'240,190,32',
+  pw:'Adamantium claws \u00B7 Healing factor',
+  d:'Logan and Wolverine are the same man &mdash; Logan is the name he goes by, Wolverine is the one he was given. Jackman is not on the announced Doomsday cast list, so everything here is inference, not reporting.',
+  d2:'What makes it plausible: Deadpool & Wolverine already brought him across, established anchor beings, and made the Fox library formally part of the MCU. The film ends with him choosing to stay. Whether that choice pays off in December is genuinely unknown.'},
+ {k:'mystique',n:'Mystique',real:'Raven Darkh\u00f6lme',actor:'Rebecca Romijn',ok:1,c:'80,180,200',
+  pw:'Shapeshifting',
+  d:'Romijn returns to the role she originated in 2000. In a film about realities wearing each other\u2019s faces, a character who can be anyone is not a henchman, she is a thesis.',
+  d2:'Also the single easiest way for a film to make you distrust a scene you have already watched.'},
+ {k:'nightcrawler',n:'Nightcrawler',real:'Kurt Wagner',actor:'Alan Cumming',ok:1,c:'120,80,190',
+  pw:'Teleportation',
+  d:'Cumming last played Kurt in X2, in an opening sequence widely held to be the best action scene in the entire Fox run. He is devout, gentle, and the only mutant on this list whose power is functionally identical to a Sling Ring.',
+  d2:'In a story about doors between realities, the man who is himself a door matters more than his screen time suggests.'},
+ {k:'beast',n:'Beast',real:'Hank McCoy',actor:'Kelsey Grammer',ok:1,c:'60,140,220',
+  pw:'Strength \u00B7 Intellect',
+  d:'Grammer returns from The Last Stand. Beast is the X-Men\u2019s scientist, which puts him in the same room as Reed Richards and Shuri when somebody finally has to explain what an incursion actually is.',
+  d2:'He is also proof the film is not embarrassed by its own history: this is a 2006 casting choice being honoured twenty years later.'},
+ {k:'gambit',n:'Gambit',real:'Remy LeBeau',actor:'Channing Tatum',ok:1,c:'216,60,200',
+  pw:'Kinetic charging',
+  d:'Tatum spent a decade trying to get a Gambit film made, finally played him in Deadpool & Wolverine, and carries over here. The only mutant on this list who arrives from the Void rather than from the mansion.',
+  d2:'His power &mdash; charging an object with kinetic energy until it detonates &mdash; is the most visually distinct thing in the roster, and the cheapest for a VFX team to make look incredible.'}
+];
+(function(){
+  var cv=$('xm-cv'),g=null,sel=0,hot=-1,pos=[];
+  function init(){g=fitCanvas(cv);}
+  resizers.pXM=init;
+  onResize.push(function(){if(activeId==='pXM'){init();}});
+
+  function roster(){
+    $('xm-roster').innerHTML=MUTANTS.map(function(m,i){
+      return '<button class="xmc'+(i===sel?' on':'')+'" data-i="'+i+'" style="--mc:rgb('+m.c+')">'+
+        '<b style="color:'+(i===sel?'rgb('+m.c+')':'inherit')+'">'+m.n+'</b>'+
+        '<span>'+m.actor+'</span></button>';
+    }).join('');
+    var bs=$('xm-roster').querySelectorAll('.xmc');
+    for(var i=0;i<bs.length;i++){
+      (function(el){el.onclick=function(){pick(parseInt(el.getAttribute('data-i'),10));};})(bs[i]);
+    }
+  }
+  function info(){
+    var m=MUTANTS[sel];
+    var box=$('xm-info');
+    box.style.setProperty('--mc','rgb('+m.c+')');
+    box.style.borderLeftColor='rgb('+m.c+')';
+    box.innerHTML='<div class="rl">'+m.actor.toUpperCase()+' &middot; '+m.real.toUpperCase()+'</div>'+
+      '<h4 style="color:rgb('+m.c+')">'+m.n+'</h4>'+
+      '<span class="badge" style="background:'+(m.ok?'#3ba55c':'#a45cff')+'">'+
+      (m.ok?'CONFIRMED CAST':'NOT CONFIRMED \u00B7 SPECULATION')+'</span>'+
+      '<p>'+m.d+'</p><p>'+m.d2+'</p>'+
+      '<div class="pw2">POWER &middot; '+m.pw+'</div>';
+  }
+  function pick(i){sel=i;roster();info();sfxCast();}
+  roster();info();
+
+  cv.addEventListener('pointermove',function(e){
+    if(!g||!pos.length){return;}
+    var r=cv.getBoundingClientRect();
+    var px=(e.clientX-r.left)*(g.W/r.width),py=(e.clientY-r.top)*(g.H/r.height);
+    hot=-1;
+    for(var i=0;i<pos.length;i++){
+      if(Math.abs(px-pos[i].x)<pos[i].s*30&&py>pos[i].y-pos[i].s*120&&py<pos[i].y+12){hot=i;break;}
+    }
+    cv.style.cursor=hot>=0?'pointer':'default';
+  });
+  cv.addEventListener('click',function(e){
+    if(hot>=0){pick(hot);magicBurst(e.clientX,e.clientY,24,60);}
+  });
+
+  function power(x,k,px,py,S,t,active,seed){
+    var amp=active?1:0.42;
+    if(k==='wolverine'){
+      /* six adamantium claws, and a slash arc when selected */
+      for(var h=0;h<2;h++){
+        var hx=px+(h?1:-1)*32*S,hy=py-40*S;
+        for(var c=0;c<3;c++){
+          var off=(c-1)*5*S;
+          x.strokeStyle='rgba(220,228,235,'+(0.75*amp+0.25)+')';
+          x.lineWidth=2.4*S;x.lineCap='round';
+          x.beginPath();
+          x.moveTo(hx+off,hy);
+          x.lineTo(hx+off+(h?1:-1)*6*S,hy-30*S);
+          x.stroke();
+        }
+      }
+      if(active){
+        var sl=(t%90)/90;
+        x.strokeStyle='rgba(240,190,32,'+(1-sl)*0.8+')';x.lineWidth=4*S;
+        x.beginPath();
+        x.arc(px,py-60*S,70*S,-2.4+sl*1.6,-1.6+sl*1.6);x.stroke();
+        x.strokeStyle='rgba(255,255,255,'+(1-sl)*0.6+')';x.lineWidth=1.6*S;
+        x.beginPath();x.arc(px,py-60*S,58*S,-2.4+sl*1.6,-1.6+sl*1.6);x.stroke();
+      }
+    }else if(k==='cyclops'){
+      var beam=0.55+Math.sin(t*0.06+seed)*0.3;
+      var bw=(active?18:9)*S*beam;
+      var bg2=x.createLinearGradient(px,py-104*S,px+220*S,py-104*S);
+      bg2.addColorStop(0,'rgba(255,240,240,'+(0.95*amp)+')');
+      bg2.addColorStop(.25,'rgba(224,27,45,'+(0.8*amp)+')');
+      bg2.addColorStop(1,'rgba(224,27,45,0)');
+      x.fillStyle=bg2;
+      x.fillRect(px+10*S,py-104*S-bw/2,230*S,bw);
+      x.fillStyle='rgba(255,60,60,'+amp+')';
+      x.fillRect(px-14*S,py-107*S,28*S,5*S);
+    }else if(k==='storm'){
+      for(var b=0;b<(active?3:1);b++){
+        if((t+b*30)%110>26){continue;}
+        fxBolt(x,px+(Math.random()-.5)*40*S,py-200*S,px+(Math.random()-.5)*30*S,py-120*S,
+               'rgba(190,225,255,'+(0.85*amp)+')',6,9*S,t);
+      }
+      for(var w2=0;w2<10;w2++){
+        var wa=t*0.05+w2*0.628;
+        x.strokeStyle='rgba(200,225,245,'+(0.1+0.18*amp)+')';x.lineWidth=1.2;
+        x.beginPath();
+        x.arc(px,py-58*S,(34+w2*4)*S,wa,wa+1.1);x.stroke();
+      }
+      x.fillStyle='rgba(230,245,255,'+(0.5+0.4*Math.sin(t*0.1))*amp+')';
+      x.fillRect(px-9*S,py-106*S,7*S,3*S);x.fillRect(px+3*S,py-106*S,7*S,3*S);
+    }else if(k==='nightcrawler'){
+      var ph=(t+seed*40)%180;
+      if(ph<40||ph>150){
+        for(var pf=0;pf<14;pf++){
+          var pa=pf*0.45+t*0.05;
+          var pr2=(12+pf*3)*S;
+          x.fillStyle='rgba(120,80,190,'+(0.35*amp*(1-pf/14))+')';
+          x.beginPath();x.arc(px+Math.cos(pa)*pr2,py-60*S+Math.sin(pa)*pr2*0.8,(5-pf*0.2)*S,0,6.284);x.fill();
+        }
+      }
+    }else if(k==='magneto'){
+      for(var m2=0;m2<(active?11:6);m2++){
+        var ma=t*0.02*(m2%2?-1:1)+m2*0.6;
+        var mr=(52+((m2*17)%40))*S;
+        var mx3=px+Math.cos(ma)*mr,my3=py-62*S+Math.sin(ma)*mr*0.75;
+        x.save();x.translate(mx3,my3);x.rotate(ma*2);
+        x.fillStyle='rgba(190,196,205,'+(0.5+0.4*amp)+')';
+        x.fillRect(-4*S,-1.4*S,8*S,2.8*S);
+        x.restore();
+      }
+      for(var fl2=0;fl2<4;fl2++){
+        x.strokeStyle='rgba(164,92,255,'+(0.12+0.16*amp)+')';x.lineWidth=1.2;
+        x.beginPath();x.ellipse(px,py-62*S,(40+fl2*16)*S,(26+fl2*11)*S,t*0.006+fl2,0,6.284);x.stroke();
+      }
+    }else if(k==='xavier'){
+      for(var pw2=0;pw2<4;pw2++){
+        var pp=((t*1.1+pw2*45)%180)/180;
+        x.strokeStyle='rgba(47,243,224,'+((1-pp)*0.45*amp)+')';x.lineWidth=1.6;
+        x.beginPath();x.arc(px,py-104*S,pp*120*S,0,6.284);x.stroke();
+      }
+      x.fillStyle='rgba(47,243,224,'+(0.3+0.3*Math.sin(t*0.06))*amp+')';
+      x.beginPath();x.arc(px,py-104*S,20*S,0,6.284);x.fill();
+    }else if(k==='mystique'){
+      var mm=(t%200)/200;
+      x.strokeStyle='rgba(80,180,200,'+(0.35*amp)+')';x.lineWidth=1.4;
+      for(var rp=0;rp<5;rp++){
+        var ry=py-120*S+((mm*160+rp*32)%160)*S;
+        x.beginPath();
+        x.moveTo(px-26*S,ry);
+        for(var q2=0;q2<6;q2++){x.lineTo(px-26*S+q2*10*S,ry+Math.sin(q2*1.4+t*0.1)*3*S);}
+        x.stroke();
+      }
+    }else if(k==='gambit'){
+      for(var cd=0;cd<(active?4:2);cd++){
+        var cp=((t*1.5+cd*60)%150)/150;
+        var cx3=px+cp*130*S,cy3=py-70*S-Math.sin(cp*3.14)*46*S;
+        x.save();x.translate(cx3,cy3);x.rotate(cp*7);
+        x.fillStyle='rgba(240,236,226,'+(1-cp*0.4)+')';
+        x.fillRect(-5*S,-8*S,10*S,16*S);
+        x.strokeStyle='rgba(216,60,200,'+(0.5+cp*0.5)+')';x.lineWidth=2*S;
+        x.strokeRect(-5*S,-8*S,10*S,16*S);
+        x.restore();
+        x.fillStyle='rgba(216,60,200,'+(0.25*(1-cp))+')';
+        x.beginPath();x.arc(cx3,cy3,14*S*cp,0,6.284);x.fill();
+      }
+    }else if(k==='beast'){
+      x.strokeStyle='rgba(60,140,220,'+(0.2+0.2*amp)+')';x.lineWidth=2*S;
+      for(var bc=0;bc<3;bc++){
+        var ba=(t*0.03+bc)%6.283;
+        x.beginPath();x.arc(px,py-60*S,(46+bc*10)*S,ba,ba+0.8);x.stroke();
+      }
+    }
+  }
+
+  draws.pXM=function(t){
+    if(!g){init();}if(!g){return;}
+    var x=g.x,W=g.W,H=g.H,i;
+    x.clearRect(0,0,W,H);
+    /* the mansion at night */
+    var sky=x.createLinearGradient(0,0,0,H);
+    sky.addColorStop(0,'#080a16');sky.addColorStop(.55,'#0e1020');sky.addColorStop(1,'#06060b');
+    x.fillStyle=sky;x.fillRect(0,0,W,H);
+    for(i=0;i<55;i++){
+      var sx2=((i*151)%W),sy2=((i*89)%(H*0.55));
+      x.globalAlpha=0.18+0.35*Math.abs(Math.sin(t*0.018+i));
+      x.fillStyle=i%6?'#f0ece2':'#2ff3e0';x.fillRect(sx2,sy2,1.3,1.3);
+    }
+    x.globalAlpha=1;
+    var gy=H*0.86;
+    x.fillStyle='rgba(16,16,26,.96)';
+    x.fillRect(W*0.2,gy-H*0.3,W*0.6,H*0.3);
+    x.beginPath();
+    x.moveTo(W*0.17,gy-H*0.3);x.lineTo(W*0.5,gy-H*0.52);x.lineTo(W*0.83,gy-H*0.3);x.closePath();x.fill();
+    for(i=0;i<8;i++){
+      x.fillStyle='rgba(240,160,32,'+(0.16+0.22*Math.abs(Math.sin(t*0.025+i*1.3)))+')';
+      x.fillRect(W*0.24+i*W*0.066,gy-H*0.22,W*0.028,H*0.07);
+    }
+    /* the X over the door */
+    x.strokeStyle='rgba(240,160,32,'+(0.3+0.2*Math.sin(t*0.04))+')';x.lineWidth=2.4;
+    x.beginPath();x.arc(W*0.5,gy-H*0.37,H*0.045,0,6.284);x.stroke();
+    x.beginPath();
+    x.moveTo(W*0.5-H*0.026,gy-H*0.396);x.lineTo(W*0.5+H*0.026,gy-H*0.344);
+    x.moveTo(W*0.5+H*0.026,gy-H*0.396);x.lineTo(W*0.5-H*0.026,gy-H*0.344);
+    x.stroke();
+    x.fillStyle='#0c0c14';x.fillRect(0,gy,W,H-gy);
+    x.strokeStyle='rgba(240,160,32,.14)';x.lineWidth=1.2;
+    x.beginPath();x.moveTo(0,gy);x.lineTo(W,gy);x.stroke();
+
+    /* the line-up */
+    var S=Math.min(W/900,H/430);
+    if(S<0.4){S=0.4;}
+    pos=[];
+    for(i=0;i<MUTANTS.length;i++){
+      pos.push({x:W*(0.09+i*0.117),y:gy,s:S*(i===sel?1.1:0.92)});
+    }
+    /* back to front so the selected one reads clearly */
+    var order=[];
+    for(i=0;i<MUTANTS.length;i++){if(i!==sel){order.push(i);}}
+    order.push(sel);
+    for(var o=0;o<order.length;o++){
+      var mi=order[o],m=MUTANTS[mi],P=pos[mi];
+      var act=(mi===sel),hov=(mi===hot);
+      x.globalAlpha=act?1:(hov?0.9:0.62);
+      if(act){
+        var gg=x.createRadialGradient(P.x,P.y-70*P.s,4,P.x,P.y-70*P.s,140*P.s);
+        gg.addColorStop(0,'rgba('+m.c+',.22)');gg.addColorStop(1,'rgba('+m.c+',0)');
+        x.fillStyle=gg;x.beginPath();x.arc(P.x,P.y-70*P.s,140*P.s,0,6.284);x.fill();
+      }
+      power(x,m.k,P.x,P.y,P.s,t,act,mi);
+      drawHero(x,m.k,P.x,P.y,P.s,act?'cast':(hov?'charge':'stand'),t,mi*1.6);
+      x.globalAlpha=1;
+      if(act){
+        fxRing(x,P.x,P.y-2,34*P.s,'rgba('+m.c+',.5)',1.6,[5,8],t*0.02);
+      }
+      if(!m.ok){
+        x.font='10px "JetBrains Mono",monospace';x.textAlign='center';
+        x.fillStyle='rgba(164,92,255,'+(act?0.95:0.5)+')';
+        x.fillText('UNCONFIRMED',P.x,P.y+16);
+      }
+      if(act||hov){
+        x.font='11px "JetBrains Mono",monospace';x.textAlign='center';
+        x.fillStyle='rgba('+m.c+',.95)';
+        x.fillText(m.n.toUpperCase(),P.x,P.y-150*P.s);
+      }
+    }
+    x.fillStyle='rgba(6,6,11,.74)';x.fillRect(0,H-32,W,32);
+    x.font='11px "JetBrains Mono",monospace';x.textAlign='left';
+    x.fillStyle='rgba(240,160,32,.9)';
+    x.fillText('XAVIER\u2019S SCHOOL FOR GIFTED YOUNGSTERS \u00B7 A SEPARATE REALITY',12,H-12);
+    x.textAlign='right';x.fillStyle='rgba(170,166,158,.7)';
+    x.fillText('CLICK A MUTANT',W-12,H-12);
+  };
+})();
 
 /* ===== POST-CREDITS SCENES : five stingers, animated ===== */
 (function(){
