@@ -1950,15 +1950,14 @@ function clearFx(el){
 function go(n,fast){
   if(busy||n<0||n>=pages.length){return;}
   /* while the loop is held, paging wraps around the magical sections */
-  if(loopHeld()){
-    if(LOOP_IDS.indexOf(pages[n].id)<0){
-      var cur=LOOP_IDS.indexOf(activeId);
-      if(cur<0){n=idOf('pPORTAL');}
-      else{
-        var step=(n>idx)?1:-1;
-        n=idOf(LOOP_IDS[(cur+step+LOOP_IDS.length)%LOOP_IDS.length]);
-      }
-      toast('The loop holds \u2014 cut it at the Sanctum');
+  if(loopHeld()&&loopPair.length===2){
+    if(loopPair.indexOf(pages[n].id)<0){
+      /* only two rooms exist right now: bounce to whichever one you are not in */
+      var cur=loopPair.indexOf(activeId);
+      n=idOf(cur===0?loopPair[1]:loopPair[0]);
+      toast(stage==='seeking'
+        ?'The loop holds \u2014 cut it at the Sanctum'
+        :'The loop holds \u2014 only '+pairText());
     }
   }
   if(n===idx){return;}
@@ -2686,9 +2685,11 @@ var RINGS=[
   onResize.push(function(){if(activeId==='p5'){init();}});
 
   $('lb-go').onclick=function(){
-    if(!loopHeld()){return;}
-    loopBroken=true;
-    updateLoopUI();
+    if(stage!=='seeking'){
+      toast('Clear the doorways in the Portal Room first');
+      return;
+    }
+    setStage('cut');
     /* cast a time loop on the Eye so you can see it happen */
     ring=5;
     var rbs=document.querySelectorAll('.ring');
@@ -6478,45 +6479,84 @@ makeBattle('pDA','da-cv','da-ph',['da-prev','da-play','da-next'],{
      open the lock. Solving it hands you a fresh item and permanently attunes that page.
 ============================================================================================ */
 /* --- the loop ---------------------------------------------------------------
-   Nothing is gated until YOU tear a portal open. From that moment the magical
-   sections fold back on each other and ordinary paging is held inside them.
-   Cut the loop at the Sanctum, return to the Portal Room, close the portal,
-   and the whole site goes back to behaving like an ordinary set of pages.
+   Nothing is gated until you actually STEP THROUGH a portal. From that moment
+   you are bound to exactly two sections: the Portal Room and wherever the
+   doorway put you. Ride it back with the ring or the TemPad, clear the
+   doorways to be thrown at the Sanctum, cut the loop there, and finally close
+   the portal back in the Portal Room. Then the file pages normally again.
+
+     idle  ->  held [Portal + destination]
+           ->  seeking [Portal + Sanctum]
+           ->  cut (free to move, portal still open)
+           ->  idle
 ----------------------------------------------------------------------------- */
-var portalOpen=false, loopBroken=false;
-var LOOP_IDS=['p2','pPORTAL','p3','p4','p5'];
-var LOOP_NAMES='Loki \u00b7 Portal Room \u00b7 Kang \u00b7 Doom \u00b7 Sanctum';
-function loopHeld(){return portalOpen&&!loopBroken;}
+var stage='idle';                 /* idle | held | seeking | cut */
+var loopPair=[];                  /* the two sections you are bound to */
+function portalIsOpen(){return stage!=='idle';}
+function loopHeld(){return stage==='held'||stage==='seeking';}
 function idOf(id){for(var i=0;i<pages.length;i++){if(pages[i].id===id){return i;}}return -1;}
+function nameOf(id){var i=idOf(id);return i<0?id:names[i];}
+function pairText(){
+  return loopPair.length?(nameOf(loopPair[0])+' \u21C4 '+nameOf(loopPair[1])):'';
+}
+function setStage(st,pair){
+  stage=st;
+  if(pair){loopPair=pair;}
+  if(st==='idle'){loopPair=[];}
+  updateLoopUI();
+}
 function updateLoopUI(){
   var chip=$('loopchip');
-  chip.classList.toggle('hide',!portalOpen);
-  chip.classList.toggle('broken',loopBroken);
+  chip.classList.toggle('hide',!portalIsOpen());
+  chip.classList.toggle('broken',stage==='cut');
   chip.classList.toggle('pulse',loopHeld());
-  chip.textContent=loopHeld()?'\u25C9 LOOP HELD':'\u25CB LOOP BROKEN';
+  chip.textContent=loopHeld()?('\u25C9 LOOP \u00b7 '+pairText()):'\u25CB LOOP CUT';
   chip.title=loopHeld()
-    ?'A portal is open. Paging is held inside the magical sections until the loop is cut at the Sanctum.'
-    :'The loop is cut. Return to the Portal Room and close the portal.';
+    ?('Bound to '+pairText()+'. Ride the doorway back to the Portal Room.')
+    :'The loop is cut. Close the portal to finish it.';
+
   var lb=$('loopbreak');
-  if(lb){lb.classList.toggle('hide',!loopHeld());}
+  if(lb){
+    lb.classList.toggle('hide',stage!=='held'&&stage!=='seeking');
+    var btn=$('lb-go'),txt=lb.querySelector('p');
+    if(btn&&txt){
+      if(stage==='seeking'){
+        btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';
+        btn.textContent='Break the loop';
+        txt.innerHTML='The doorways are cleared and the loop has narrowed to this room and the Portal Room. The Eye can cut it &mdash; it is the one thing in the building that has done this before, several thousand times, on purpose.';
+      }else{
+        btn.disabled=true;btn.style.opacity='.4';btn.style.cursor='default';
+        btn.textContent='Not yet \u00b7 clear the doorways first';
+        txt.innerHTML='You are still bound to <b style="color:var(--paper)">'+pairText()+'</b>. Ride the doorway back to the Portal Room and clear the open doorways there &mdash; that is what narrows the loop down to the Sanctum, where it can be cut.';
+      }
+    }
+  }
   var shut=$('por-shut');
-  if(shut){shut.classList.toggle('show',portalOpen&&loopBroken);}
-  var st=$('por-state');
-  if(st){
-    st.classList.toggle('open',loopHeld());
-    st.classList.toggle('free',portalOpen&&loopBroken);
-    if(!portalOpen){
-      st.innerHTML='<b>NO PORTAL OPEN</b>The file pages normally. Tear one open and the magical sections will start folding back on each other.';
-    }else if(!loopBroken){
-      st.innerHTML='<b>LOOP HELD</b>Paging is caught between '+LOOP_NAMES+'. Cut it at the Sanctum, then come back here and close the portal.';
+  if(shut){shut.classList.toggle('show',stage==='cut');}
+  var clr=$('por-clear');
+  if(clr){
+    clr.textContent=(stage==='held')?'Clear doorways \u2192 Sanctum':'Close all';
+    clr.classList.toggle('danger',stage==='held');
+  }
+  var st2=$('por-state');
+  if(st2){
+    st2.classList.toggle('open',loopHeld());
+    st2.classList.toggle('free',stage==='cut');
+    if(stage==='idle'){
+      st2.innerHTML='<b>NO PORTAL OPEN</b>The file pages normally. Tear a doorway open and step through it to see what that costs.';
+    }else if(stage==='held'){
+      st2.innerHTML='<b>LOOP HELD \u00b7 '+pairText()+'</b>Paging is bound to those two sections. Clear the doorways here and the loop narrows to the Sanctum.';
+    }else if(stage==='seeking'){
+      st2.innerHTML='<b>LOOP NARROWED \u00b7 '+pairText()+'</b>Get to the Sanctum and cut it with the Eye.';
     }else{
-      st.innerHTML='<b>LOOP CUT \u2014 CLOSE THE PORTAL</b>You can page anywhere again, but the door stays open until you shut it.';
+      st2.innerHTML='<b>LOOP CUT \u2014 CLOSE THE PORTAL</b>You can page anywhere again, but the doorway stays open until you shut it.';
     }
   }
   if(typeof refreshDoor==='function'){refreshDoor();}
 }
 $('loopchip').onclick=function(){
-  if(loopHeld()){toast('Held between '+LOOP_NAMES+' \u2014 cut the loop at the Sanctum');}
+  if(stage==='held'){toast('Bound to '+pairText()+' \u2014 clear the doorways in the Portal Room');}
+  else if(stage==='seeking'){toast('Bound to '+pairText()+' \u2014 cut the loop at the Sanctum');}
   else{toast('Loop cut. Close the portal to finish it.');}
 };
 var CARRY=null;            /* 'ring' | 'tempad' | null */
@@ -6549,7 +6589,7 @@ function portalIndex(){
 function refreshDoor(){
   var b=$('backportal');
   /* no open portal means no lock, no door, and nothing unusual about scrolling */
-  if(!portalOpen||activeId==='pPORTAL'){b.classList.add('hide');return;}
+  if(!portalIsOpen()||activeId==='pPORTAL'){b.classList.add('hide');return;}
   b.classList.remove('hide');
   var open=!!CARRY||!!ATTUNED[activeId];
   b.classList.toggle('open',open);
@@ -6579,7 +6619,7 @@ $('backportal').onclick=function(){
 var _rd=refreshDoor;
 refreshDoor=function(){
   _rd();
-  if(portalOpen&&activeId!=='pPORTAL'&&!CARRY&&!ATTUNED[activeId]&&!doorHinted&&idx!==0){
+  if(portalIsOpen()&&activeId!=='pPORTAL'&&!CARRY&&!ATTUNED[activeId]&&!doorHinted&&idx!==0){
     setTimeout(hintDoor,1400);
   }
 };
@@ -6599,7 +6639,7 @@ refreshDoor=function(){
   box.onclick=function(e){if(e.target===box){close();}};
 
   window.openLock=function(){
-    if(!portalOpen){return;}
+    if(!portalIsOpen()){return;}
     pageAt=activeId;
     kind=(LASTITEM==='tempad')?'pad':'ring';
     solved=false;
@@ -6853,18 +6893,10 @@ var DESTS=[
   renderKit();renderDests();info();
 
   function open2(px,py,r,k){
-    var first=!portalOpen;
-    portalOpen=true;
-    if(first){
-      loopBroken=false;
-      updateLoopUI();
-      toast('A portal is open \u2014 the sections are folding back on each other');
-    }
     ports.push({x:px,y:py,r:Math.max(46,Math.min(r||90,190)),k:(typeof k==='number')?k:sel,
       t:0,born:1,vx:(Math.random()-.5)*0.22,vy:(Math.random()-.5)*0.16,spin:Math.random()*6.28});
     if(ports.length>3){ports.shift();}
     sfxCast();
-    updateLoopUI();
   }
   function local(e){
     var r=cv.getBoundingClientRect();
@@ -6922,6 +6954,12 @@ var DESTS=[
     var n=-1;
     for(var i=0;i<pages.length;i++){if(pages[i].id===targetId){n=i;}}
     toast('Stepping through to '+dd.n+' \u2014 the '+itemName(LASTITEM)+' is spent');
+    if(n>=0){
+      setStage('held',['pPORTAL',targetId]);
+      setTimeout(function(){
+        toast('Bound to '+pairText()+' until the loop is cut');
+      },2200);
+    }
     var rn=$('rune');rn.classList.remove('go');void rn.offsetWidth;rn.classList.add('go');
     magicBurst(window.innerWidth/2,window.innerHeight/2,60,60);
     sfxCast();
@@ -6929,13 +6967,23 @@ var DESTS=[
   }
   $('por-clear').onclick=function(){
     ports=[];
-    toast(loopBroken?'Doorways cleared \u2014 now close the portal itself':'Doorways cleared, but the way is still open');
+    if(stage==='held'){
+      setStage('seeking',['pPORTAL','p5']);
+      var rn=$('rune');rn.classList.remove('go');void rn.offsetWidth;rn.classList.add('go');
+      magicBurst(window.innerWidth/2,window.innerHeight/2,48,80);
+      sfxCast();
+      toast('Doorways cleared \u2014 the loop drags you toward the Sanctum');
+      setTimeout(function(){go(idOf('p5'),true);},900);
+    }else if(stage==='cut'){
+      toast('Doorways cleared \u2014 now close the portal itself');
+    }else{
+      toast('Doorways cleared');
+    }
   };
   $('por-shut').onclick=function(){
-    if(!(portalOpen&&loopBroken)){return;}
+    if(stage!=='cut'){return;}
     ports=[];
-    portalOpen=false;loopBroken=false;
-    updateLoopUI();
+    setStage('idle');
     var rn=$('rune');rn.classList.remove('go');void rn.offsetWidth;rn.classList.add('go');
     magicBurst(window.innerWidth/2,window.innerHeight/2,54,90);
     sfxBoom();
@@ -7193,9 +7241,9 @@ var DESTS=[
     x.fillStyle='rgba(216,174,79,.9)';
     x.fillText('ARMED: '+DESTS[sel].n+(CARRY?'   \u25C9 '+itemName(CARRY):'   \u25CB EMPTY HANDS'),12,H-12);
     x.textAlign='right';x.fillStyle='rgba(170,166,158,.7)';
-    x.fillText(portalOpen
-      ?(ports.length+' OPEN \u00B7 '+(loopBroken?'LOOP CUT':'LOOP HELD'))
-      :'DRAG TO TEAR ONE OPEN',W-12,H-12);
+    x.fillText(portalIsOpen()
+      ?(ports.length+' OPEN \u00B7 '+(stage==='cut'?'LOOP CUT':'LOOP '+stage.toUpperCase()))
+      :(ports.length+' OPEN \u00B7 DRAG TO TEAR ONE'),W-12,H-12);
   };
 })();
 
