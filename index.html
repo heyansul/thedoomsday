@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
 <title>Avengers: Doomsday (2026) — Release Date, Full Cast, Trailer &amp; Theories | TheDoomsday.in</title>
-<meta name="description" content="Avengers: Doomsday releases December 18, 2026. Full confirmed cast, both trailers explained, Doctor Doom's story, Phase 6 order and the best fan theories — inside a 20-page interactive Marvel experience.">
+<meta name="description" content="Avengers: Doomsday releases December 18, 2026. Full confirmed cast, both trailers explained, Doctor Doom's story, Phase 6 order and the best fan theories — inside a 25-page interactive Marvel experience.">
 <meta name="keywords" content="Avengers Doomsday, Avengers Doomsday release date, Avengers Doomsday cast, Doctor Doom, Dr Doom, Doom, Robert Downey Jr Doctor Doom, Avengers 5, Avengers Phase 6, Marvel Phase 6, Avengers Doomsday trailer, Avengers Secret Wars 2027, MCU Multiverse Saga, Avengers Doomsday theories, X-Men MCU">
 <link rel="canonical" href="https://thedoomsday.in/">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -851,6 +851,101 @@ p{line-height:1.72}
 #por-shut{display:none}
 #por-shut.show{display:block;border-color:var(--green);color:var(--green)}
 #por-shut.show:hover{background:var(--green);color:#06060b}
+
+/* ===== DOOM'S DILEMMA : the veil, the band, the CRT ===== */
+#doomveil{position:fixed;inset:0;z-index:36;pointer-events:none;opacity:0;transition:opacity 1.6s ease;
+ background:
+  radial-gradient(ellipse 80% 60% at 50% 40%,rgba(0,0,0,0) 30%,rgba(4,10,7,.72) 100%),
+  linear-gradient(rgba(10,26,18,.42),rgba(2,6,4,.62)),
+  repeating-linear-gradient(rgba(255,255,255,.035) 0 1px,transparent 1px 3px)}
+body.doomed #doomveil{opacity:1}
+body.doomed #fx-vig{box-shadow:inset 0 0 240px 90px rgba(0,0,0,.94)}
+body.doomed #logo i{color:var(--green)}
+#doomband{position:fixed;left:50%;bottom:104px;transform:translateX(-50%) translateY(16px);z-index:33;
+ pointer-events:none;text-align:center;opacity:0;transition:.9s cubic-bezier(.3,0,.2,1);max-width:92vw;
+ border:1px solid rgba(59,165,92,.45);background:rgba(6,14,9,.92);padding:11px 22px}
+body.doomed #doomband{opacity:1;transform:translateX(-50%) translateY(0)}
+#doomband b{display:block;font-family:Oswald,sans-serif;font-weight:600;font-size:1rem;letter-spacing:.09em;
+ text-transform:uppercase;color:#7fe0a0;animation:dband 2.6s ease-in-out infinite}
+@keyframes dband{0%,100%{opacity:.72;text-shadow:0 0 0 rgba(127,224,160,0)}
+ 50%{opacity:1;text-shadow:0 0 16px rgba(127,224,160,.5)}}
+#doomband span{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;
+ color:var(--dim);margin-top:5px}
+@media(max-width:760px){#doomband{bottom:118px;padding:9px 14px}#doomband b{font-size:.86rem}
+ #doomband span{font-size:9px}}
+
+#dd-pillars{display:flex;flex-direction:column;gap:9px}
+.dpil{background:var(--panel);border-left:2px solid var(--green);padding:13px 16px;cursor:pointer;transition:.42s ease}
+.dpil:hover,.dpil.on{background:#141c17;border-left-color:#7fe0a0}
+.dpil b{display:block;font-family:Oswald,sans-serif;font-weight:600;font-size:1.02rem;text-transform:uppercase;
+ letter-spacing:.03em;color:#9fe8b8}
+.dpil span{display:block;color:var(--dim);font-size:.9rem;line-height:1.7;margin-top:5px}
+#dd-state{border:1px solid var(--line);border-left:2px solid var(--red);background:var(--void2);
+ padding:13px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;
+ line-height:1.8;color:var(--dim)}
+#dd-state b{display:block;color:#9fe8b8;letter-spacing:.12em;margin-bottom:4px}
+
+/* CRT power-down */
+#crt{position:fixed;inset:0;z-index:210;display:none;background:#000;pointer-events:none}
+#crt.on{display:block}
+#crt-line{position:absolute;left:0;right:0;top:50%;height:3px;background:#eafff2;opacity:0;
+ box-shadow:0 0 28px 6px rgba(200,255,225,.9)}
+#crt-dot{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;
+ background:#fff;opacity:0;box-shadow:0 0 26px 8px rgba(255,255,255,.85)}
+#crt.on #crt-line{animation:crtLine 1.25s cubic-bezier(.6,0,.2,1) forwards}
+#crt.on #crt-dot{animation:crtDot .75s .95s cubic-bezier(.5,0,.3,1) forwards}
+@keyframes crtLine{0%{opacity:0;transform:scaleX(1)}18%{opacity:1;transform:scaleX(1)}
+ 70%{opacity:1;transform:scaleX(1)}100%{opacity:1;transform:scaleX(.02)}}
+@keyframes crtDot{0%{opacity:1;transform:scale(1)}55%{opacity:1;transform:scale(1.9)}100%{opacity:0;transform:scale(0)}}
+#deck.crtdown{animation:crtSquash 1.2s cubic-bezier(.6,0,.2,1) forwards}
+@keyframes crtSquash{0%{transform:scale(1,1);filter:brightness(1)}
+ 30%{transform:scale(1,.9);filter:brightness(1.6)}
+ 55%{transform:scale(1.01,.006);filter:brightness(3.4)}
+ 100%{transform:scale(1,.004);filter:brightness(3.4);opacity:0}}
+
+/* ===== CONTACT ===== */
+#contact{display:grid;grid-template-columns:1.35fr .65fr;gap:26px;align-items:start}
+@media(max-width:860px){#contact{grid-template-columns:1fr}}
+#c-form label{display:block;margin-bottom:14px}
+#c-form label>span{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;
+ text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:620px){.cf-row{grid-template-columns:1fr}}
+#c-form input,#c-form select,#c-form textarea{width:100%;background:var(--void2);border:1px solid var(--line);
+ color:var(--paper);padding:12px 14px;font-family:Inter,sans-serif;font-size:.95rem;transition:.36s ease;
+ border-radius:0;-webkit-appearance:none;appearance:none}
+#c-form select{background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),linear-gradient(135deg,var(--gold) 50%,transparent 50%);
+ background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+#c-form textarea{resize:vertical;line-height:1.7;font-size:.95rem}
+#c-form input:focus,#c-form select:focus,#c-form textarea:focus{outline:0;border-color:var(--gold);background:#15151f}
+#c-form input.bad,#c-form textarea.bad{border-color:var(--red)}
+#cf-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.cf-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:4px}
+#cf-send{background:var(--red);border:0;color:#fff;padding:14px 34px;cursor:pointer;
+ font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+ box-shadow:7px 7px 0 rgba(0,0,0,.55);transition:transform .35s cubic-bezier(.25,.8,.25,1),box-shadow .35s ease}
+#cf-send:hover{transform:translate(-2px,-2px);box-shadow:10px 10px 0 rgba(0,0,0,.55)}
+#cf-send:disabled{opacity:.5;cursor:default;transform:none}
+#cf-status{font-size:10px;letter-spacing:.11em;color:var(--dim)}
+#cf-status.ok{color:var(--green)}
+#cf-status.err{color:var(--red)}
+.cf-note{color:var(--dim);font-size:.86rem;line-height:1.7;margin-top:14px}
+#c-side{display:flex;flex-direction:column;gap:10px}
+.cbox{background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--gold);padding:15px 17px}
+.cbox .ck{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--gold);margin-bottom:7px}
+.cbox p{color:var(--dim);font-size:.9rem;line-height:1.72}
+.cbox b{color:var(--paper)}
+.cmail{display:block;font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--paper);
+ word-break:break-all;text-decoration:none;border-bottom:1px solid rgba(216,174,79,.4);
+ padding-bottom:4px;margin-bottom:9px;transition:.36s ease}
+.cmail:hover{color:var(--gold)}
+#foot2{border-top:1px solid var(--line);margin-top:34px;padding:26px 0 10px;text-align:center}
+#foot2 .made{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+#foot2 .made i{font-style:normal;color:var(--red);display:inline-block;animation:beat 1.8s ease-in-out infinite}
+#foot2 .made b{color:var(--gold);font-weight:400}
+#foot2 .by{font-family:Oswald,sans-serif;font-size:1.05rem;text-transform:uppercase;letter-spacing:.08em;color:var(--paper);margin-top:12px}
+#foot2 .by span{color:var(--gold)}
+#foot2 .yr2{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;color:var(--dim);margin-top:10px;opacity:.75}
 #toast{position:fixed;bottom:64px;left:50%;transform:translateX(-50%) translateY(20px);z-index:120;background:var(--gold);color:#1a1408;padding:12px 22px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;opacity:0;transition:.4s;pointer-events:none;text-align:center;max-width:88vw}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.2s!important}}
@@ -870,6 +965,9 @@ p{line-height:1.72}
  <circle cx="200" cy="200" r="62" fill="none" stroke="currentColor" stroke-width="1"/>
 </svg></div>
 <div id="sfx"><b></b></div><div id="toast"></div>
+<div id="doomveil"></div>
+<div id="doomband"><b>YOU ARE TRAPPED IN DOOM&rsquo;S LOOP</b><span id="doomband-sub">Every road leads back to him. Find the branch he did not account for.</span></div>
+<div id="crt"><div id="crt-line"></div><div id="crt-dot"></div></div>
 <div id="boom"><canvas id="boom-cv"></canvas><div id="boom-word"><b>BOOM!</b></div></div>
 
 <div id="gate">
@@ -887,7 +985,7 @@ p{line-height:1.72}
   </div>
   <div class="gn" style="animation-delay:.55s">
    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 12h8M13 9l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-   <span><b>21 pages.</b> Arrow keys, swipe or scroll to turn them. Six riddles are hidden inside.</span>
+   <span><b>25 pages.</b> Arrow keys, swipe or scroll to turn them. Six riddles are hidden inside.</span>
   </div>
  </div>
  <button id="enter">Open the File</button>
@@ -906,7 +1004,7 @@ p{line-height:1.72}
 <div id="rail"></div>
 <div id="bot">
  <button class="arw" id="prev">&larr; Prev</button>
- <div id="pnum" class="mono">01 / 23</div>
+ <div id="pnum" class="mono">01 / 25</div>
  <button class="arw" id="next">Next &rarr;</button>
 </div>
 
@@ -1419,6 +1517,22 @@ p{line-height:1.72}
  <div style="height:80px"></div>
 </div>
 
+<div class="page" id="pDOOM">
+ <div class="hd">
+  <div class="kick">Doom&rsquo;s Dilemma &middot; classified</div>
+  <h2>Dark magic. A genius mind. An army that never asks why.</h2>
+  <p>Three things make Victor Von Doom worse than anyone who came before him. Read them while the machine finishes its arithmetic.</p>
+ </div>
+ <div class="body"><div class="bt-lay">
+  <div class="bt-stage"><canvas id="dd-cv"></canvas></div>
+  <div class="bt-side">
+   <div class="bt-tag"><span>LATVERIA</span><span>BATTLEWORLD PROTOCOL</span><span>NO EXIT</span></div>
+   <div id="dd-pillars"></div>
+   <div id="dd-state"></div>
+  </div>
+ </div></div>
+</div>
+
 <div class="page scr" id="pSEO">
  <div class="hd">
   <div class="kick">The Full Guide &middot; scrollable</div>
@@ -1545,6 +1659,61 @@ p{line-height:1.72}
  <div style="height:70px"></div>
 </div>
 
+
+<div class="page scr" id="pCONTACT">
+ <div class="hd">
+  <div class="kick">End of file</div>
+  <h2>Questions, corrections, or work</h2>
+  <p>Spotted something wrong, want to use a piece of this, or need something like it built? Send it over.</p>
+ </div>
+ <div id="contact">
+  <div id="c-form">
+   <div class="cf-row">
+    <label><span>Your name</span>
+     <input type="text" id="cf-name" maxlength="80" autocomplete="name" placeholder="Who is asking?"></label>
+    <label><span>Email</span>
+     <input type="email" id="cf-email" maxlength="120" autocomplete="email" placeholder="Where should the reply go?"></label>
+   </div>
+   <label><span>What is this about?</span>
+    <select id="cf-topic">
+     <option>A correction to something on this site</option>
+     <option>A theory you think I have missed</option>
+     <option>Permission to use something from here</option>
+     <option>I want a site like this built</option>
+     <option>Something else</option>
+    </select></label>
+   <label><span>Message</span>
+    <textarea id="cf-msg" rows="6" maxlength="4000" placeholder="Go on then."></textarea></label>
+   <input type="text" id="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+   <div class="cf-actions">
+    <button id="cf-send">Send it</button>
+    <span id="cf-status" class="mono"></span>
+   </div>
+   <p class="cf-note">No newsletter, no list, no tracking. The message goes to one inbox and that is the end of it.</p>
+  </div>
+  <aside id="c-side">
+   <div class="cbox">
+    <div class="ck">DIRECT</div>
+    <a class="cmail" href="mailto:anshulsharmacs016@gmail.com?subject=TheDoomsday.in">anshulsharmacs016@gmail.com</a>
+    <p>Prefer your own mail client? That link opens it with the subject already filled in.</p>
+   </div>
+   <div class="cbox">
+    <div class="ck">RESPONSE TIME</div>
+    <p>Usually a day or two. If it is a factual correction with a source attached, faster &mdash; those get fixed the same week.</p>
+   </div>
+   <div class="cbox">
+    <div class="ck">BUILT BY</div>
+    <p><b>Anshul Sharma (Shubh)</b><br>Web applications, dashboards, Shopify builds, and whatever this counts as.</p>
+   </div>
+  </aside>
+ </div>
+ <footer id="foot2">
+  <div class="made">Made with <i>&#10084;</i> in <b>India</b></div>
+  <div class="by">Designed and crafted by <span>Anshul Sharma</span> (Shubh)</div>
+  <div class="yr2">THEDOOMSDAY.IN &middot; &copy; 2026 &middot; AN INDEPENDENT FAN PROJECT &middot; anshulsharmacs016@gmail.com</div>
+ </footer>
+ <div style="height:80px"></div>
+</div>
 </div>
 
 <div id="glitchbox"><div id="gb-in">
@@ -1930,7 +2099,7 @@ var pages=[].slice.call(document.querySelectorAll('.page'));
 var names=['Title','Loki Tree','Portal Room','Kang','Doom','Dr Strange','Thanos',
            'Thanos vs Avengers','Doom vs Kang vs Thanos','Doom vs Avengers',
            'Sentry','Trophy Wall','Incursion Map','The X-Men','Roster','Comics',
-           'Post-Credits','Briefing','Evidence','War Room','Arena','Rooftop','Full Guide'];
+           'Post-Credits','Briefing','Evidence','War Room','Arena','Rooftop','Doom\u2019s Dilemma','Full Guide','Contact'];
 var sfxWords=['KRAK!','FWOOSH','SHRAK','BOOM!','WHUMP','THOOM','ZZKT!','KLANG','FWAM!','SKRSH','KRAKK','VWOOM','THWIP','DOOM!','FWASH','SNKT!'];
 var idx=0,busy=false;
 var FX=['flip','warp','iris','shear','fall','blade','dust'];
@@ -1950,7 +2119,15 @@ function clearFx(el){
 function go(n,fast){
   if(busy||n<0||n>=pages.length){return;}
   /* while the loop is held, paging wraps around the magical sections */
-  if(loopHeld()&&loopPair.length===2){
+  /* Doom's loop takes precedence over everything, including the portal loop */
+  if(typeof doomLoop!=='undefined'&&doomLoop){
+    if(DOOM_PAIR.indexOf(pages[n].id)<0){
+      var dcur=DOOM_PAIR.indexOf(activeId);
+      n=idOf(dcur===0?DOOM_PAIR[1]:DOOM_PAIR[0]);
+      toast('Doom accounted for that road. Take the tree apart.');
+    }
+  }
+  else if(loopHeld()&&loopPair.length===2){
     if(loopPair.indexOf(pages[n].id)<0){
       /* only two rooms exist right now: bounce to whichever one you are not in */
       var cur=loopPair.indexOf(activeId);
@@ -2005,6 +2182,7 @@ function go(n,fast){
     from.classList.remove('out');clearFx(from);clearFx(to);
     busy=false;turning=false;
     if(resizers[to.id]){resizers[to.id]();}
+    if(to.id==='pDOOM'&&typeof armDoomLoop==='function'){armDoomLoop();}
   },dur+60);
 }
 $('prev').onclick=function(){go(idx-1);};
@@ -2088,6 +2266,9 @@ window.addEventListener('keydown',function(e){
            $('secret').classList.contains('on')||$('puzzle').classList.contains('on');
   if(e.keyCode===konami[kpos]){kpos++;if(kpos===konami.length){kpos=0;solve(0);}}
   else{kpos=(e.keyCode===konami[0])?1:0;}
+  var tag=(e.target&&e.target.tagName)||'';
+  var typing=(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT');
+  if(typing){return;}
   if(e.key&&e.key.length===1&&activeId!=='p15'){
     typed=(typed+e.key.toUpperCase()).slice(-8);
     if(typed.slice(-4)==='DOOM'){solve(1);}
@@ -3308,6 +3489,7 @@ var LORE=[
 (function(){
   var cv=$('tree-cv'),g=null;
   var nodes=[],pruned=0,newGrowth=0,hot=-1,sparks=[],bolts=[],tva=false,tvaT=0,cleared=false,lastLive=0;
+  var trueLine=null,trueHot=false;
   var MAXGEN=5,CAP=340;
   function addNode(px,py,ang,len,gen,parent,lore){
     var n={id:nodes.length,x0:px,y0:py,ang:ang,len:len,gen:gen,parent:parent,
@@ -3320,7 +3502,7 @@ var LORE=[
   }
   function build(){
     g=fitCanvas(cv);if(!g){return;}
-    nodes=[];pruned=0;newGrowth=0;sparks=[];bolts=[];cleared=false;hot=-1;
+    nodes=[];pruned=0;newGrowth=0;sparks=[];bolts=[];cleared=false;hot=-1;trueLine=null;trueHot=false;
     var hx=[g.W*0.5-g.W*0.225,g.W*0.5+g.W*0.225],hy=g.H*0.615;
     for(var i=0;i<8;i++){
       var side=i<4?0:1,k=i%4,spread=(k-1.5)/1.5;
@@ -3400,14 +3582,33 @@ var LORE=[
     if(!g){return;}
     var r=cv.getBoundingClientRect();
     var px=(e.clientX-r.left)*(g.W/r.width),py=(e.clientY-r.top)*(g.H/r.height);
-    hot=pick(px,py,tick);
-    cv.style.cursor=hot>=0?'pointer':'default';
+    trueHot=false;
+    if(trueLine&&trueLine.grow>0.5){
+      var te=trueEnd(tick);
+      if(distSeg(px,py,trueLine.x0,trueLine.y0,te.x,te.y)<900){trueHot=true;}
+    }
+    hot=trueHot?-1:pick(px,py,tick);
+    cv.style.cursor=(hot>=0||trueHot)?'pointer':'default';
   });
+  function trueEnd(t){
+    var a=trueLine.ang+Math.sin(t*0.008)*0.03;
+    var L=trueLine.len*trueLine.grow;
+    return {x:trueLine.x0+Math.cos(a)*L,y:trueLine.y0+Math.sin(a)*L,a:a};
+  }
   cv.addEventListener('pointerleave',function(){hot=-1;});
   cv.addEventListener('click',function(e){
     if(!g){return;}
     var r=cv.getBoundingClientRect();
     var px=(e.clientX-r.left)*(g.W/r.width),py=(e.clientY-r.top)*(g.H/r.height);
+    if(trueLine&&trueLine.grow>0.5){
+      var te=trueEnd(tick);
+      if(distSeg(px,py,trueLine.x0,trueLine.y0,te.x,te.y)<900){
+        magicBurst(e.clientX,e.clientY,70,110);
+        sfxHit(true);
+        if(typeof breakDoomLoop==='function'){breakDoomLoop();}
+        return;
+      }
+    }
     var id=pick(px,py,tick);
     if(id<0){return;}
     hot=id;
@@ -3598,6 +3799,51 @@ var LORE=[
       }
     }
     if(grew||(t%20===0&&liveCount()!==lastLive)){lastLive=liveCount();stat();}
+
+    /* ---- the branch Doom never modelled ----
+       Only exists inside his loop, and only once every other branch is gone. */
+    if(typeof doomLoop!=='undefined'&&doomLoop&&!trueLine&&liveCount()===0){
+      trueLine={x0:cx,y0:cy-118*S,ang:-Math.PI/2,len:g.H*0.44,grow:0};
+      toast('Something is still growing under all that.');
+      sfxCast();
+    }
+    if(trueLine){
+      trueLine.x0=(hands.lx+hands.rx)/2;
+      trueLine.y0=(hands.ly+hands.ry)/2;
+      if(trueLine.grow<1){trueLine.grow=Math.min(1,trueLine.grow+0.012);}
+      var te2=trueEnd(t);
+      var pulse=0.6+Math.sin(t*0.06)*0.4;
+      /* halo */
+      var hg=x.createRadialGradient(te2.x,te2.y,2,te2.x,te2.y,90);
+      hg.addColorStop(0,'rgba(127,224,160,'+(0.3*pulse)+')');
+      hg.addColorStop(1,'rgba(127,224,160,0)');
+      x.fillStyle=hg;x.beginPath();x.arc(te2.x,te2.y,90,0,6.284);x.fill();
+      x.strokeStyle=trueHot?'rgba(200,255,220,1)':'rgba(127,224,160,'+(0.75+pulse*0.25)+')';
+      x.lineWidth=trueHot?7:5;x.lineCap='round';
+      x.shadowColor='rgba(127,224,160,.85)';x.shadowBlur=trueHot?26:16;
+      x.beginPath();
+      x.moveTo(trueLine.x0,trueLine.y0);
+      x.quadraticCurveTo(trueLine.x0+Math.sin(t*0.02)*16,(trueLine.y0+te2.y)/2,te2.x,te2.y);
+      x.stroke();
+      x.shadowBlur=0;
+      /* leaves of light travelling up it */
+      for(var lf=0;lf<7;lf++){
+        var lp=((t*0.9+lf*36)%180)/180;
+        if(lp>trueLine.grow){continue;}
+        x.fillStyle='rgba(220,255,235,'+(1-lp)*0.85+')';
+        x.beginPath();
+        x.arc(trueLine.x0+(te2.x-trueLine.x0)*lp,trueLine.y0+(te2.y-trueLine.y0)*lp,2.6,0,6.284);
+        x.fill();
+      }
+      if(trueLine.grow>0.55){
+        x.font='12px "JetBrains Mono",monospace';x.textAlign='center';
+        x.fillStyle='rgba(200,255,220,'+(0.7+pulse*0.3)+')';
+        x.fillText('THE BRANCH HE DID NOT MODEL',te2.x,te2.y-28);
+        x.font='10px "JetBrains Mono",monospace';
+        x.fillStyle='rgba(159,232,184,.8)';
+        x.fillText(trueHot?'CLICK TO TAKE IT':'THE CORRECT TIMELINE',te2.x,te2.y-12);
+      }
+    }
     for(var s2=sparks.length-1;s2>=0;s2--){
       var sp=sparks[s2];sp.x+=sp.vx;sp.y+=sp.vy;sp.vy+=0.08;sp.l--;
       if(sp.l<=0){sparks.splice(s2,1);continue;}
@@ -7755,6 +8001,267 @@ var MUTANTS=[
   };
 })();
 
+/* ================= DOOM'S DILEMMA : the second loop =========================
+   Harder than the portal loop on purpose. It arms itself the moment you walk
+   in, binds you to the Dilemma and the Loki tree, and only lets go when you
+   find the one branch Doom did not account for — which is only visible once
+   every other branch is gone.
+============================================================================ */
+var doomLoop=false, doomArmed=false, doomBroken=false;
+var DOOM_PAIR=['pDOOM','p2'];
+
+var DPILLARS=[
+ {t:'The dark magic',
+  d:'Doom is a sorcerer who learned from his mother\u2019s death and never stopped. He is a peer of Strange in the mystic arts and considers the fact that other geniuses picked one discipline a failure of imagination on their part.'},
+ {t:'The genius mind',
+  d:'He treats a collapsing multiverse the way an engineer treats a failing bridge: identify the load, replace the structure, book the casualties as a line item. That is why he is worse than Thanos. Thanos wanted balance. Doom wants a solution that works, and he has usually already built it.'},
+ {t:'The Doombots',
+  d:'An army that never asks why, never defects, and is indistinguishable from him. Half the times you think you have killed Doom in the comics, you have killed a machine wearing his face, and he was somewhere else, working.'},
+ {t:'The dilemma',
+  d:'If the branches cannot be saved separately, and one man can weld the survivors into a single world that functions \u2014 is refusing him a principle, or is it vanity? Every hero in this file has an answer. None of them has a better plan.'}
+];
+
+(function(){
+  var cv=$('dd-cv'),g=null,intro=0,mem=0,memT=0,bots=[];
+  var MEM=[
+   {t:'THE AVENGERS',s:'Kneeling, and recorded as compliant',
+    u:[['thor',0.2,'kneel'],['cap',0.36,'kneel'],['hulk',0.52,'kneel'],['sentry',0.68,'kneel'],['strange',0.84,'down']]},
+   {t:'SPIDER-MAN',s:'No suit, no name, nobody left who remembers him',
+    u:[['spidey',0.5,'kneel'],['doom',0.78,'cast']]},
+   {t:'THE X-MEN',s:'The school, and everything filed under it',
+    u:[['xavier',0.22,'kneel'],['magneto',0.4,'down'],['cyclops',0.58,'kneel'],['wolverine',0.76,'charge']]},
+   {t:'THE FANTASTIC FOUR',s:'The family he keeps closest, for the obvious reason',
+    u:[['sue',0.28,'kneel'],['strange',0.5,'down'],['doom',0.74,'stand']]},
+   {t:'THE TITAN',s:'A trophy now, mounted next to the others',
+    u:[['thanos',0.5,'kneel'],['doom',0.8,'cast']]},
+   {t:'EVERYONE ELSE',s:'Barons, subjects, and a legal code with his name on it',
+    u:[['gambit',0.18,'kneel'],['nightcrawler',0.34,'kneel'],['widow',0.5,'down'],['shangchi',0.66,'kneel'],['ironman',0.82,'down']]}
+  ];
+  var EQ=['\u2202\u03a8/\u2202t = \u0124\u03a8','\u2207\u00b7B = 0','\u03a3 branches \u2192 1','\u222b\u03a9 d\u03bc = \u221e',
+          'lim(n\u2192\u221e) 616','E = mc\u00b2 \u00b7 \u0394R','\u0394S \u2265 0','\u03bb = h/p','det(M) \u2260 0','\u211d[incursion]'];
+
+  function init(){
+    g=fitCanvas(cv);
+    if(!g){return;}
+    bots=[];
+    for(var i=0;i<14;i++){
+      bots.push({x:0.06+ (i%7)*0.145,row:Math.floor(i/7),born:i*11,s:0.55+(Math.floor(i/7)?0:0.18)});
+    }
+  }
+  resizers.pDOOM=init;
+  onResize.push(function(){if(activeId==='pDOOM'){init();}});
+
+  $('dd-pillars').innerHTML=DPILLARS.map(function(d,i){
+    return '<div class="dpil'+(i===0?' on':'')+'" data-i="'+i+'"><b>'+d.t+'</b><span>'+d.d+'</span></div>';
+  }).join('');
+  var pl=document.querySelectorAll('.dpil');
+  for(var i=0;i<pl.length;i++){
+    (function(el){
+      el.onclick=function(){
+        for(var k=0;k<pl.length;k++){pl[k].classList.remove('on');}
+        el.classList.add('on');
+        sfxCast();
+      };
+    })(pl[i]);
+  }
+
+  window.doomState=function(){
+    var st=$('dd-state');
+    if(!st){return;}
+    if(doomBroken){
+      st.innerHTML='<b>LOOP BROKEN</b>You found the branch he did not model. The file is free to close.';
+      st.style.borderLeftColor='var(--green)';
+    }else if(doomLoop){
+      st.innerHTML='<b>YOU ARE INSIDE IT</b>Bound to Doom\u2019s Dilemma and the Loki tree. Every branch he modelled ends here. Go to the tree, take every branch off it, and see what is left underneath.';
+      st.style.borderLeftColor='var(--red)';
+    }else if(intro>0){
+      st.innerHTML='<b>CALCULATING</b>Something in this room is finishing a very long sum.';
+      st.style.borderLeftColor='var(--gold)';
+    }else{
+      st.innerHTML='<b>DORMANT</b>Nothing here is running. Yet.';
+      st.style.borderLeftColor='var(--dim)';
+    }
+  };
+  doomState();
+
+  window.armDoomLoop=function(){
+    if(doomArmed||doomBroken){return;}
+    doomArmed=true;intro=1;
+    doomState();
+  };
+  cv.addEventListener('click',function(e){
+    if(doomLoop){
+      mem=(mem+1)%MEM.length;memT=0;
+      magicBurst(e.clientX,e.clientY,22,60);
+      sfxHit(false);
+    }
+  });
+
+  function bot(x,px,py,S,t,seed,alpha){
+    x.save();x.translate(px,py);x.scale(S,S);x.globalAlpha=alpha;
+    var sway=Math.sin(t*0.02+seed)*2;
+    x.fillStyle='#1b241d';
+    x.beginPath();x.moveTo(0,-86+sway);x.quadraticCurveTo(-24,-80,-23,-40);
+    x.lineTo(-17,-6);x.lineTo(19,-6);x.lineTo(25,-40);
+    x.quadraticCurveTo(26,-80,0,-86+sway);x.closePath();x.fill();
+    x.strokeStyle='rgba(59,165,92,.35)';x.lineWidth=1.2;x.stroke();
+    x.strokeStyle='#1b241d';x.lineWidth=11;x.lineCap='round';
+    x.beginPath();x.moveTo(-6,-8);x.lineTo(-12,34);x.stroke();
+    x.beginPath();x.moveTo(8,-8);x.lineTo(14,34);x.stroke();
+    x.beginPath();x.moveTo(-20,-66);x.lineTo(-30,-26);x.stroke();
+    x.beginPath();x.moveTo(22,-66);x.lineTo(32,-26);x.stroke();
+    var hy=-102+sway;
+    x.fillStyle='#7d868c';
+    x.beginPath();
+    x.moveTo(0,hy-16);x.quadraticCurveTo(14,hy-12,15,hy);
+    x.quadraticCurveTo(15,hy+14,0,hy+18);x.quadraticCurveTo(-15,hy+14,-15,hy);
+    x.quadraticCurveTo(-14,hy-12,0,hy-16);x.closePath();x.fill();
+    x.fillStyle='#050706';x.fillRect(-11,hy-6,8,4.6);x.fillRect(3,hy-6,8,4.6);
+    x.fillStyle='rgba(59,165,92,'+(0.5+Math.sin(t*0.09+seed)*0.4)+')';
+    x.fillRect(-10,hy-5,6,3);x.fillRect(4,hy-5,6,3);
+    x.fillStyle='#121814';x.fillRect(-6,hy+7,12,6);
+    x.restore();
+    x.globalAlpha=1;
+  }
+
+  draws.pDOOM=function(t){
+    if(!g){init();}if(!g){return;}
+    var x=g.x,W=g.W,H=g.H,i;
+    x.clearRect(0,0,W,H);
+    var sky=x.createLinearGradient(0,0,0,H);
+    sky.addColorStop(0,'#060b08');sky.addColorStop(.55,'#0a130d');sky.addColorStop(1,'#040605');
+    x.fillStyle=sky;x.fillRect(0,0,W,H);
+    var gy=H*0.86;
+
+    /* the arithmetic, always running */
+    for(i=0;i<10;i++){
+      var ey=((t*0.6+i*63)%(H+60))-30;
+      x.font='11px "JetBrains Mono",monospace';x.textAlign='left';
+      x.fillStyle='rgba(59,165,92,'+(0.06+0.1*Math.abs(Math.sin(t*0.01+i)))+')';
+      x.fillText(EQ[i%EQ.length],(i*137)%W,H-ey);
+    }
+    /* the hall */
+    x.strokeStyle='rgba(59,165,92,.1)';x.lineWidth=1.2;
+    for(i=0;i<4;i++){
+      var aw=W*(0.44-i*0.1);
+      x.beginPath();
+      x.moveTo(W/2-aw,gy);x.lineTo(W/2-aw,gy-H*(0.38-i*0.06));
+      x.quadraticCurveTo(W/2,gy-H*(0.78-i*0.1),W/2+aw,gy-H*(0.38-i*0.06));
+      x.lineTo(W/2+aw,gy);x.stroke();
+    }
+    x.fillStyle='#080d0a';x.fillRect(0,gy,W,H-gy);
+
+    if(intro>0&&!doomLoop){
+      /* ------- the calculation sequence, then the trap ------- */
+      intro++;
+      var pr=Math.min(1,intro/380);
+      for(i=0;i<bots.length;i++){
+        var b=bots[i];
+        if(intro<b.born){continue;}
+        var a=Math.min(1,(intro-b.born)/40);
+        bot(x,W*b.x,gy-b.row*22,Math.min(W/900,H/430)*b.s*(1.1-b.row*0.15),t,i,a*0.85);
+      }
+      var boxW=Math.min(W*0.6,360);
+      x.fillStyle='rgba(4,8,6,.88)';
+      x.fillRect(W/2-boxW/2,H*0.16,boxW,66);
+      x.strokeStyle='rgba(59,165,92,.5)';x.lineWidth=1.2;
+      x.strokeRect(W/2-boxW/2,H*0.16,boxW,66);
+      x.font='11px "JetBrains Mono",monospace';x.textAlign='center';
+      x.fillStyle='rgba(159,232,184,.95)';
+      x.fillText(pr<1?'CALCULATING OPTIMAL REALITY':'SOLUTION FOUND',W/2,H*0.16+24);
+      x.fillStyle='rgba(59,165,92,.25)';
+      x.fillRect(W/2-boxW/2+22,H*0.16+38,boxW-44,7);
+      x.fillStyle='rgba(127,224,160,.9)';
+      x.fillRect(W/2-boxW/2+22,H*0.16+38,(boxW-44)*pr,7);
+      x.fillStyle='rgba(170,166,158,.8)';x.font='10px "JetBrains Mono",monospace';
+      x.fillText(Math.floor(pr*100)+'%   \u00b7   BRANCHES MODELLED '+Math.floor(pr*14000605).toLocaleString('en-US'),W/2,H*0.16+60);
+      if(intro>420){
+        doomLoop=true;
+        document.body.classList.add('doomed');
+        doomState();
+        sfxBoom();
+        toast('The sum finished. You are inside it.');
+      }
+    }else if(doomLoop){
+      /* ------- the dark memories ------- */
+      memT++;
+      if(memT>420){mem=(mem+1)%MEM.length;memT=0;}
+      var M=MEM[mem];
+      var S=Math.min(W/900,H/430);
+      if(S<0.42){S=0.42;}
+      /* Doom's silhouette presiding over all of it */
+      x.globalAlpha=0.22;
+      drawHero(x,'doom',W*0.5,gy-H*0.02,S*2.3,'cast',t,0);
+      x.globalAlpha=1;
+      for(i=0;i<M.u.length;i++){
+        var u=M.u[i];
+        x.globalAlpha=0.86;
+        drawHero(x,u[0],W*u[1],gy,S*0.86,u[2],t,i*1.7);
+        x.globalAlpha=1;
+        fxRing(x,W*u[1],gy-2,26*S,'rgba(59,165,92,.3)',1.4,[4,7],t*0.014+i);
+      }
+      /* the fog he keeps them in */
+      var fg=x.createLinearGradient(0,gy-H*0.28,0,gy+20);
+      fg.addColorStop(0,'rgba(6,16,10,0)');fg.addColorStop(1,'rgba(6,16,10,.7)');
+      x.fillStyle=fg;x.fillRect(0,gy-H*0.28,W,H*0.28+20);
+      /* scanline crawl */
+      for(i=0;i<3;i++){
+        var sy=((t*1.4+i*160)%(H+80))-40;
+        x.fillStyle='rgba(127,224,160,.045)';
+        x.fillRect(0,sy,W,26);
+      }
+      x.font='12px "JetBrains Mono",monospace';x.textAlign='center';
+      x.fillStyle='rgba(159,232,184,.9)';
+      x.fillText(M.t,W/2,H*0.12);
+      x.fillStyle='rgba(170,166,158,.7)';x.font='10px "JetBrains Mono",monospace';
+      x.fillText(M.s.toUpperCase(),W/2,H*0.12+18);
+    }else{
+      for(i=0;i<bots.length;i++){
+        var b2=bots[i];
+        bot(x,W*b2.x,gy-b2.row*22,Math.min(W/900,H/430)*b2.s*(1.1-b2.row*0.15),t,i,0.35);
+      }
+      x.font='11px "JetBrains Mono",monospace';x.textAlign='center';
+      x.fillStyle='rgba(59,165,92,.5)';
+      x.fillText('SYSTEM DORMANT',W/2,H*0.14);
+    }
+    x.fillStyle='rgba(4,8,6,.78)';x.fillRect(0,H-32,W,32);
+    x.font='11px "JetBrains Mono",monospace';x.textAlign='left';
+    x.fillStyle='rgba(159,232,184,.9)';
+    x.fillText(doomBroken?'LOOP BROKEN \u00b7 THE FILE MAY CLOSE'
+      :(doomLoop?'DOOM\u2019S LOOP \u00b7 ACTIVE':'LATVERIAN ENGINE ROOM'),12,H-12);
+    x.textAlign='right';x.fillStyle='rgba(170,166,158,.65)';
+    x.fillText(doomLoop?'CLICK FOR THE NEXT MEMORY':'',W-12,H-12);
+  };
+})();
+
+/* ---------- breaking it, and the CRT power-down ---------- */
+function breakDoomLoop(){
+  if(!doomLoop||doomBroken){return;}
+  doomBroken=true;doomLoop=false;
+  document.body.classList.remove('doomed');
+  if(typeof doomState==='function'){doomState();}
+  toast('The branch he never modelled. The loop lets go.');
+  sfxBoom();
+  magicBurst(window.innerWidth/2,window.innerHeight/2,80,110);
+  var crt=$('crt'),dk=$('deck');
+  setTimeout(function(){
+    crt.classList.add('on');
+    dk.classList.add('crtdown');
+    if(audioOn&&AU){try{Tone.Destination.volume.linearRampToValueAtTime(-60,Tone.now()+1.1);}catch(e){}}
+  },900);
+  setTimeout(function(){
+    dk.classList.remove('crtdown');
+    var n=-1;
+    for(var i=0;i<pages.length;i++){if(pages[i].id==='pCONTACT'){n=i;}}
+    if(n>=0){idx=Math.max(0,n-1);busy=false;go(n,true);}
+    if(audioOn&&AU){try{Tone.Destination.volume.linearRampToValueAtTime(-5,Tone.now()+3);}catch(e){}}
+  },2900);
+  setTimeout(function(){
+    crt.classList.remove('on');
+    toast('File closed. Thanks for reading it.');
+  },3300);
+}
+
 /* ===== P16 ROOFTOP: DEADPOOL & SPIDER-MAN ===== */
 var DPSCRIPT=[
  ['nar','Rooftop. Night. Battleworld, sector unknown.'],
@@ -8031,6 +8538,57 @@ var WALLLINES=[
     x.fillStyle='rgba(139,135,128,.6)';
     x.fillText('BATTLEWORLD \u00B7 SECTOR UNKNOWN \u00B7 CAMERA 04',W/2,H-10);
   };
+})();
+
+/* ===== CONTACT ===== */
+(function(){
+  var send=$('cf-send'),st=$('cf-status');
+  if(!send){return;}
+  function val(id){var e=$(id);return e?e.value.trim():'';}
+  function bad(id,on){var e=$(id);if(e){e.classList.toggle('bad',!!on);}}
+  function say(msg,cls){
+    st.textContent=msg;
+    st.className='mono'+(cls?' '+cls:'');
+  }
+  send.onclick=function(){
+    var name=val('cf-name'),email=val('cf-email'),msg=val('cf-msg'),topic=val('cf-topic');
+    bad('cf-name',0);bad('cf-email',0);bad('cf-msg',0);
+    if(val('cf-hp')){return;}                       /* honeypot: silent drop */
+    if(name.length<2){bad('cf-name',1);say('A name would help.','err');return;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){bad('cf-email',1);say('That email does not look right.','err');return;}
+    if(msg.length<10){bad('cf-msg',1);say('Give me a bit more than that.','err');return;}
+
+    send.disabled=true;say('Sending\u2026');
+    var body=new FormData();
+    body.append('name',name);body.append('email',email);
+    body.append('topic',topic);body.append('message',msg);
+    body.append('hp',val('cf-hp'));
+    body.append('page','thedoomsday.in');
+    fetch('contact.php',{method:'POST',body:body})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d&&d.ok){
+          say('Sent. You will hear back.','ok');
+          $('cf-name').value='';$('cf-email').value='';$('cf-msg').value='';
+          magicBurst(window.innerWidth/2,window.innerHeight*0.6,34,70);
+          sfxCast();
+        }else{
+          throw new Error((d&&d.error)||'refused');
+        }
+      })
+      .catch(function(){
+        /* no PHP, or it failed: hand it to their mail client instead */
+        say('Opening your mail app instead\u2026','err');
+        var sub=encodeURIComponent('TheDoomsday.in \u2014 '+topic);
+        var bd=encodeURIComponent(msg+'\n\n\u2014 '+name+'\n'+email);
+        window.location.href='mailto:anshulsharmacs016@gmail.com?subject='+sub+'&body='+bd;
+      })
+      .then(function(){send.disabled=false;});
+  };
+  ['cf-name','cf-email','cf-msg'].forEach(function(id){
+    var e=$(id);
+    if(e){e.addEventListener('input',function(){bad(id,0);if(st.textContent){say('');}});}
+  });
 })();
 
 $('prev').disabled=true;
