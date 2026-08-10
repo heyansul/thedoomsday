@@ -872,6 +872,8 @@ p{line-height:1.72}
 body.doomed #doomveil{opacity:1}
 body.doomed #fx-vig{box-shadow:inset 0 0 240px 90px rgba(0,0,0,.94)}
 body.doomed #logo i{color:var(--green)}
+body.locked #rail,body.locked #prev,body.locked #next,body.locked #pnum{opacity:.18;pointer-events:none;transition:opacity .6s ease}
+body.locked #backportal{display:none}
 #doomband{position:fixed;left:50%;bottom:104px;transform:translateX(-50%) translateY(16px);z-index:33;
  pointer-events:none;text-align:center;opacity:0;transition:.9s cubic-bezier(.3,0,.2,1);max-width:92vw;
  border:1px solid rgba(59,165,92,.45);background:rgba(6,14,9,.92);padding:11px 22px}
@@ -897,6 +899,33 @@ body.doomed #doomband{opacity:1;transform:translateX(-50%) translateY(0)}
 #dd-state b{display:block;color:#9fe8b8;letter-spacing:.12em;margin-bottom:4px}
 
 /* CRT power-down */
+#flood{position:fixed;inset:0;z-index:212;display:none;pointer-events:none}
+#flood.on{display:block}
+body.quake{animation:quake .28s linear infinite}
+@keyframes quake{0%{transform:translate(0,0) rotate(0)}
+ 20%{transform:translate(-9px,5px) rotate(-.24deg)}
+ 40%{transform:translate(8px,-7px) rotate(.2deg)}
+ 60%{transform:translate(-6px,-4px) rotate(-.14deg)}
+ 80%{transform:translate(7px,6px) rotate(.18deg)}
+ 100%{transform:translate(0,0) rotate(0)}}
+body.quake-hard{animation:quake .13s linear infinite}
+#illusion{position:fixed;inset:0;z-index:230;display:none;background:#000}
+#illusion.on{display:block}
+#ill-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:26px}
+#ill-cv{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+#ill-line{position:relative;z-index:2;max-width:760px;text-align:center;
+ font-family:Oswald,sans-serif;font-weight:500;font-size:clamp(1.05rem,3.4vw,1.9rem);
+ text-transform:uppercase;letter-spacing:.05em;line-height:1.45;color:#cfd6d2;min-height:2.6em}
+#ill-line i{font-style:normal;color:#7fe0a0}
+#ill-line b{display:inline-block;width:.6ch;background:#7fe0a0;animation:cur 1s steps(2) infinite}
+@keyframes cur{0%,49%{opacity:1}50%,100%{opacity:0}}
+#ill-ask{position:relative;z-index:2;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+ opacity:0;pointer-events:none;transition:opacity 1.2s ease}
+#ill-ask.on{opacity:1;pointer-events:auto}
+.ill-b{background:none;border:1px solid rgba(127,224,160,.5);color:#cfd6d2;padding:15px 30px;cursor:pointer;
+ font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+ transition:.4s ease}
+.ill-b:hover{border-color:#7fe0a0;color:#fff;background:rgba(127,224,160,.09)}
 #vhs{position:fixed;inset:0;z-index:215;display:none;pointer-events:none;background:#000}
 #vhs.on{display:block}
 #crt{position:fixed;inset:0;z-index:210;display:none;background:#000;pointer-events:none}
@@ -982,6 +1011,17 @@ body.doomed #doomband{opacity:1;transform:translateX(-50%) translateY(0)}
 <div id="doomband"><b>YOU ARE TRAPPED IN DOOM&rsquo;S LOOP</b><span id="doomband-sub">Every road leads back to him. Find the branch he did not account for.</span></div>
 <div id="crt"><div id="crt-line"></div><div id="crt-dot"></div></div>
 <canvas id="vhs"></canvas>
+<canvas id="flood"></canvas>
+<div id="illusion">
+ <div id="ill-in">
+  <canvas id="ill-cv"></canvas>
+  <div id="ill-line"></div>
+  <div id="ill-ask">
+   <button class="ill-b" data-i="0">Go back to the Doom files</button>
+   <button class="ill-b" data-i="1">Go back to the Doom files</button>
+  </div>
+ </div>
+</div>
 <div id="boom"><canvas id="boom-cv"></canvas><div id="boom-word"><b>BOOM!</b></div></div>
 
 <div id="gate">
@@ -2137,6 +2177,11 @@ function clearFx(el){
 }
 function go(n,fast){
   if(busy||n<0||n>=pages.length){return;}
+  /* while the engine is finishing its sum, nothing leaves the room */
+  if(typeof doomLock!=='undefined'&&doomLock){
+    toast('It has your attention now. Wait for it to finish.');
+    return;
+  }
   /* while the loop is held, paging wraps around the magical sections */
   /* Doom's loop takes precedence over everything, including the portal loop */
   if(typeof doomLoop!=='undefined'&&doomLoop){
@@ -3508,7 +3553,7 @@ var LORE=[
 (function(){
   var cv=$('tree-cv'),g=null;
   var nodes=[],pruned=0,newGrowth=0,hot=-1,sparks=[],bolts=[],tva=false,tvaT=0,cleared=false,lastLive=0;
-  var trueLine=null,trueHot=false;
+  var trueLines=[],trueHot=-1;
   var MAXGEN=5,CAP=340;
   function addNode(px,py,ang,len,gen,parent,lore){
     var n={id:nodes.length,x0:px,y0:py,ang:ang,len:len,gen:gen,parent:parent,
@@ -3521,7 +3566,7 @@ var LORE=[
   }
   function build(){
     g=fitCanvas(cv);if(!g){return;}
-    nodes=[];pruned=0;newGrowth=0;sparks=[];bolts=[];cleared=false;hot=-1;trueLine=null;trueHot=false;
+    nodes=[];pruned=0;newGrowth=0;sparks=[];bolts=[];cleared=false;hot=-1;trueLines=[];trueHot=-1;
     var hx=[g.W*0.5-g.W*0.225,g.W*0.5+g.W*0.225],hy=g.H*0.615;
     for(var i=0;i<8;i++){
       var side=i<4?0:1,k=i%4,spread=(k-1.5)/1.5;
@@ -3601,30 +3646,50 @@ var LORE=[
     if(!g){return;}
     var r=cv.getBoundingClientRect();
     var px=(e.clientX-r.left)*(g.W/r.width),py=(e.clientY-r.top)*(g.H/r.height);
-    trueHot=false;
-    if(trueLine&&trueLine.grow>0.5){
-      var te=trueEnd(tick);
-      if(distSeg(px,py,trueLine.x0,trueLine.y0,te.x,te.y)<900){trueHot=true;}
+    trueHot=-1;
+    for(var tl2=0;tl2<trueLines.length;tl2++){
+      var T2=trueLines[tl2];
+      if(T2.grow<0.5){continue;}
+      var te2=trueEnd(T2,tick);
+      if(distSeg(px,py,T2.x0,T2.y0,te2.x,te2.y)<1000){trueHot=tl2;break;}
     }
-    hot=trueHot?-1:pick(px,py,tick);
-    cv.style.cursor=(hot>=0||trueHot)?'pointer':'default';
+    hot=(trueHot>=0)?-1:pick(px,py,tick);
+    cv.style.cursor=(hot>=0||trueHot>=0)?'pointer':'default';
   });
-  function trueEnd(t){
-    var a=trueLine.ang+Math.sin(t*0.008)*0.03;
-    var L=trueLine.len*trueLine.grow;
-    return {x:trueLine.x0+Math.cos(a)*L,y:trueLine.y0+Math.sin(a)*L,a:a};
+  function trueEnd(T,t){
+    var a=T.ang+Math.sin(t*0.008+T.seed)*0.035;
+    var L=T.len*T.grow;
+    return {x:T.x0+Math.cos(a)*L,y:T.y0+Math.sin(a)*L,a:a};
+  }
+  function takeBranch(act){
+    if(act==='break'){
+      if(typeof breakDoomLoop==='function'){breakDoomLoop();}
+    }else if(act==='dark'){
+      toast('That one goes back down. Hold on.');
+      if(typeof enterDarkSide==='function'){setTimeout(enterDarkSide,600);}
+    }else if(act==='portal'){
+      toast('That one comes out in the Portal Room.');
+      doomLoop=false;
+      document.body.classList.remove('doomed');
+      if(typeof doomState==='function'){doomState();}
+      setTimeout(function(){go(idOf('pPORTAL'),true);},700);
+    }else{
+      if(typeof doomFlood==='function'){doomFlood();}
+    }
   }
   cv.addEventListener('pointerleave',function(){hot=-1;});
   cv.addEventListener('click',function(e){
     if(!g){return;}
     var r=cv.getBoundingClientRect();
     var px=(e.clientX-r.left)*(g.W/r.width),py=(e.clientY-r.top)*(g.H/r.height);
-    if(trueLine&&trueLine.grow>0.5){
-      var te=trueEnd(tick);
-      if(distSeg(px,py,trueLine.x0,trueLine.y0,te.x,te.y)<900){
+    for(var tl=0;tl<trueLines.length;tl++){
+      var T=trueLines[tl];
+      if(T.grow<0.5){continue;}
+      var te=trueEnd(T,tick);
+      if(distSeg(px,py,T.x0,T.y0,te.x,te.y)<1000){
         magicBurst(e.clientX,e.clientY,70,110);
         sfxHit(true);
-        if(typeof breakDoomLoop==='function'){breakDoomLoop();}
+        takeBranch(T.act);
         return;
       }
     }
@@ -3821,25 +3886,39 @@ var LORE=[
 
     /* ---- the branch Doom never modelled ----
        Only exists inside his loop, and only once every other branch is gone. */
-    if(typeof doomLoop!=='undefined'&&doomLoop&&!trueLine&&liveCount()===0){
-      trueLine={x0:cx,y0:cy-118*S,ang:-Math.PI/2,len:g.H*0.44,grow:0};
-      toast('Something is still growing under all that.');
+    if(typeof doomLoop!=='undefined'&&doomLoop&&!trueLines.length&&liveCount()===0){
+      var DEFS=[
+       {act:'break', col:'127,224,160', ang:-1.5708,      len:0.46, t1:'THE BRANCH HE DID NOT MODEL',t2:'CUTS THE LOOP'},
+       {act:'dark',  col:'164,92,255',  ang:-1.5708-0.62, len:0.38, t1:'DOWN INTO THE DARK',        t2:'HIS WORLD, NOT YOURS'},
+       {act:'portal',col:'255,150,45',  ang:-1.5708+0.62, len:0.38, t1:'OUT THROUGH THE SANCTUM',   t2:'COMES UP IN THE PORTAL ROOM'},
+       {act:'all',   col:'224,27,45',   ang:-1.5708+1.16, len:0.33, t1:'OPEN ALL OF THEM AT ONCE',  t2:'DO NOT'}
+      ];
+      for(var dfi=0;dfi<DEFS.length;dfi++){
+        var D2=DEFS[dfi];
+        trueLines.push({x0:cx,y0:cy-118*S,ang:D2.ang,len:g.H*D2.len,grow:0,
+          col:D2.col,t1:D2.t1,t2:D2.t2,act:D2.act,seed:dfi*1.7,born:dfi*26});
+      }
+      toast('Four things are still growing under all that. Only one of them is honest.');
       sfxCast();
     }
-    if(trueLine){
+    for(var tli=0;tli<trueLines.length;tli++){
+      var trueLine=trueLines[tli];
+      trueLine.born--;
+      if(trueLine.born>0){continue;}
       trueLine.x0=(hands.lx+hands.rx)/2;
       trueLine.y0=(hands.ly+hands.ry)/2;
       if(trueLine.grow<1){trueLine.grow=Math.min(1,trueLine.grow+0.012);}
-      var te2=trueEnd(t);
+      var te2=trueEnd(trueLine,t);
       var pulse=0.6+Math.sin(t*0.06)*0.4;
       /* halo */
       var hg=x.createRadialGradient(te2.x,te2.y,2,te2.x,te2.y,90);
-      hg.addColorStop(0,'rgba(127,224,160,'+(0.3*pulse)+')');
-      hg.addColorStop(1,'rgba(127,224,160,0)');
+      hg.addColorStop(0,'rgba('+trueLine.col+','+(0.3*pulse)+')');
+      hg.addColorStop(1,'rgba('+trueLine.col+',0)');
       x.fillStyle=hg;x.beginPath();x.arc(te2.x,te2.y,90,0,6.284);x.fill();
-      x.strokeStyle=trueHot?'rgba(200,255,220,1)':'rgba(127,224,160,'+(0.75+pulse*0.25)+')';
-      x.lineWidth=trueHot?7:5;x.lineCap='round';
-      x.shadowColor='rgba(127,224,160,.85)';x.shadowBlur=trueHot?26:16;
+      var isHotT=(trueHot===tli);
+      x.strokeStyle=isHotT?'rgba(255,255,255,1)':'rgba('+trueLine.col+','+(0.75+pulse*0.25)+')';
+      x.lineWidth=isHotT?7:5;x.lineCap='round';
+      x.shadowColor='rgba('+trueLine.col+',.85)';x.shadowBlur=isHotT?26:16;
       x.beginPath();
       x.moveTo(trueLine.x0,trueLine.y0);
       x.quadraticCurveTo(trueLine.x0+Math.sin(t*0.02)*16,(trueLine.y0+te2.y)/2,te2.x,te2.y);
@@ -3849,18 +3928,18 @@ var LORE=[
       for(var lf=0;lf<7;lf++){
         var lp=((t*0.9+lf*36)%180)/180;
         if(lp>trueLine.grow){continue;}
-        x.fillStyle='rgba(220,255,235,'+(1-lp)*0.85+')';
+        x.fillStyle='rgba('+trueLine.col+','+(1-lp)*0.9+')';
         x.beginPath();
         x.arc(trueLine.x0+(te2.x-trueLine.x0)*lp,trueLine.y0+(te2.y-trueLine.y0)*lp,2.6,0,6.284);
         x.fill();
       }
       if(trueLine.grow>0.55){
         x.font='12px "JetBrains Mono",monospace';x.textAlign='center';
-        x.fillStyle='rgba(200,255,220,'+(0.7+pulse*0.3)+')';
-        x.fillText('THE BRANCH HE DID NOT MODEL',te2.x,te2.y-28);
+        x.fillStyle='rgba('+trueLine.col+','+(0.75+pulse*0.25)+')';
+        x.fillText(trueLine.t1,te2.x,te2.y-28);
         x.font='10px "JetBrains Mono",monospace';
-        x.fillStyle='rgba(159,232,184,.8)';
-        x.fillText(trueHot?'CLICK TO TAKE IT':'THE CORRECT TIMELINE',te2.x,te2.y-12);
+        x.fillStyle='rgba(200,205,200,.75)';
+        x.fillText(isHotT?'CLICK TO TAKE IT':trueLine.t2,te2.x,te2.y-12);
       }
     }
     for(var s2=sparks.length-1;s2>=0;s2--){
@@ -8026,7 +8105,7 @@ var MUTANTS=[
    find the one branch Doom did not account for — which is only visible once
    every other branch is gone.
 ============================================================================ */
-var doomLoop=false, doomArmed=false, doomBroken=false;
+var doomLoop=false, doomArmed=false, doomBroken=false, doomLock=false;
 var DOOM_PAIR=['pDOOM','p2'];
 
 var DPILLARS=[
@@ -8105,8 +8184,10 @@ var DPILLARS=[
 
   window.armDoomLoop=function(){
     if(doomArmed||doomBroken){return;}
-    doomArmed=true;intro=1;
+    doomArmed=true;intro=1;doomLock=true;
+    document.body.classList.add('locked');
     doomState();
+    toast('The door closed behind you.');
   };
   cv.addEventListener('click',function(e){
     if(doomLoop){
@@ -8301,7 +8382,8 @@ var DPILLARS=[
 
       if(intro===456){toast('The mask came apart. Something is on the other side of it.');}
       if(intro>500&&typeof enterDarkSide==='function'){
-        intro=-1;
+        intro=-1;doomLock=false;
+        document.body.classList.remove('locked');
         enterDarkSide();
       }
     }else if(doomLoop){
@@ -8352,6 +8434,259 @@ var DPILLARS=[
     x.fillText(doomLoop?'CLICK FOR THE NEXT MEMORY':'',W-12,H-12);
   };
 })();
+/* ================= OPEN ALL OF THEM AT ONCE =================
+   Every door at once, everything that lives behind them, the mirror going,
+   and then a long dark wait before he explains what you are looking at.
+========================================================================= */
+function doomFlood(){
+  if(doomFlood.ran){return;}
+  doomFlood.ran=true;
+  doomLoop=false;doomLock=true;
+  document.body.classList.remove('doomed');
+  var cv=$('flood'),x=null,W=0,H=0,t=0;
+  var gates=[],mob=[],cracks=[],shards=[],bolts=[];
+  var CAST=['thanos','kang','magneto','doom','hulk','thor','cap','spidey','strange','wanda',
+            'sentry','wolverine','cyclops','ironman','gambit','nightcrawler','beast','widow'];
+  function fit(){
+    W=window.innerWidth;H=window.innerHeight;
+    cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+    x=cv.getContext('2d');x.setTransform(DPR,0,0,DPR,0,0);
+  }
+  fit();cv.classList.add('on');
+  var COL=['255,150,45','47,243,224','164,92,255','216,174,79','224,27,45','127,224,160'];
+  for(var i=0;i<11;i++){
+    gates.push({x:0.08+Math.random()*0.84,y:0.16+Math.random()*0.6,
+      r:60+Math.random()*90,born:i*9,c:COL[i%COL.length],spin:Math.random()*6.28});
+  }
+  toast('Every door at once. That was the wrong branch.');
+  document.body.classList.add('quake');
+  sfxBoom();
+  if(audioOn&&AU){try{Tone.Destination.volume.linearRampToValueAtTime(-9,Tone.now()+2);}catch(e){}}
+
+  function crackTree(x0,y0,a,len,depth){
+    cracks.push({x0:x0,y0:y0,a:a,len:len,grow:0});
+    if(depth<=0){return;}
+    crackTree(x0+Math.cos(a)*len,y0+Math.sin(a)*len,a-0.4-Math.random()*0.35,len*0.72,depth-1);
+    crackTree(x0+Math.cos(a)*len,y0+Math.sin(a)*len,a+0.4+Math.random()*0.35,len*0.72,depth-1);
+  }
+
+  frameHooks.push(function(){
+    if(!x||!cv.classList.contains('on')){return;}
+    t++;
+    x.clearRect(0,0,W,H);
+
+    /* --- 0.0s-4.0s : the doors, and what comes out of them --- */
+    if(t<300){
+      for(var i2=0;i2<gates.length;i2++){
+        var G=gates[i2];
+        if(t<G.born){continue;}
+        var age=t-G.born, grow=Math.min(1,age/18);
+        var gx=G.x*W,gy=G.y*H,R=G.r*grow;
+        var pg=x.createRadialGradient(gx,gy,2,gx,gy,R);
+        pg.addColorStop(0,'rgba(8,5,16,.95)');
+        pg.addColorStop(.78,'rgba(26,10,38,.7)');
+        pg.addColorStop(1,'rgba('+G.c+',.35)');
+        x.fillStyle=pg;x.beginPath();x.arc(gx,gy,R,0,6.284);x.fill();
+        x.strokeStyle='rgba('+G.c+',.95)';x.lineWidth=3.4;
+        x.beginPath();x.arc(gx,gy,R,0,6.284);x.stroke();
+        for(var sp=0;sp<24;sp++){
+          var sa=G.spin+sp*0.2618+t*0.04;
+          x.fillStyle='rgba('+G.c+','+(0.3+Math.random()*0.5)+')';
+          x.beginPath();x.arc(gx+Math.cos(sa)*(R+Math.sin(t*0.2+sp)*6),
+                              gy+Math.sin(sa)*(R+Math.cos(t*0.2+sp)*6),2.1,0,6.284);x.fill();
+        }
+        if(age>16&&age%9===0&&mob.length<58){
+          mob.push({k:CAST[Math.floor(Math.random()*CAST.length)],
+            x:gx,y:gy,vx:(Math.random()-.5)*3.4,vy:1+Math.random()*2.6,
+            s:0.45+Math.random()*0.5,a:1,seed:Math.random()*9});
+        }
+      }
+      for(var m=mob.length-1;m>=0;m--){
+        var M2=mob[m];
+        M2.x+=M2.vx;M2.y+=M2.vy;M2.vy+=0.045;
+        if(M2.y>H+120){mob.splice(m,1);continue;}
+        x.globalAlpha=0.78;
+        drawHero(x,M2.k,M2.x,M2.y,M2.s,'charge',t,M2.seed);
+        x.globalAlpha=1;
+      }
+      if(t%34===0){
+        bolts.push({x:Math.random()*W,life:0});
+        sfxHit(true);
+      }
+      for(var b=bolts.length-1;b>=0;b--){
+        var B=bolts[b];B.life++;
+        if(B.life>16){bolts.splice(b,1);continue;}
+        fxBolt(x,B.x,-20,B.x+(Math.random()-.5)*160,H,'rgba(207,239,255,'+(1-B.life/16)+')',9,26,t);
+      }
+      if(t===170){document.body.classList.add('quake-hard');document.body.classList.remove('quake');}
+      if(t%40===0){
+        var fl=$('flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');
+      }
+    }
+
+    /* --- 4.0s : the mirror --- */
+    if(t===300){
+      for(var c2=0;c2<7;c2++){
+        crackTree(W/2,H/2,c2/7*6.2832,Math.max(W,H)*0.16,3);
+      }
+      sfxBoom();
+    }
+    if(t>=300){
+      for(var cr=0;cr<cracks.length;cr++){
+        var C=cracks[cr];
+        if(C.grow<1){C.grow=Math.min(1,C.grow+0.05);}
+        x.strokeStyle='rgba(235,245,240,'+(0.85*Math.min(1,(t-300)/20))+')';
+        x.lineWidth=Math.max(1,3-cr*0.02);
+        x.shadowColor='rgba(200,235,255,.8)';x.shadowBlur=8;
+        x.beginPath();
+        x.moveTo(C.x0,C.y0);
+        x.lineTo(C.x0+Math.cos(C.a)*C.len*C.grow,C.y0+Math.sin(C.a)*C.len*C.grow);
+        x.stroke();
+        x.shadowBlur=0;
+      }
+    }
+    /* --- 5.5s : the glass falls --- */
+    if(t===400){
+      for(var sh=0;sh<44;sh++){
+        shards.push({x:Math.random()*W,y:Math.random()*H,
+          w:40+Math.random()*130,h:40+Math.random()*130,
+          vy:1+Math.random()*4,vr:(Math.random()-.5)*0.06,r:0,a:1});
+      }
+      document.body.classList.remove('quake-hard');
+      sfxHit(true);
+    }
+    if(t>=400){
+      x.fillStyle='rgba(0,0,0,'+Math.min(1,(t-400)/90)+')';
+      x.fillRect(0,0,W,H);
+      for(var s2=0;s2<shards.length;s2++){
+        var S2=shards[s2];
+        S2.y+=S2.vy;S2.vy+=0.42;S2.r+=S2.vr;S2.a-=0.007;
+        if(S2.a<=0){continue;}
+        x.save();x.translate(S2.x,S2.y);x.rotate(S2.r);
+        x.globalAlpha=Math.max(0,S2.a);
+        x.fillStyle='rgba(150,170,180,.22)';
+        x.beginPath();
+        x.moveTo(-S2.w/2,-S2.h/2);x.lineTo(S2.w/2,-S2.h/3);
+        x.lineTo(S2.w/3,S2.h/2);x.lineTo(-S2.w/2,S2.h/3);x.closePath();x.fill();
+        x.strokeStyle='rgba(230,245,240,.6)';x.lineWidth=1.2;x.stroke();
+        x.restore();
+        x.globalAlpha=1;
+      }
+    }
+    /* --- 7s : black. hand over to the long wait --- */
+    if(t===500){
+      cv.classList.remove('on');
+      x.clearRect(0,0,W,H);
+      illusion();
+    }
+  });
+}
+
+/* ---------- the long dark, then him ---------- */
+function illusion(){
+  var box=$('illusion'),cv=$('ill-cv'),x=null,W=0,H=0,t=0;
+  box.classList.add('on');
+  function fit(){
+    W=window.innerWidth;H=window.innerHeight;
+    cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+    x=cv.getContext('2d');x.setTransform(DPR,0,0,DPR,0,0);
+  }
+  fit();onResize.push(function(){if(box.classList.contains('on')){fit();}});
+  if(audioOn&&AU){try{Tone.Destination.volume.linearRampToValueAtTime(-30,Tone.now()+2);}catch(e){}}
+
+  var LINE='This is the delusion, not the reality. You can see the new world with your own eyes.';
+  var typed=0,started=false;
+  var WAIT=1200;   /* 20 seconds of nothing, exactly as asked */
+
+  frameHooks.push(function(){
+    if(!x||!box.classList.contains('on')){return;}
+    t++;
+    x.clearRect(0,0,W,H);
+    x.fillStyle='#000';x.fillRect(0,0,W,H);
+    var cx=W/2,cy=H*0.36,M=Math.min(W,H);
+
+    if(t<WAIT){
+      /* not empty, just very nearly: breathing dark, far-off weather */
+      var br=0.02+0.02*Math.sin(t*0.012);
+      var bg=x.createRadialGradient(cx,H/2,10,cx,H/2,M*0.9);
+      bg.addColorStop(0,'rgba(20,34,26,'+br+')');bg.addColorStop(1,'rgba(0,0,0,0)');
+      x.fillStyle=bg;x.fillRect(0,0,W,H);
+      for(var d=0;d<26;d++){
+        var dy=((t*0.5+d*61)%(H+40))-20;
+        x.fillStyle='rgba(127,224,160,'+(0.02+0.05*Math.abs(Math.sin(t*0.01+d)))+')';
+        x.fillRect((d*137)%W,H-dy,1.6,1.6);
+      }
+      if(t%210<4){
+        x.fillStyle='rgba(180,210,200,'+(0.05+Math.random()*0.05)+')';
+        x.fillRect(0,0,W,H);
+      }
+      var pr=t/WAIT;
+      x.fillStyle='rgba(127,224,160,.14)';
+      x.fillRect(0,H-2,W*pr,2);
+      x.font='10px "JetBrains Mono",monospace';x.textAlign='center';
+      x.fillStyle='rgba(120,130,124,'+(0.18+0.14*Math.sin(t*0.03))+')';
+      x.fillText('\u00b7  \u00b7  \u00b7',cx,H*0.5);
+      return;
+    }
+
+    /* he arrives */
+    var age=t-WAIT;
+    var app=Math.min(1,age/70);
+    for(var r=0;r<4;r++){
+      fxRing(x,cx,cy,(M*0.16+r*M*0.07)*app+Math.sin(t*0.03+r)*6,
+        'rgba(59,165,92,'+(0.35-r*0.07)*app+')',2,[8,13],t*0.012*(r%2?-1:1));
+    }
+    var vg=x.createRadialGradient(cx,cy,4,cx,cy,M*0.42);
+    vg.addColorStop(0,'rgba(16,30,22,'+(0.75*app)+')');
+    vg.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=vg;x.beginPath();x.arc(cx,cy,M*0.42,0,6.284);x.fill();
+    x.save();
+    x.translate(cx,cy);
+    var RS=M/380*app;
+    x.globalAlpha=app;
+    var mg=x.createLinearGradient(0,-58*RS*4,0,64*RS*4);
+    mg.addColorStop(0,'#aab3b8');mg.addColorStop(.55,'#6c757b');mg.addColorStop(1,'#232a2f');
+    x.scale(4,4);
+    x.fillStyle=mg;
+    x.beginPath();
+    x.moveTo(0,-58*RS);x.quadraticCurveTo(40*RS,-52*RS,42*RS,-6*RS);
+    x.quadraticCurveTo(44*RS,44*RS,0,64*RS);x.quadraticCurveTo(-44*RS,44*RS,-42*RS,-6*RS);
+    x.quadraticCurveTo(-40*RS,-52*RS,0,-58*RS);x.closePath();x.fill();
+    x.fillStyle='#05070a';
+    x.fillRect(-30*RS,-24*RS,20*RS,10*RS);x.fillRect(10*RS,-24*RS,20*RS,10*RS);
+    x.fillStyle='rgba(127,224,160,'+(0.55+Math.sin(t*0.07)*0.35)+')';
+    x.fillRect(-28*RS,-22*RS,15*RS,5.5*RS);x.fillRect(13*RS,-22*RS,15*RS,5.5*RS);
+    x.fillStyle='#12171b';
+    x.beginPath();x.moveTo(-15*RS,22*RS);x.lineTo(15*RS,22*RS);x.lineTo(11*RS,44*RS);x.lineTo(-11*RS,44*RS);x.closePath();x.fill();
+    x.fillStyle='#d8ae4f';
+    for(var rv=0;rv<7;rv++){
+      var rva=-2.3+rv*0.62;
+      x.beginPath();x.arc(Math.cos(rva)*40*RS,Math.sin(rva)*52*RS-4*RS,2*RS,0,6.284);x.fill();
+    }
+    x.globalAlpha=1;
+    x.restore();
+
+    if(age>80&&!started){started=true;}
+    if(started&&age%2===0&&typed<LINE.length){
+      typed++;
+      $('ill-line').innerHTML=LINE.slice(0,typed).replace('delusion','<i>delusion</i>')+'<b>&nbsp;</b>';
+      if(typed===LINE.length){
+        $('ill-line').innerHTML=LINE.replace('delusion','<i>delusion</i>');
+        setTimeout(function(){$('ill-ask').classList.add('on');},900);
+      }
+    }
+  });
+
+  var bs=document.querySelectorAll('.ill-b');
+  for(var i=0;i<bs.length;i++){
+    bs[i].onclick=function(){
+      try{sessionStorage.setItem('tdd_mirror','1');}catch(e){}
+      sfxCast();
+      tvStaticOff(function(){window.location.href='mirror/index.html';});
+    };
+  }
+}
+
 /* ===== VINTAGE TV STATIC TURN-OFF ===== */
 function tvStaticOff(done){
   var cv=$('vhs');
@@ -8428,6 +8763,18 @@ $('toworld').onclick=function(){
   sfxCast();sfxHit(true);
   tvStaticOff(function(){window.location.href='world/index.html';});
 };
+/* the mirror let you go */
+(function(){
+  var back=null;
+  try{back=sessionStorage.getItem('tdd_unmirror');}catch(e){}
+  if(!back){return;}
+  try{sessionStorage.removeItem('tdd_unmirror');sessionStorage.removeItem('tdd_mirror');}catch(e){}
+  setTimeout(function(){
+    var n=idOf('pPORTAL');
+    if(n>=0){idx=Math.max(0,n-1);busy=false;go(n,true);}
+    toast('You picked the right door. The reflection is gone.');
+  },420);
+})();
 /* coming back from a sub-page: no loop, no penalty, just put them where they were */
 (function(){
   var back=null;
