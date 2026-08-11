@@ -912,6 +912,25 @@ body.doomed #doomband{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* CRT power-down */
 #flood{position:fixed;inset:0;z-index:212;display:none;pointer-events:none}
+#gfx{position:fixed;inset:0;z-index:37;display:none;pointer-events:none}
+body.glitched #gfx{display:block}
+body.glitched .hd h2,body.glitched #logo,body.glitched h1{animation:flick 3.4s steps(1) infinite}
+@keyframes flick{0%,96%,100%{opacity:1}
+ 96.6%{opacity:.25}97.2%{opacity:1}97.8%{opacity:.5}98.4%{opacity:1}99%{opacity:.15}99.4%{opacity:1}}
+body.glitched .hd h2{text-shadow:2px 0 rgba(224,27,45,.55),-2px 0 rgba(47,243,224,.55)}
+body.glitched #pnum,body.glitched .kick{animation:flick 2.1s steps(1) infinite}
+#stillin{position:fixed;top:54px;left:50%;transform:translateX(-50%);z-index:34;display:none;
+ text-align:center;max-width:min(92vw,720px);padding:10px 20px;
+ border:1px solid rgba(59,165,92,.45);background:rgba(6,14,9,.94)}
+body.glitched #stillin{display:block}
+#stillin b{display:block;font-family:Oswald,sans-serif;font-weight:600;font-size:1rem;
+ letter-spacing:.1em;text-transform:uppercase;color:#7fe0a0;animation:blinkin 1.5s ease-in-out infinite}
+@keyframes blinkin{0%,100%{opacity:.45}50%{opacity:1;text-shadow:0 0 16px rgba(127,224,160,.65)}}
+#stillin span{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;
+ color:var(--dim);margin-top:5px;line-height:1.75}
+#stillin i{font-style:normal;color:var(--gold)}
+@media(max-width:760px){#stillin{top:48px;padding:8px 12px}#stillin b{font-size:.82rem}
+ #stillin span{font-size:8.5px}}
 #flood.on{display:block}
 body.quake{animation:quake .28s linear infinite}
 @keyframes quake{0%{transform:translate(0,0) rotate(0)}
@@ -1048,6 +1067,12 @@ body.quake-hard{animation:quake .13s linear infinite}
 <div id="crt"><div id="crt-line"></div><div id="crt-dot"></div></div>
 <canvas id="vhs"></canvas>
 <canvas id="flood"></canvas>
+<canvas id="gfx"></canvas>
+<div id="stillin">
+ <b>YOU ARE STILL IN DOOM&rsquo;S WORLD</b>
+ <span>Go back to the tree where it started and take the right branch.
+ <i>It is the colour Loki and I both wear.</i> Haa. Haa. Haa.</span>
+</div>
 <div id="illusion">
  <div id="ill-in">
   <canvas id="ill-cv"></canvas>
@@ -1925,6 +1950,21 @@ var rzT;
 window.addEventListener('resize',function(){
   clearTimeout(rzT);rzT=setTimeout(function(){for(var i=0;i<onResize.length;i++){onResize[i]();}},180);
 });
+/* the narration column follows the beat, unless you have taken the wheel yourself */
+function autoScroll(box,el){
+  if(!box||!el){return;}
+  if(Date.now()-(box._touched||0)<7000){return;}
+  var top=el.offsetTop-box.offsetTop-14;
+  try{box.scrollTo({top:Math.max(0,top),behavior:'smooth'});}
+  catch(e){box.scrollTop=Math.max(0,top);}
+}
+function trackTouch(box){
+  if(!box||box._tracked){return;}
+  box._tracked=true;
+  ['wheel','touchstart','pointerdown','keydown'].forEach(function(ev){
+    box.addEventListener(ev,function(){box._touched=Date.now();},{passive:true});
+  });
+}
 function toast(msg){
   var t=$('toast');t.textContent=msg;t.classList.add('on');
   clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},2800);
@@ -2248,6 +2288,9 @@ function go(n,fast){
   /* while the loop is held, paging wraps around the magical sections */
   /* Doom's loop takes precedence over everything, including the portal loop */
   if(typeof doomLoop!=='undefined'&&doomLoop){
+    if(DOOM_PAIR.length>2&&(pages[n].id==='p2'||pages[n].id==='pDOOM')){
+      DOOM_PAIR=['pDOOM','p2'];
+    }
     if(DOOM_PAIR.indexOf(pages[n].id)<0){
       var dcur=DOOM_PAIR.indexOf(activeId);
       n=idOf(dcur===0?DOOM_PAIR[1]:DOOM_PAIR[0]);
@@ -3725,19 +3768,34 @@ var LORE=[
     return {x:T.x0+Math.cos(a)*L,y:T.y0+Math.sin(a)*L,a:a};
   }
   function takeBranch(act){
+    /* the red one first. he wants you to see what all of them at once looks like. */
+    if(!floodDone&&act!=='all'){
+      toast('Not that one. He wants every door open first \u2014 take the red one.');
+      sfxUI();
+      return;
+    }
+    if(act==='all'){
+      if(floodDone){toast('That door is already open. It stayed open.');return;}
+      if(typeof doomFlood==='function'){doomFlood();}
+      return;
+    }
     if(act==='break'){
       if(typeof breakDoomLoop==='function'){breakDoomLoop();}
-    }else if(act==='dark'){
-      toast('That one goes back down. Hold on.');
-      if(typeof enterDarkSide==='function'){setTimeout(enterDarkSide,600);}
-    }else if(act==='portal'){
-      toast('That one comes out in the Portal Room.');
-      doomLoop=false;
-      document.body.classList.remove('doomed');
-      if(typeof doomState==='function'){doomState();}
-      setTimeout(function(){go(idOf('pPORTAL'),true);},700);
+      return;
+    }
+    /* every other branch is a trip, not an exit */
+    wrongTaken++;
+    setGlitch(true);
+    if(act==='dark'){
+      toast('That one only goes further down.');
+      if(typeof enterDarkSide==='function'){setTimeout(enterDarkSide,700);}
     }else{
-      if(typeof doomFlood==='function'){doomFlood();}
+      toast('It comes out in the Portal Room. It does not come out of the loop.');
+      DOOM_PAIR=['pDOOM','p2','pPORTAL'];
+      setTimeout(function(){go(idOf('pPORTAL'),true);},700);
+      setTimeout(function(){
+        toast('Still his. Go back to the tree.');
+      },5200);
     }
   }
   cv.addEventListener('pointerleave',function(){hot=-1;});
@@ -3961,7 +4019,9 @@ var LORE=[
         trueLines.push({x0:cx,y0:cy-118*S,ang:D2.ang,len:g.H*D2.len,grow:0,
           col:D2.col,t1:D2.t1,t2:D2.t2,act:D2.act,seed:dfi*1.7,born:dfi*26});
       }
-      toast('Four things are still growing under all that. Only one of them is honest.');
+      toast(floodDone
+        ?'Four branches. One of them is the colour he and I both wear.'
+        :'Four things are still growing under all that. Only the red one will open.');
       sfxCast();
     }
     for(var tli=0;tli<trueLines.length;tli++){
@@ -3978,7 +4038,9 @@ var LORE=[
       hg.addColorStop(0,'rgba('+trueLine.col+','+(0.3*pulse)+')');
       hg.addColorStop(1,'rgba('+trueLine.col+',0)');
       x.fillStyle=hg;x.beginPath();x.arc(te2.x,te2.y,90,0,6.284);x.fill();
-      var isHotT=(trueHot===tli);
+      var locked=(!floodDone&&trueLine.act!=='all');
+      var isHotT=(trueHot===tli)&&!locked;
+      if(locked){x.globalAlpha=0.34;}
       x.strokeStyle=isHotT?'rgba(255,255,255,1)':'rgba('+trueLine.col+','+(0.75+pulse*0.25)+')';
       x.lineWidth=isHotT?7:5;x.lineCap='round';
       x.shadowColor='rgba('+trueLine.col+',.85)';x.shadowBlur=isHotT?26:16;
@@ -4002,8 +4064,18 @@ var LORE=[
         x.fillText(trueLine.t1,te2.x,te2.y-28);
         x.font='10px "JetBrains Mono",monospace';
         x.fillStyle='rgba(200,205,200,.75)';
-        x.fillText(isHotT?'CLICK TO TAKE IT':trueLine.t2,te2.x,te2.y-12);
+        x.fillText(locked?'\u2014 SEALED \u2014':(isHotT?'CLICK TO TAKE IT':trueLine.t2),te2.x,te2.y-12);
       }
+      x.globalAlpha=1;
+    }
+    if(trueLines.length&&!floodDone){
+      x.font='11px "JetBrains Mono",monospace';x.textAlign='center';
+      x.fillStyle='rgba(224,27,45,'+(0.55+0.35*Math.sin(t*0.05))+')';
+      x.fillText('ONLY THE RED ONE WILL OPEN',cx,g.H*0.1);
+    }else if(trueLines.length&&doomLoop){
+      x.font='11px "JetBrains Mono",monospace';x.textAlign='center';
+      x.fillStyle='rgba(127,224,160,'+(0.5+0.35*Math.sin(t*0.045))+')';
+      x.fillText('ONE OF THEM IS THE COLOUR HE AND I BOTH WEAR',cx,g.H*0.1);
     }
     for(var s2=sparks.length-1;s2>=0;s2--){
       var sp=sparks[s2];sp.x+=sp.vx;sp.y+=sp.vy;sp.vy+=0.08;sp.l--;
@@ -6348,6 +6420,9 @@ function makeBattle(pid,cvId,phId,btnIds,cfg){
         el.onclick=function(){setPhase(parseInt(el.getAttribute('data-i'),10));};
       })(rows[i]);
     }
+    var box=$(phId).parentNode;
+    trackTouch(box);
+    if(rows[ph]){autoScroll(box,rows[ph]);}
   }
   function setPhase(i){
     ph=(i+cfg.phases.length)%cfg.phases.length;pt=0;
@@ -7978,6 +8053,9 @@ var PETERS=[
     for(var i=0;i<cs.length;i++){
       cs[i].classList.toggle('here',phase>=1||i===2);
     }
+    var box=$('pt-side');
+    trackTouch(box);
+    autoScroll(box,$('pt-note'));
   }
   function set(p){phase=(p+PH.length)%PH.length;pt=0;note();sfxCast();}
   note();
@@ -8232,6 +8310,9 @@ var PETERS=[
     for(var i=0;i<rows.length;i++){
       (function(el){el.onclick=function(){set(parseInt(el.getAttribute('data-i'),10));};})(rows[i]);
     }
+    var box=$('pc-ph').parentNode;
+    trackTouch(box);
+    if(rows[sc]){autoScroll(box,rows[sc]);}
   }
   function set(i){
     sc=(i+SCENES.length)%SCENES.length;pt=0;render();
@@ -8427,6 +8508,51 @@ var PETERS=[
    every other branch is gone.
 ============================================================================ */
 var doomLoop=false, doomArmed=false, doomBroken=false, doomLock=false;
+var floodDone=false, wrongTaken=0;
+try{floodDone=!!sessionStorage.getItem('tdd_flood');}catch(e){}
+function setGlitch(on){
+  document.body.classList.toggle('glitched',!!on);
+}
+/* horizontal slicing + RGB split, drawn over everything while he still has you */
+(function(){
+  var cv=$('gfx'),x=null,W=0,H=0,bands=[];
+  function fit(){
+    W=window.innerWidth;H=window.innerHeight;
+    cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+    x=cv.getContext('2d');x.setTransform(DPR,0,0,DPR,0,0);
+    bands=[];
+    for(var i=0;i<16;i++){
+      bands.push({y:Math.random()*H,h:3+Math.random()*34,o:(Math.random()-.5)*90,
+        v:0.3+Math.random()*2.2,c:Math.random()<.5?'224,27,45':'47,243,224'});
+    }
+  }
+  fit();onResize.push(fit);
+  frameHooks.push(function(t){
+    if(!x||!document.body.classList.contains('glitched')){return;}
+    x.clearRect(0,0,W,H);
+    /* horizontal slicing */
+    for(var i=0;i<bands.length;i++){
+      var b=bands[i];
+      b.y+=b.v;
+      if(b.y>H){b.y=-b.h;b.o=(Math.random()-.5)*90;}
+      x.fillStyle='rgba('+b.c+',.055)';
+      x.fillRect(b.o,b.y,W,b.h);
+    }
+    /* RGB split, in bursts */
+    if(t%140<10){
+      var off=6+Math.random()*14;
+      x.fillStyle='rgba(224,27,45,.06)';x.fillRect(-off,0,W,H);
+      x.fillStyle='rgba(47,243,224,.06)';x.fillRect(off,0,W,H);
+      for(var k=0;k<5;k++){
+        var ky=Math.random()*H;
+        x.fillStyle='rgba(240,236,226,.05)';
+        x.fillRect((Math.random()-.5)*140,ky,W,2+Math.random()*10);
+      }
+    }
+    /* the green wash he leaves on everything */
+    x.fillStyle='rgba(20,44,30,.05)';x.fillRect(0,0,W,H);
+  });
+})();
 var DOOM_PAIR=['pDOOM','p2'];
 
 var DPILLARS=[
@@ -8762,6 +8888,8 @@ var DPILLARS=[
 function doomFlood(){
   if(doomFlood.ran){return;}
   doomFlood.ran=true;
+  floodDone=true;
+  try{sessionStorage.setItem('tdd_flood','1');}catch(e){}
   doomLoop=false;doomLock=true;
   document.body.classList.remove('doomed');
   var cv=$('flood'),x=null,W=0,H=0,t=0;
@@ -9097,10 +9225,14 @@ $('toworld').onclick=function(){
   if(!back){return;}
   try{sessionStorage.removeItem('tdd_unmirror');sessionStorage.removeItem('tdd_mirror');}catch(e){}
   setTimeout(function(){
-    var n=idOf('pPORTAL');
+    doomArmed=true;doomLoop=true;floodDone=true;
+    document.body.classList.add('doomed');
+    setGlitch(true);
+    if(typeof doomState==='function'){doomState();}
+    var n=idOf('p2');
     if(n>=0){idx=Math.max(0,n-1);busy=false;go(n,true);}
-    toast('You picked the right door. The reflection is gone.');
-  },420);
+    toast('The reflection is gone. You are not.');
+  },520);
 })();
 /* coming back from a sub-page: no loop, no penalty, just put them where they were */
 (function(){
@@ -9192,6 +9324,7 @@ function enterDarkSide(){
   setTimeout(function(){
     doomArmed=true;doomLoop=true;
     document.body.classList.add('doomed');
+    if(floodDone){setGlitch(true);}
     if(typeof doomState==='function'){doomState();}
     var n=idOf('pDOOM');
     if(n>=0){idx=Math.max(0,n-1);busy=false;go(n,true);}
@@ -9202,8 +9335,11 @@ function enterDarkSide(){
 /* ---------- breaking it, and the CRT power-down ---------- */
 function breakDoomLoop(){
   if(!doomLoop||doomBroken){return;}
-  doomBroken=true;doomLoop=false;
-  document.body.classList.remove('doomed');
+  doomBroken=true;doomLoop=false;doomLock=false;
+  document.body.classList.remove('doomed','locked');
+  setGlitch(false);
+  DOOM_PAIR=['pDOOM','p2'];
+  try{sessionStorage.removeItem('tdd_flood');}catch(e){}
   if(typeof doomState==='function'){doomState();}
   toast('The branch he never modelled. The loop lets go.');
   sfxBoom();
