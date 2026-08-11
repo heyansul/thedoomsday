@@ -415,7 +415,19 @@ button{font-family:inherit;color:inherit}
 #g-stage{position:relative;aspect-ratio:1;max-height:100%;margin:auto;width:100%;max-width:480px}
 #globe-cv{width:100%;height:100%;cursor:grab;touch-action:none}
 #g-ring{position:absolute;inset:5%;border:1px solid rgba(47,243,224,.13);border-radius:50%;pointer-events:none}
-#pins{display:flex;flex-direction:column;gap:1px;overflow-y:auto;max-height:100%;padding-right:6px}
+#pin-col{display:flex;flex-direction:column;min-height:0;gap:12px}
+#pins{display:flex;flex-direction:column;gap:1px;overflow-y:auto;flex:1;min-height:0;padding-right:6px}
+#toforge{flex-shrink:0;display:block;width:100%;text-align:left;cursor:pointer;
+ background:linear-gradient(150deg,#241610,#120b08);border:1px solid rgba(232,117,42,.45);
+ border-left:2px solid #e8752a;padding:14px 17px;transition:.42s ease;position:relative;overflow:hidden}
+#toforge:hover{border-color:var(--gold);background:linear-gradient(150deg,#2e1c13,#17100b)}
+#toforge .tf-k{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:#e8752a}
+#toforge .tf-t{display:block;font-family:Oswald,sans-serif;font-weight:600;font-size:1.18rem;
+ text-transform:uppercase;letter-spacing:.03em;margin:5px 0 4px}
+#toforge .tf-s{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.07em;color:var(--dim);line-height:1.6}
+#toforge::after{content:'\2192';position:absolute;right:17px;top:50%;transform:translateY(-50%);
+ font-size:1.25rem;color:#e8752a;transition:.42s ease}
+#toforge:hover::after{right:12px;color:var(--gold)}
 #pins>*{flex-shrink:0}
 .pin{display:flex;gap:12px;padding:11px 14px;border-left:2px solid transparent;cursor:pointer;transition:.38s ease}
 .pin:hover,.pin.on{border-left-color:var(--red);background:rgba(224,27,45,.07)}
@@ -988,6 +1000,30 @@ body.quake-hard{animation:quake .13s linear infinite}
 #foot2 .by{font-family:Oswald,sans-serif;font-size:1.05rem;text-transform:uppercase;letter-spacing:.08em;color:var(--paper);margin-top:12px}
 #foot2 .by span{color:var(--gold)}
 #foot2 .yr2{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.13em;color:var(--dim);margin-top:10px;opacity:.75}
+
+/* ===== THE THREE PETERS ===== */
+#pt-lay{display:grid;grid-template-columns:1.3fr .7fr;gap:26px;height:100%;min-height:0;align-items:stretch}
+@media(max-width:960px){#pt-lay{grid-template-columns:1fr;overflow-y:auto}}
+#pt-stage{position:relative;min-height:300px;border:1px solid var(--line);background:#05060c;overflow:hidden}
+#pt-stage canvas{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+#pt-side{display:flex;flex-direction:column;gap:11px;min-height:0;overflow-y:auto;padding-right:6px;
+ scroll-behavior:smooth;overscroll-behavior:contain}
+#pt-side>*{flex-shrink:0}
+#pt-cards{display:flex;flex-direction:column;gap:8px}
+.ptc{background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--pcc);
+ padding:13px 16px;cursor:pointer;transition:.42s ease;opacity:.5}
+.ptc.here{opacity:1;background:#161a22}
+.ptc:hover{opacity:1}
+.ptc .n{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--pcc)}
+.ptc b{display:block;font-family:Oswald,sans-serif;font-weight:600;font-size:1.1rem;text-transform:uppercase;
+ letter-spacing:.03em;margin:4px 0 2px}
+.ptc .yr3{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--dim)}
+.ptc p{color:var(--dim);font-size:.9rem;line-height:1.72;margin-top:7px}
+#pt-note{background:var(--panel);border:1px solid var(--line);border-left:2px solid var(--gold);padding:15px 17px}
+#pt-note .k2{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--gold);margin-bottom:7px}
+#pt-note p{color:var(--dim);font-size:.92rem;line-height:1.78;margin-bottom:9px}
+#pt-note p:last-child{margin-bottom:0}
+#pt-note b{color:var(--paper)}
 #toast{position:fixed;bottom:64px;left:50%;transform:translateX(-50%) translateY(20px);z-index:120;background:var(--gold);color:#1a1408;padding:12px 22px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;opacity:0;transition:.4s;pointer-events:none;text-align:center;max-width:88vw}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.2s!important}}
@@ -1058,7 +1094,7 @@ body.quake-hard{animation:quake .13s linear infinite}
 <div id="rail"></div>
 <div id="bot">
  <button class="arw" id="prev">&larr; Prev</button>
- <div id="pnum" class="mono">01 / 25</div>
+ <div id="pnum" class="mono">01 / 26</div>
  <button class="arw" id="next">Next &rarr;</button>
 </div>
 
@@ -1361,7 +1397,14 @@ body.quake-hard{animation:quake .13s linear infinite}
  </div>
  <div class="body"><div id="globe-lay">
   <div id="g-stage"><canvas id="globe-cv"></canvas><div id="g-ring"></div></div>
-  <div id="pins"></div>
+  <div id="pin-col">
+   <div id="pins"></div>
+   <button id="toforge">
+    <span class="tf-k">WHAT HAPPENS IF ONE LANDS</span>
+    <span class="tf-t">Watch Earth break</span>
+    <span class="tf-s">Six acts &middot; the incursion, the detonation, and what he builds out of the pieces</span>
+   </button>
+  </div>
  </div></div>
 </div>
 
@@ -1414,6 +1457,26 @@ body.quake-hard{animation:quake .13s linear infinite}
     <button class="mini on" id="pc-play">Auto: On</button>
     <button class="mini" id="pc-next">Scene &rarr;</button>
    </div>
+  </div>
+ </div></div>
+</div>
+
+<div class="page" id="pPETER">
+ <div class="hd">
+  <div class="kick">The scene everyone came for</div>
+  <h2>Peter one. Peter two. Peter three.</h2>
+  <p>Ned opens a portal by accident, and two men who have never met walk out of it. It is the moment the multiverse stopped being a plot device and became a room with people standing in it &mdash; and it is the bar Doomsday has to clear.</p>
+ </div>
+ <div class="body"><div id="pt-lay">
+  <div id="pt-stage"><canvas id="pt-cv"></canvas></div>
+  <div id="pt-side">
+   <div id="pt-cards"></div>
+   <div class="bt-bar">
+    <button class="mini on" id="pt-go">Open the portal</button>
+    <button class="mini" id="pt-auto">Auto: On</button>
+    <button class="mini" id="pt-reset">From the top</button>
+   </div>
+   <div id="pt-note"></div>
   </div>
  </div></div>
 </div>
@@ -2158,7 +2221,7 @@ var pages=[].slice.call(document.querySelectorAll('.page'));
 var names=['Title','Loki Tree','Portal Room','Kang','Doom','Dr Strange','Thanos',
            'Thanos vs Avengers','Doom vs Kang vs Thanos','Doom vs Avengers',
            'Sentry','Trophy Wall','Incursion Map','The X-Men','Roster','Comics',
-           'Post-Credits','Briefing','Evidence','War Room','Arena','Rooftop','Doom\u2019s Dilemma','Full Guide','Contact'];
+           'Post-Credits','The Three Peters','Briefing','Evidence','War Room','Arena','Rooftop','Doom\u2019s Dilemma','Full Guide','Contact'];
 var sfxWords=['KRAK!','FWOOSH','SHRAK','BOOM!','WHUMP','THOOM','ZZKT!','KLANG','FWAM!','SKRSH','KRAKK','VWOOM','THWIP','DOOM!','FWASH','SNKT!'];
 var idx=0,busy=false;
 var FX=['flip','warp','iris','shear','fall','blade','dust'];
@@ -7865,6 +7928,264 @@ var MUTANTS=[
   };
 })();
 
+/* ===== THE THREE PETERS : the portal, the meeting, the goodbye ===== */
+var PETERS=[
+ {k:'p2002',n:'Peter One',c:'196,42,42',yr:'2002 \u2013 2007 \u00b7 Tobey Maguire',
+  d:'The oldest of them, and the only one whose webs come out of his own wrists. Twenty years married to the work. He arrives already at peace with it, which is exactly why the other two listen to him.'},
+ {k:'p2012',n:'Peter Two',c:'40,80,190',yr:'2012 \u2013 2014 \u00b7 Andrew Garfield',
+  d:'The one who stopped being Spider-Man for a while. He reached for Gwen Stacy and did not catch her, and he has been carrying the maths of that fall ever since. Nobody in the room needs to ask what is wrong with him.'},
+ {k:'p2016',n:'Peter Three',c:'200,40,50',yr:'2016 \u2013 now \u00b7 Tom Holland',
+  d:'The youngest, the angriest, and the one about to lose the most. He has just buried the person who raised him and is one bad decision away from becoming something the other two would have to stop.'}
+];
+(function(){
+  var cv=$('pt-cv'),g=null,phase=0,pt=0,auto=true;
+  var PH=[
+   {t:'The portal opens',n:'A spell goes wrong and a hole appears in the ceiling of a school gym.',
+    d:'It is an accident. Ned is holding a Sling Ring he does not know how to use, asking out loud where his friend is, and the universe takes the question literally.',dur:280},
+   {t:'Two men walk out',n:'Nobody says who they are. They do not have to.',
+    d:'The film gives them no introduction and no explanation, because it knows the audience has already stood up. Twenty years of separate films arriving in one room through a hole in the air.',dur:340},
+   {t:'They compare notes',n:'Organic web-shooters. A dead girlfriend. A dead uncle. Everyone has one.',
+    d:'The best scene in the film is three men sitting on scaffolding finding out they are the same person with different injuries. It is the whole point of a multiverse story and almost nobody else has bothered to do it.',dur:360},
+   {t:'The catch',n:'Peter Two gets his hands on MJ in mid-air.',
+    d:'Eight years after failing to catch Gwen Stacy, the same man catches a different girl falling from a different height, and the actor plays it like a man being let out of prison. It is a repair, not a rematch.',dur:340},
+   {t:'The spell lands',n:'Everyone forgets Peter Parker. Not Spider-Man. Peter.',
+    d:'The name, the face, the boy. He asks for it himself, and Strange casts it, and every person who ever loved him keeps living without the part where he existed.',dur:400},
+   {t:'They say goodbye',n:'Two of them go home. One of them stays and starts again with nothing.',
+    d:'No speeches. The portals open, they tell him he is good, and they leave. He goes back to a bare apartment and sews a suit by hand.',dur:420}
+  ];
+  function init(){g=fitCanvas(cv);}
+  resizers.pPETER=init;
+  onResize.push(function(){if(activeId==='pPETER'){init();}});
+
+  $('pt-cards').innerHTML=PETERS.map(function(P,i){
+    return '<div class="ptc" data-i="'+i+'" style="--pcc:rgb('+P.c+')">'+
+      '<div class="n">'+P.n.toUpperCase()+'</div>'+
+      '<b>'+P.n+'</b><div class="yr3">'+P.yr+'</div><p>'+P.d+'</p></div>';
+  }).join('');
+  function note(){
+    var P=PH[phase];
+    $('pt-note').innerHTML='<div class="k2">BEAT '+(phase+1)+' / '+PH.length+' &middot; '+P.t.toUpperCase()+'</div>'+
+      '<p><b>'+P.n+'</b></p><p>'+P.d+'</p>'+
+      '<p style="margin-top:12px"><button class="mini" id="pt-full" style="width:100%">'+
+      'See the whole thing full screen &rarr;</button></p>';
+    $('pt-full').onclick=function(){
+      try{sessionStorage.setItem('tdd_back','pPETER');}catch(e){}
+      if(audioOn&&AU){try{Tone.Destination.volume.linearRampToValueAtTime(-60,Tone.now()+1.1);}catch(e){}}
+      sfxCast();
+      tvStaticOff(function(){window.location.href='spider/index.html';});
+    };
+    var cs=document.querySelectorAll('.ptc');
+    for(var i=0;i<cs.length;i++){
+      cs[i].classList.toggle('here',phase>=1||i===2);
+    }
+  }
+  function set(p){phase=(p+PH.length)%PH.length;pt=0;note();sfxCast();}
+  note();
+  $('pt-go').onclick=function(){set(phase+1);};
+  $('pt-auto').onclick=function(){
+    auto=!auto;
+    $('pt-auto').textContent='Auto: '+(auto?'On':'Off');
+    $('pt-auto').classList.toggle('on',auto);
+  };
+  $('pt-reset').onclick=function(){set(0);};
+  cv.addEventListener('click',function(e){set(phase+1);magicBurst(e.clientX,e.clientY,20,50);});
+  var cards=document.querySelectorAll('.ptc');
+  for(var ci=0;ci<cards.length;ci++){
+    (function(el){el.onclick=function(){set(2);};})(cards[ci]);
+  }
+
+  function spider(x,px,py,S,col,pose,t,seed,alpha){
+    x.save();x.translate(px,py);x.scale(S,S);
+    x.globalAlpha=alpha===undefined?1:alpha;
+    var br=Math.sin(t*0.04+seed)*1.6;
+    var crouch=pose==='sit'?16:0;
+    x.strokeStyle='rgb('+col+')';x.lineWidth=12;x.lineCap='round';
+    if(pose==='sit'){
+      x.beginPath();x.moveTo(-6,-30);x.lineTo(-14,4);x.lineTo(-8,26);x.stroke();
+      x.beginPath();x.moveTo(7,-30);x.lineTo(15,4);x.lineTo(9,26);x.stroke();
+    }else if(pose==='swing'){
+      x.beginPath();x.moveTo(-6,-34);x.lineTo(-20,2);x.stroke();
+      x.beginPath();x.moveTo(7,-34);x.lineTo(22,-6);x.stroke();
+    }else{
+      x.beginPath();x.moveTo(-6,-34+crouch);x.lineTo(-12,6);x.stroke();
+      x.beginPath();x.moveTo(7,-34+crouch);x.lineTo(13,6);x.stroke();
+    }
+    x.fillStyle='rgb('+col+')';
+    x.beginPath();
+    x.moveTo(0,-78+br+crouch);x.quadraticCurveTo(-22,-72+crouch,-22,-42+crouch);
+    x.lineTo(-16,-32+crouch);x.lineTo(18,-32+crouch);x.lineTo(24,-42+crouch);
+    x.quadraticCurveTo(24,-72+crouch,0,-78+br+crouch);x.closePath();x.fill();
+    /* the spider on the chest */
+    x.fillStyle='rgba(0,0,0,.55)';
+    x.beginPath();x.ellipse(1,-56+crouch,4,6,0,0,6.284);x.fill();
+    x.strokeStyle='rgba(0,0,0,.45)';x.lineWidth=1.4;
+    for(var lg=0;lg<3;lg++){
+      x.beginPath();x.moveTo(-3,-60+lg*4+crouch);x.lineTo(-11,-64+lg*5+crouch);x.stroke();
+      x.beginPath();x.moveTo(5,-60+lg*4+crouch);x.lineTo(13,-64+lg*5+crouch);x.stroke();
+    }
+    x.strokeStyle='rgb('+col+')';x.lineWidth=11;
+    if(pose==='swing'){
+      x.beginPath();x.moveTo(-18,-62);x.lineTo(-30,-96);x.stroke();
+      x.beginPath();x.moveTo(20,-62);x.lineTo(30,-40);x.stroke();
+    }else if(pose==='wave'){
+      x.beginPath();x.moveTo(-18,-62+crouch);x.lineTo(-30,-34+crouch);x.stroke();
+      x.beginPath();x.moveTo(20,-62+crouch);x.lineTo(34,-94+br);x.stroke();
+    }else if(pose==='shoot'){
+      x.beginPath();x.moveTo(-18,-62);x.lineTo(-28,-36);x.stroke();
+      x.beginPath();x.moveTo(20,-62);x.lineTo(52,-70);x.stroke();
+    }else{
+      x.beginPath();x.moveTo(-18,-62+crouch);x.quadraticCurveTo(-32,-48+crouch,-28,-26+crouch);x.stroke();
+      x.beginPath();x.moveTo(20,-62+crouch);x.quadraticCurveTo(34,-48+crouch,30,-26+crouch);x.stroke();
+    }
+    /* head + lenses */
+    var hy=-92+br+crouch;
+    x.fillStyle='rgb('+col+')';
+    x.beginPath();x.ellipse(1,hy,14,15,0,0,6.284);x.fill();
+    x.strokeStyle='rgba(0,0,0,.3)';x.lineWidth=0.8;
+    for(var wr=1;wr<4;wr++){x.beginPath();x.arc(1,hy,wr*4.4,0,6.284);x.stroke();}
+    for(var ws=0;ws<6;ws++){
+      var wa=ws/6*6.2832;
+      x.beginPath();x.moveTo(1,hy);x.lineTo(1+Math.cos(wa)*14,hy+Math.sin(wa)*15);x.stroke();
+    }
+    x.fillStyle='#12141c';
+    x.beginPath();x.ellipse(-5,hy-1,7,5.2,-0.26,0,6.284);x.fill();
+    x.beginPath();x.ellipse(9,hy-1,7,5.2,0.26,0,6.284);x.fill();
+    x.fillStyle='#f2efe8';
+    x.beginPath();x.ellipse(-5,hy-1,5.4,3.8,-0.26,0,6.284);x.fill();
+    x.beginPath();x.ellipse(9,hy-1,5.4,3.8,0.26,0,6.284);x.fill();
+    x.restore();
+    x.globalAlpha=1;
+  }
+
+  draws.pPETER=function(t){
+    if(!g){init();}if(!g){return;}
+    var x=g.x,W=g.W,H=g.H,i;
+    pt++;
+    var P=PH[phase];
+    if(auto&&pt>P.dur){set(phase+1);return;}
+    var pr=Math.min(1,pt/(P.dur*0.8));
+    x.clearRect(0,0,W,H);
+    var sky=x.createLinearGradient(0,0,0,H);
+    sky.addColorStop(0,'#070a14');sky.addColorStop(.55,'#0b0f1c');sky.addColorStop(1,'#05070c');
+    x.fillStyle=sky;x.fillRect(0,0,W,H);
+    var gy=H*0.86;
+    var S=Math.min(W/760,H/420);
+    if(S<0.44){S=0.44;}
+
+    /* the room: scaffolding and a high window */
+    x.strokeStyle='rgba(120,140,180,.07)';x.lineWidth=1.4;
+    for(i=0;i<6;i++){
+      x.beginPath();x.moveTo(W*(i/5),0);x.lineTo(W*(i/5),gy);x.stroke();
+      x.beginPath();x.moveTo(0,H*(i/8));x.lineTo(W,H*(i/8));x.stroke();
+    }
+    x.fillStyle='#0a0d16';x.fillRect(0,gy,W,H-gy);
+    x.strokeStyle='rgba(120,140,180,.14)';x.lineWidth=1.4;
+    x.beginPath();x.moveTo(0,gy);x.lineTo(W,gy);x.stroke();
+
+    /* the portals */
+    var portals=[{x:0.26,c:'40,80,190'},{x:0.74,c:'196,42,42'}];
+    var open=(phase===0)?pr:(phase>=5?Math.max(0,1-Math.abs(pr-0.6)*2.2):(phase===1?1:0.16));
+    for(i=0;i<portals.length;i++){
+      var PO=portals[i];
+      var R=Math.min(W,H)*0.2*Math.min(1,open*1.2);
+      if(R<2){continue;}
+      var px2=W*PO.x,py2=gy-R*0.95;
+      var pg=x.createRadialGradient(px2,py2,2,px2,py2,R);
+      pg.addColorStop(0,'rgba(10,8,20,.94)');
+      pg.addColorStop(.78,'rgba(28,14,44,.72)');
+      pg.addColorStop(1,'rgba(255,150,45,.34)');
+      x.fillStyle=pg;x.beginPath();x.arc(px2,py2,R,0,6.284);x.fill();
+      x.strokeStyle='rgba(255,150,45,.95)';x.lineWidth=3.2;
+      x.beginPath();x.arc(px2,py2,R,0,6.284);x.stroke();
+      for(var sp=0;sp<22;sp++){
+        var sa=t*0.04+sp*0.2856+i;
+        x.fillStyle='rgba(255,'+(150+((sp*11)%80))+',45,'+(0.3+Math.random()*0.5)+')';
+        x.beginPath();x.arc(px2+Math.cos(sa)*(R+Math.sin(t*0.18+sp)*5),
+                            py2+Math.sin(sa)*(R+Math.cos(t*0.18+sp)*5),1.9,0,6.284);x.fill();
+      }
+      /* a glimpse of the city each of them came from */
+      x.save();
+      x.beginPath();x.arc(px2,py2,R*0.92,0,6.284);x.clip();
+      x.fillStyle='rgba('+PO.c+',.16)';x.fillRect(px2-R,py2-R,R*2,R*2);
+      for(var b2=0;b2<7;b2++){
+        var bh=R*(0.25+((b2*37)%50)/100);
+        x.fillStyle='rgba(10,14,22,.9)';
+        x.fillRect(px2-R+b2*(R*2/7),py2+R*0.5-bh,R*0.2,bh);
+      }
+      x.restore();
+    }
+
+    /* who is standing where */
+    var pos=[W*0.5,W*0.26,W*0.74];
+    var poses=['stand','stand','stand'];
+    var alphas=[1,0,0];
+    if(phase===0){alphas=[1,0,0];}
+    else if(phase===1){
+      alphas=[1,Math.min(1,pr*1.6),Math.min(1,pr*1.6)];
+      poses=['stand','stand','stand'];
+      pos[1]=W*0.26+Math.min(1,pr)*W*0.06;
+      pos[2]=W*0.74-Math.min(1,pr)*W*0.06;
+    }else if(phase===2){
+      alphas=[1,1,1];poses=['sit','sit','sit'];
+      pos=[W*0.5,W*0.32,W*0.68];
+    }else if(phase===3){
+      alphas=[1,1,1];poses=['shoot','swing','shoot'];
+      pos=[W*0.42,W*0.6,W*0.78];
+    }else if(phase===4){
+      alphas=[1,0.6,0.6];poses=['stand','stand','stand'];
+      pos=[W*0.5,W*0.28,W*0.72];
+    }else{
+      var fade=Math.max(0,1-Math.max(0,pr-0.45)*2.4);
+      alphas=[1,fade,fade];poses=['wave','wave','wave'];
+      pos=[W*0.5,W*0.26,W*0.74];
+    }
+    /* the spell washing over everything */
+    if(phase===4){
+      for(var r2=0;r2<5;r2++){
+        var rp=((t*1.3+r2*54)%270)/270;
+        x.strokeStyle='rgba(59,165,92,'+((1-rp)*0.4)+')';x.lineWidth=2;
+        x.beginPath();x.arc(W*0.5,gy-H*0.24,rp*Math.max(W,H)*0.7,0,6.284);x.stroke();
+      }
+      var NAMES=['PETER','PARKER','PETER B. PARKER','THE BOY','HIM','PETER'];
+      for(var nn=0;nn<NAMES.length;nn++){
+        var na=Math.max(0,1-((t*0.7+nn*40)%220)/220);
+        x.font='11px "JetBrains Mono",monospace';x.textAlign='center';
+        x.fillStyle='rgba(200,220,210,'+(na*0.35)+')';
+        x.fillText(NAMES[nn],W*(0.12+nn*0.15),gy-H*0.42+Math.sin(nn+t*0.02)*20);
+      }
+    }
+    for(i=0;i<3;i++){
+      if(alphas[i]<=0.02){continue;}
+      spider(x,pos[i],gy,S,PETERS[i].c,poses[i],t,i*2.1,alphas[i]);
+      if(phase>=5&&i>0&&alphas[i]<0.98){
+        for(var dz=0;dz<16;dz++){
+          x.fillStyle='rgba(255,150,45,'+(1-alphas[i])*0.5+')';
+          x.fillRect(pos[i]+(Math.random()-.5)*70*S,gy-Math.random()*110*S,2,2);
+        }
+      }
+    }
+    /* webs during the fight */
+    if(phase===3){
+      x.strokeStyle='rgba(240,240,236,.55)';x.lineWidth=1.6;
+      for(var wq=0;wq<3;wq++){
+        var wp=((t*2+wq*40)%120)/120;
+        x.beginPath();
+        x.moveTo(pos[0]+40*S,gy-70*S);
+        x.lineTo(pos[0]+40*S+wp*W*0.3,gy-70*S-wp*H*0.3);
+        x.stroke();
+      }
+    }
+    x.fillStyle='rgba(5,7,12,.78)';x.fillRect(0,H-32,W,32);
+    x.font='11px "JetBrains Mono",monospace';x.textAlign='left';
+    x.fillStyle='rgba(255,150,45,.9)';
+    x.fillText('BEAT '+(phase+1)+' / '+PH.length+'  \u00b7  '+P.t.toUpperCase(),12,H-12);
+    x.textAlign='right';x.fillStyle='rgba(170,166,158,.65)';
+    x.fillText(auto?'AUTO \u00b7 CLICK TO SKIP':'CLICK FOR THE NEXT BEAT',W-12,H-12);
+    x.fillStyle='rgba(196,42,42,.8)';
+    x.fillRect(0,H-33,W*Math.min(1,pt/P.dur),1.6);
+  };
+})();
+
 /* ===== POST-CREDITS SCENES : five stingers, animated ===== */
 (function(){
   var cv=$('pc-cv'),g=null,sc=0,pt=0,auto=true;
@@ -8757,6 +9078,12 @@ function tvStaticOff(done){
   }
   frame();
 }
+$('toforge').onclick=function(){
+  try{sessionStorage.setItem('tdd_back','p9');}catch(e){}
+  if(audioOn&&AU){try{Tone.Destination.volume.linearRampToValueAtTime(-60,Tone.now()+1.1);}catch(e){}}
+  sfxHit(true);
+  tvStaticOff(function(){window.location.href='forge/index.html';});
+};
 $('toworld').onclick=function(){
   try{sessionStorage.setItem('tdd_back','p4');}catch(e){}
   if(audioOn&&AU){try{Tone.Destination.volume.linearRampToValueAtTime(-60,Tone.now()+1.1);}catch(e){}}
